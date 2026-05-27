@@ -1,83 +1,109 @@
-"""
-충남대 웹사이트 크롤러
-대상: 학사공지, 학사일정, 졸업요건, 장학금, 셔틀버스, 식당메뉴
-"""
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import json, time, os
 
-import requests
-from bs4 import BeautifulSoup
-import json
-import time
-from pathlib import Path
+def make_driver():
+    opts = Options()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+    opts.add_argument("--window-size=1920,1080")
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=opts
+    )
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+BOARDS = {
+    "학사공지": "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0701&site_dvs_cd=kr&menu_dvs_cd=0701",
+    "장학공지": "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0702&site_dvs_cd=kr&menu_dvs_cd=0702",
+    "일반공지": "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0703&site_dvs_cd=kr&menu_dvs_cd=0703",
+    "취업공지": "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0704&site_dvs_cd=kr&menu_dvs_cd=0704",
+    "행사안내": "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0705&site_dvs_cd=kr&menu_dvs_cd=0705",
 }
 
-BASE_URL = "https://www.cnu.ac.kr"
-RAW_DIR = Path("../../data/raw")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OUT_PATH = os.path.join(BASE_DIR, "data", "raw", "crawled.json")
+os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
 
-CRAWL_TARGETS = {
-    "academic_notice": "/main/kr/sub05_01_01.do",   # 학사공지
-    "scholarship": "/main/kr/sub05_01_02.do",        # 장학공지
-    "general_notice": "/main/kr/sub05_01_03.do",     # 일반공지
-}
-
-
-def crawl_notice_list(category: str, path: str, max_pages: int = 5) -> list[dict]:
-    items = []
-    for page in range(1, max_pages + 1):
-        url = f"{BASE_URL}{path}?pageIndex={page}"
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        if resp.status_code != 200:
-            break
-        soup = BeautifulSoup(resp.text, "lxml")
-        rows = soup.select("table tbody tr")
-        if not rows:
-            break
-        for row in rows:
-            cols = row.find_all("td")
-            if len(cols) < 3:
-                continue
-            title_tag = row.select_one("td.subject a, td a")
-            if not title_tag:
-                continue
-            items.append({
-                "category": category,
-                "title": title_tag.get_text(strip=True),
-                "href": title_tag.get("href", ""),
-            })
-        time.sleep(0.5)
-    return items
-
-
-def crawl_detail(href: str) -> str:
-    if not href.startswith("http"):
-        href = BASE_URL + href
-    try:
-        resp = requests.get(href, headers=HEADERS, timeout=10)
-        soup = BeautifulSoup(resp.text, "lxml")
-        content = soup.select_one(".board-view-content, .view-content, .board_content")
-        return content.get_text(strip=True) if content else ""
-    except Exception:
-        return ""
-
-
-def run_crawl():
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
+def crawl():
+    driver = make_driver()
     all_docs = []
-    for category, path in CRAWL_TARGETS.items():
-        print(f"크롤링 중: {category}")
-        items = crawl_notice_list(category, path)
-        for item in items:
-            detail = crawl_detail(item["href"])
-            item["content"] = detail
-            all_docs.append(item)
-            time.sleep(0.3)
-    out_path = RAW_DIR / "notices.json"
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(all_docs, f, ensure_ascii=False, indent=2)
-    print(f"저장 완료: {out_path} ({len(all_docs)}건)")
 
+    for category, board_url in BOARDS.items():
+        print(f"\n[{category}] 크롤링 시작...")
+        article_urls = []
+
+        for page in range(1, 4):
+            url = board_url + f"&GotoPage={page}"
+            driver.get(url)
+            time.sleep(2)
+            links = driver.find_elements(By.CSS_SELECTOR, "a[href*='mode=V']")
+            for link in links:
+                href = link.get_attribute("href")
+                if href and href not in article_urls:
+                    article_urls.append(href)
+
+        print(f"  게시글 URL 수집: {len(article_urls)}개")
+
+        collected = 0
+        for url in article_urls[:20]:
+            try:
+                driver.get(url)
+                time.sleep(1.5)
+
+                try:
+                    title = driver.find_element(By.CSS_SELECTOR,
+                        ".board-view-title, .view-title, h3, h4, .title").text.strip()
+                except:
+                    title = driver.title.strip()
+
+                try:
+                    content = driver.find_element(By.CSS_SELECTOR,
+                        ".board-view-content, .view-content, .content").text.strip()
+                except:
+                    body = driver.find_element(By.TAG_NAME, "body").text
+                    lines = [l.strip() for l in body.split('\n') if l.strip()]
+                    content = '\n'.join(lines[10:50])
+
+                if len(content) > 50:
+                    all_docs.append({
+                        "category": category,
+                        "title": title[:100],
+                        "content": content[:2000],
+                        "url": url
+                    })
+                    collected += 1
+                    print(f"  [{collected}] {title[:40]}")
+
+            except Exception as e:
+                print(f"  오류: {e}")
+            time.sleep(0.5)
+
+        print(f"  {category} 완료: {collected}건")
+
+    driver.quit()
+
+    # 기존 수동 데이터와 합치기
+    existing_path = os.path.join(BASE_DIR, "data", "raw", "all_docs.json")
+    try:
+        with open(existing_path, encoding="utf-8") as f:
+            existing = json.load(f)
+    except:
+        existing = []
+
+    merged = existing + all_docs
+    with open(existing_path, "w", encoding="utf-8") as f:
+        json.dump(merged, f, ensure_ascii=False, indent=2)
+
+    with open(OUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(all_docs, f, ensure_ascii=False, indent=2)
+
+    print(f"\n{'='*40}")
+    print(f"크롤링 완료: {len(all_docs)}건")
+    print(f"전체 데이터: {len(merged)}건 → {existing_path}")
 
 if __name__ == "__main__":
-    run_crawl()
+    crawl()

@@ -1,7 +1,7 @@
 {
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"gh api repos/peradura/NLP_Term_7 --jq '{name:.name, description:.description, topics:.topics}' 2>/dev/null; gh api repos/peradura/NLP_Term_7/contents --jq '[.[] | {name:.name, type:.type}]...",
-  "error": "Exit code 127",
-  "timestamp": "2026-05-27T10:27:23.219Z",
+  "tool_name": "PowerShell",
+  "tool_input_preview": "{\"command\":\"$env:PYTHONUTF8=1; & \\\"C:\\\\Users\\\\yeonjin\\\\anaconda3\\\\envs\\\\nlp_project\\\\python.exe\\\" -c \\\"\\nimport sys; sys.path.insert(0, r'C:\\\\충남대학교\\\\3-1\\\\자연어처리\\\\Termproject')\\nfrom src.vectordb.chroma...",
+  "error": "Exit code 1\n  File \"<string>\", line 7\r\n    print(f'[{h[\" score\\]:.3f}]\r\n          ^\r\nSyntaxError: unterminated string literal (detected at line 7)",
+  "timestamp": "2026-05-27T12:17:21.078Z",
   "retry_count": 1
 }

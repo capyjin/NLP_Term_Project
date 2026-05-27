@@ -1,0 +1,136 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1779883787844,
+  "projectRoot": "C:\\충남대학교\\3-1\\자연어처리\\Termproject",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "pip",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": "snake_case",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "data": {
+      "path": "data",
+      "purpose": "Data files",
+      "fileCount": 0,
+      "lastAccessed": 1779883787819,
+      "keyFiles": []
+    },
+    "models": {
+      "path": "models",
+      "purpose": "Data models",
+      "fileCount": 0,
+      "lastAccessed": 1779883787820,
+      "keyFiles": []
+    },
+    "notebooks": {
+      "path": "notebooks",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1779883787822,
+      "keyFiles": [
+        "colab_main.py"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 1,
+      "lastAccessed": 1779883787823,
+      "keyFiles": [
+        "evaluate.py"
+      ]
+    },
+    "src\\api": {
+      "path": "src\\api",
+      "purpose": "API routes",
+      "fileCount": 1,
+      "lastAccessed": 1779883787824,
+      "keyFiles": [
+        "server.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src\\rag\\pipeline.py",
+      "accessCount": 3,
+      "lastAccessed": 1779884318146,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 2,
+      "lastAccessed": 1779883795078,
+      "type": "directory"
+    },
+    {
+      "path": "src\\embedding\\embedder.py",
+      "accessCount": 1,
+      "lastAccessed": 1779883798579,
+      "type": "file"
+    },
+    {
+      "path": "src\\vectordb\\chroma_store.py",
+      "accessCount": 1,
+      "lastAccessed": 1779883799148,
+      "type": "file"
+    },
+    {
+      "path": "data\\raw\\all_docs.json",
+      "accessCount": 1,
+      "lastAccessed": 1779883805594,
+      "type": "file"
+    },
+    {
+      "path": "src\\preprocessing\\preprocess.py",
+      "accessCount": 1,
+      "lastAccessed": 1779883857694,
+      "type": "file"
+    },
+    {
+      "path": "test_search.py",
+      "accessCount": 1,
+      "lastAccessed": 1779884250110,
+      "type": "file"
+    },
+    {
+      "path": "notebooks\\colab_main.py",
+      "accessCount": 1,
+      "lastAccessed": 1779884370092,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

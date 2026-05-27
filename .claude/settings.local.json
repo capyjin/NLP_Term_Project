@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(gh api *)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.cnu.ac.kr)",
+      "PowerShell($env:PYTHONUTF8=1; & \"C:\\\\Users\\\\yeonjin\\\\anaconda3\\\\envs\\\\nlp_project\\\\python.exe\" \"C:\\\\충남대학교\\\\3-1\\\\자연어처리\\\\Termproject\\\\src\\\\vectordb\\\\build_db.py\")",
+      "PowerShell(& \"C:\\\\Users\\\\yeonjin\\\\anaconda3\\\\envs\\\\nlp_project\\\\python.exe\" -m pip install chromadb sentence-transformers --quiet)"
     ]
   }
 }
