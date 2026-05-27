@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"gh api repos/peradura/NLP_Term_7 --jq '{name:.name, description:.description, topics:.topics}' 2>/dev/null; gh api repos/peradura/NLP_Term_7/contents --jq '[.[] | {name:.name, type:.type}]...",
+  "error": "Exit code 127",
+  "timestamp": "2026-05-27T10:27:23.219Z",
+  "retry_count": 1
+}
