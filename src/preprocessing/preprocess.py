@@ -1,6 +1,7 @@
 """
 전처리 + 청킹 스크립트
-입력: data/raw/all_docs.json (크롤링 결과)
+입력: data/raw/all_docs.json  (공지 크롤링 결과)
+      data/raw/pdf_docs.json  (PDF 크롤링 결과 — 있으면 자동 병합)
 출력: data/processed/chunks.json (정제된 청크)
 
 청크 형식:
@@ -14,6 +15,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent.parent
 RAW_PATH = BASE_DIR / "data" / "raw" / "all_docs.json"
+PDF_PATH = BASE_DIR / "data" / "raw" / "pdf_docs.json"
 OUT_DIR = BASE_DIR / "data" / "processed"
 OUT_PATH = OUT_DIR / "chunks.json"
 
@@ -80,6 +82,20 @@ def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) 
 def preprocess():
     with open(RAW_PATH, encoding="utf-8") as f:
         docs = json.load(f)
+    print(f"공지 문서 수: {len(docs)}")
+
+    # PDF 문서 병합 (있으면)
+    if PDF_PATH.exists():
+        with open(PDF_PATH, encoding="utf-8") as f:
+            pdf_docs = json.load(f)
+        # pdf_docs는 page_url 기준으로 url 필드 통일
+        for d in pdf_docs:
+            d.setdefault("url", d.get("page_url", ""))
+            d.setdefault("title", d.get("title", ""))
+        docs = docs + pdf_docs
+        print(f"PDF 문서 병합: +{len(pdf_docs)}건 → 합계 {len(docs)}건")
+    else:
+        print("pdf_docs.json 없음 (PDF 크롤링 전 상태)")
 
     print(f"원본 문서 수: {len(docs)}")
 
