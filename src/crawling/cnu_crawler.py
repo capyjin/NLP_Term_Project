@@ -28,6 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 OUT_PATH = os.path.join(BASE_DIR, "data", "raw", "crawled.json")
 os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
 
+
 def crawl():
     driver = make_driver()
     all_docs = []
@@ -72,7 +73,7 @@ def crawl():
                     all_docs.append({
                         "category": category,
                         "title": title[:100],
-                        "content": content[:2000],
+                        "content": content[:5000],
                         "url": url
                     })
                     collected += 1
@@ -86,7 +87,7 @@ def crawl():
 
     driver.quit()
 
-    # 기존 수동 데이터와 합치기
+    # 기존 데이터와 합치기
     existing_path = os.path.join(BASE_DIR, "data", "raw", "all_docs.json")
     try:
         with open(existing_path, encoding="utf-8") as f:
@@ -104,6 +105,7 @@ def crawl():
     print(f"\n{'='*40}")
     print(f"크롤링 완료: {len(all_docs)}건")
     print(f"전체 데이터: {len(merged)}건 → {existing_path}")
+    print(f"PDF 추출은 별도로: python src/crawling/pdf_crawler.py")
 
 if __name__ == "__main__":
     crawl()
