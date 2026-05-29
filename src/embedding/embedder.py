@@ -2,6 +2,9 @@
 한국어 임베딩 모델 래퍼
 jhgan/ko-sroberta-multitask : 한국어 특화 sentence-transformer (작고 빠름)
 """
+"""
+
+"""
 
 from sentence_transformers import SentenceTransformer
 import numpy as np
