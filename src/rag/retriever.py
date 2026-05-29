@@ -116,7 +116,7 @@ class HybridRetriever:
                 "embed_score": embed_score_map.get(idx, 0.0),  # 임베딩 유사도 (임계값용)
             })
         return results
-
+    # search()는 retrieve()에서 호출. BM25와 임베딩 검색 결과(가장 관련있는 청크 3개)를 RRF로 결합하여 최종 랭킹 반환.
     def search(self, query: str, top_k: int = 3) -> list[dict]:
         """
         하이브리드 검색 실행.
