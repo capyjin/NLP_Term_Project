@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1779883787844,
+  "lastScanned": 1779972313603,
   "projectRoot": "C:\\충남대학교\\3-1\\자연어처리\\Termproject",
   "techStack": {
     "languages": [
@@ -40,26 +40,36 @@
   },
   "customNotes": [],
   "directoryMap": {
+    "chroma_db": {
+      "path": "chroma_db",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1779972313565,
+      "keyFiles": [
+        "chroma.sqlite3"
+      ]
+    },
     "data": {
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1779883787819,
+      "lastAccessed": 1779972313566,
       "keyFiles": []
     },
     "models": {
       "path": "models",
       "purpose": "Data models",
       "fileCount": 0,
-      "lastAccessed": 1779883787820,
+      "lastAccessed": 1779972313567,
       "keyFiles": []
     },
     "notebooks": {
       "path": "notebooks",
       "purpose": null,
-      "fileCount": 1,
-      "lastAccessed": 1779883787822,
+      "fileCount": 2,
+      "lastAccessed": 1779972313568,
       "keyFiles": [
+        "colab_main.ipynb",
         "colab_main.py"
       ]
     },
@@ -67,16 +77,26 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 1,
-      "lastAccessed": 1779883787823,
+      "lastAccessed": 1779972313569,
       "keyFiles": [
         "evaluate.py"
+      ]
+    },
+    "__pycache__": {
+      "path": "__pycache__",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1779972313570,
+      "keyFiles": [
+        "test_search.cpython-311.pyc",
+        "test_search.cpython-313.pyc"
       ]
     },
     "src\\api": {
       "path": "src\\api",
       "purpose": "API routes",
       "fileCount": 1,
-      "lastAccessed": 1779883787824,
+      "lastAccessed": 1779972313573,
       "keyFiles": [
         "server.py"
       ]
@@ -85,15 +105,45 @@
   "hotPaths": [
     {
       "path": "src\\rag\\pipeline.py",
-      "accessCount": 3,
-      "lastAccessed": 1779884318146,
+      "accessCount": 7,
+      "lastAccessed": 1780027386921,
+      "type": "file"
+    },
+    {
+      "path": "test_search.py",
+      "accessCount": 4,
+      "lastAccessed": 1779951318877,
       "type": "file"
     },
     {
       "path": "",
-      "accessCount": 2,
-      "lastAccessed": 1779883795078,
+      "accessCount": 4,
+      "lastAccessed": 1780024728153,
       "type": "directory"
+    },
+    {
+      "path": "src\\preprocessing\\preprocess.py",
+      "accessCount": 4,
+      "lastAccessed": 1780025272717,
+      "type": "file"
+    },
+    {
+      "path": "requirements.txt",
+      "accessCount": 4,
+      "lastAccessed": 1780027392806,
+      "type": "file"
+    },
+    {
+      "path": "src\\crawling\\cnu_crawler.py",
+      "accessCount": 3,
+      "lastAccessed": 1780027907973,
+      "type": "file"
+    },
+    {
+      "path": "notebooks\\colab_main.py",
+      "accessCount": 2,
+      "lastAccessed": 1779951267716,
+      "type": "file"
     },
     {
       "path": "src\\embedding\\embedder.py",
@@ -114,21 +164,51 @@
       "type": "file"
     },
     {
-      "path": "src\\preprocessing\\preprocess.py",
+      "path": "src\\crawling\\add_pdf.py",
       "accessCount": 1,
-      "lastAccessed": 1779883857694,
+      "lastAccessed": 1779887180542,
       "type": "file"
     },
     {
-      "path": "test_search.py",
+      "path": "src\\api\\server.py",
       "accessCount": 1,
-      "lastAccessed": 1779884250110,
+      "lastAccessed": 1779951292553,
       "type": "file"
     },
     {
-      "path": "notebooks\\colab_main.py",
+      "path": "src\\ui\\app.py",
       "accessCount": 1,
-      "lastAccessed": 1779884370092,
+      "lastAccessed": 1779951292636,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 1,
+      "lastAccessed": 1779951338584,
+      "type": "file"
+    },
+    {
+      "path": "notebooks\\colab_main.ipynb",
+      "accessCount": 1,
+      "lastAccessed": 1779951381156,
+      "type": "file"
+    },
+    {
+      "path": "src\\crawling\\pdf_crawler.py",
+      "accessCount": 1,
+      "lastAccessed": 1780025253977,
+      "type": "file"
+    },
+    {
+      "path": "src\\rag\\retriever.py",
+      "accessCount": 1,
+      "lastAccessed": 1780027357034,
+      "type": "file"
+    },
+    {
+      "path": "test_hybrid.py",
+      "accessCount": 1,
+      "lastAccessed": 1780027401528,
       "type": "file"
     }
   ],

@@ -1,0 +1,362 @@
+Total pages: 32
+=== PAGE 1 ===
+Image Processing
+실습 11주차
+김 가 연
+Department of Computer Science and Engineering
+Chungnam National University, Korea
+
+=== PAGE 2 ===
+실습 소개 2
+• 과목 홈페이지
+– 충남대학교 사이버 캠퍼스 (http://e-learn.cnu.ac.kr)
+• TA 연락처
+– 공대 5호관 531호 컴퓨터비전 연구실
+– 과제 질문은 [IP]를 제목에 붙여 메일로 주세요.
+– 00반
+• 정재헌
+• jaeheonjeong@icloud.com
+– 01반
+• 김가연
+• gyeon0907@gmail.com
+
+=== PAGE 3 ===
+목차 3
+• 실습
+– Bilateral filtering
+• 과제
+– Bilateral filtering using similar patch search
+
+=== PAGE 4 ===
+4
+Gaussian noise
+• 이전 실습의 Gaussian noise removal 문제점
+– Average filtering, Gaussian filtering은 이미지를 부드럽게 하여 Edge를 흐리게 함
+– Average 𝑁 noise images는 여러 장의 이미지가 필요해 비효율적
+➢ Bilateral filtering으로 문제 해결
+Original Original + Gaussian noise Gaussian filtering Bilateral filtering
+
+=== PAGE 5 ===
+5
+Bilateral filtering
+• Bilateral filtering
+– Edge를 보존하면서 이미지의 noise를 제거
+– 이미지에서 공간적으로 가까운 pixel과 intensity가 비슷한 pixel들만 고려하여
+filtering 진행
+2
+1 𝑖 − 𝑘 2 𝑗 − 𝑙 2 𝐼 𝑖, 𝑗 − 𝐼 𝑘, 𝑙
+𝑓 𝑖, 𝑗, 𝑘, 𝑙 = exp − − ∙ exp −
+𝒩 2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 𝑟
+
+=== PAGE 6 ===
+실습 : bilateral_filtering.py 6
+• my_bilateral_filtering() 구현 과정
+– src_noise 좌표 중 (𝑖, 𝑗)에 대해서 3 × 3 크기의 bilateral filtering with patch를 한다고
+가정
+(𝑖,𝑗)
+src_noise
+
+=== PAGE 7 ===
+실습 : bilateral_filtering.py 7
+• my_bilateral_filtering() 구현 과정
+– 𝑖, 𝑗 를 중심으로 하는 3 × 3 영역을 본인 패치로 지정
+(𝑖,𝑗)
+본인 패치
+본인 패치
+src_noise
+
+=== PAGE 8 ===
+실습 : bilateral_filtering.py 8
+• my_bilateral_filtering() 구현 과정
+– Pixel 𝑖, 𝑗 기준, 본인 패치에 대한 bilateral filter 𝐹(𝑖, 𝑗) 구하기
+• 모든 weight의 합이 1이 되도록 bilateral filter 정규화 필수
+𝐹
+𝑖 −𝑖 2 𝑗 −𝑗 2 𝐼 𝑖 ,𝑗 −𝐼(𝑖,𝑗) 2
+= exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+(𝑖,𝑗)
+𝑖 −𝑘 2 𝑗 −𝑙 2 𝐼 𝑖 ,𝑗 −𝐼(𝑘,𝑙) 2
+(𝑖,𝑗) (𝑘,𝑙) = exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+dst 𝑖,𝑗 = ∗
+𝐹(𝑖,𝑗) 본인 패치
+src_noise
+
+=== PAGE 9 ===
+실습 : bilateral_filtering.py 9
+• 주의 사항
+
+=== PAGE 10 ===
+실습 : bilateral_filtering.py 10
+• 주의 사항
+
+=== PAGE 11 ===
+실습 : bilateral_filtering.py 11
+• my_bilateral_filtering(src_noise, psize, sigma_xy, sigma_r, pad_type)
+– 입력
+• src_noise: noise가 적용된 입력 이미지
+• psize: 본인 패치의 크기 (11로 사용)
+• sigma_xy: 𝜎 , 𝜎 (5로 사용)
+𝑥 𝑦
+• sigma_r: 𝜎 (0.2로 사용)
+𝑟
+• pad_type: padding의 방식 지정
+– 반환
+• dst: edge를 유지하면서 noise를 제거한 이미지
+
+=== PAGE 12 ===
+실습 : bilateral_filtering.py 12
+• 결과
+– 정량 지표
+• MSE: 원본 이미지와 결과 이미지의 픽셀 차이 제곱 평균
+– 작을수록 좋음
+• RMSE: MSE의 제곱근
+– 작을수록 좋음
+• PSNR: 원본 대비 오차가 얼마나 작은지를 dB 단위로 표현
+– 클수록 좋음
+Original Original + Gaussian noise Bilateral filtering
+
+=== PAGE 13 ===
+13
+Bilateral filtering using similar patch search
+• Bilateral filtering using similar patch search
+본인 패치 본인 패치
+(𝑖,𝑗) (𝑖,𝑗) (𝑖,𝑗) (𝑖,𝑗)
+유사 패치
+Noisy image Results Noisy image Results
+∗ = 𝑉𝑎𝑙𝑢𝑒 ∗ = Value
+본인 패치 𝐹(𝑖,𝑗) 본인 패치 𝐹(𝑖,𝑗) Sum
+𝑉𝑎𝑙𝑢𝑒
+Bilateral filter
+∗ = Value’
+유사 패치 𝐹′(𝑖,𝑗)
+< bilateral filtering 방법 > < bilateral filtering using similar patch search 방법 >
+
+=== PAGE 14 ===
+과제 : bilateral_filtering_with_similar_patch.py 14
+• main()
+1. baby.png를 흑백 이미지로 불러온 src 생성
+2. add_gaussian_noise()를 사용해서 src에 gaussian noise 추가한 src_noise 생성
+3. src_noise에 my_bilateral_with_patch()을 적용하여 noise를 제거한 dst 생성
+4. 결과 이미지 확인
+src src_noise dst
+
+=== PAGE 15 ===
+과제 : bilateral_filtering_with_similar_patch.py 15
+• my_bilateral_with_patch() 구현 과정
+– src_noise 좌표 중 (𝑖, 𝑗)에 대해서 3 × 3 크기의 bilateral filtering with patch를 한다고
+가정
+(𝑖,𝑗)
+src_noise
+
+=== PAGE 16 ===
+과제 : bilateral_filtering_with_similar_patch.py 16
+• my_bilateral_with_patch() 구현 과정
+– 𝑖, 𝑗 를 중심으로 하는 3 × 3 영역을 본인 패치로 지정
+(𝑖,𝑗)
+본인 패치
+본인 패치
+src_noise
+
+=== PAGE 17 ===
+과제 : bilateral_filtering_with_similar_patch.py 17
+• my_bilateral_with_patch() 구현 과정
+– 𝑖, 𝑗 를 중심으로 임의의 box를 생성 후, 본인 패치와 가장 유사한 box 안의 패치 선정
+– 인접 패치 중 가장 작은 SSD를 갖는 패치를 유사 패치로 선정
+인접 패치
+0.8 0.6 0.7 0.2 0.1 0.1 0.6 0.5 0.6 0.360.250.36
+− = → ⇒ 1.03
+0.6 0.8 0.8 0.4 0.8 0.7 0.2 0 0.1 0.04 0 0.01
+0.7 0.9 0.8 0.6 0.9 0.8 0.1 0 0 0.01 0 0
+본인 패치 인접 패치 Difference Squared Sum
+Sum of squared difference (SSD)
+Box
+본인 패치
+src_noise
+
+=== PAGE 18 ===
+과제 : bilateral_filtering_with_similar_patch.py 18
+• my_bilateral_with_patch() 구현 과정
+– 𝑖, 𝑗 를 중심으로 임의의 box를 생성 후, 본인 패치와 가장 유사한 box 안의 패치 선정
+– 인접 패치 중 가장 작은 SSD를 갖는 패치를 유사 패치로 선정
+0.8 0.6 0.7 0.1 0.10.05 0.7 0.50.65 0.490.250.43
+− = → ⇒ 1.28
+0.6 0.8 0.8 0.8 0.7 0.8 -0.2 0.1 0 0.040.01 0
+0.7 0.9 0.8 0.9 0.8 0.7 -0.2 0.1 -0.1 0.040.010.01
+본인 패치 인접 패치 Difference Squared Sum
+Sum of squared difference (SSD)
+본인 패치
+src_noise
+
+=== PAGE 19 ===
+과제 : bilateral_filtering_with_similar_patch.py 19
+• my_bilateral_with_patch() 구현 과정
+– 𝑖, 𝑗 를 중심으로 임의의 box를 생성 후, 본인 패치와 가장 유사한 box 안의 패치 선정
+– 인접 패치 중 가장 작은 SSD를 갖는 패치를 유사 패치로 선정
+0.8 0.6 0.7 0.8 0.7 0.3 0 -0.1 0.4 0 0.010.16
+− = → ⇒ 1.53
+0.6 0.8 0.8 0.8 0.5 0.1 -0.2 0.3 0.7 0.040.090.49
+0.7 0.9 0.8 0.9 0.4 0.2 -0.2 0.5 0.6 0.040.250.36
+본인 패치 인접 패치 Difference Squared Sum
+Sum of squared difference (SSD)
+본인 패치
+src_noise
+
+=== PAGE 20 ===
+과제 : bilateral_filtering_with_similar_patch.py 20
+• my_bilateral_with_patch() 구현 과정
+– 유사 패치를 선정할 때 본인 패치를 후보에서 제외
+• 본인 패치를 포함하면 SSD가 0이 되어 항상 본인 패치가 선택됨
+− = → ⇒ -
+본인 패치 인접 패치 Difference Squared Sum
+Sum of squared difference (SSD)
+본인 패치
+src_noise
+
+=== PAGE 21 ===
+과제 : bilateral_filtering_with_similar_patch.py 21
+• my_bilateral_with_patch() 구현 과정
+– 유사 패치 선정
+본인 패치 유사 패치
+src_noise
+
+=== PAGE 22 ===
+과제 : bilateral_filtering_with_similar_patch.py 22
+• my_bilateral_with_patch() 구현 과정
+– 현재 pixel 𝑖, 𝑗 를 기준으로 본인 패치에 대한 bilateral filter 𝐹(𝑖, 𝑗) 구하기
+𝐹
+𝑖 −𝑖 2 𝑗 −𝑗 2 𝐼 𝑖 ,𝑗 −𝐼(𝑖,𝑗) 2
+= exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+(𝑖,𝑗)
+𝑖 −𝑘 2 𝑗 −𝑙 2 𝐼 𝑖 ,𝑗 −𝐼(𝑘,𝑙) 2
+(𝑖,𝑗) (𝑘,𝑙) = exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+𝐹(𝑖,𝑗) 본인 패치 유사 패치
+src_noise
+
+=== PAGE 23 ===
+과제 : bilateral_filtering_with_similar_patch.py 23
+• my_bilateral_with_patch() 구현 과정
+– 선택된 유사 패치의 중심 pixel (𝑖′, 𝑗′)을 기준으로 유사 패치에 대한 bilateral filter
+𝐹′(𝑖′, 𝑗′) 구하기
+𝐹′
+𝑖’−𝑖’ 2 𝑗’ −𝑗’ 2 𝐼 𝑖’ ,𝑗’ −𝐼(𝑖’,𝑗’) 2
+= exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+(𝑖′,𝑗′)
+(𝑖′,𝑗′)
+𝑖’ −𝑘’ 2 𝑗’ −𝑙’ 2 𝐼 𝑖’ ,𝑗’ −𝐼(𝑘’,𝑙’) 2
+(𝑘′,𝑙′) = exp(− − ) ∙ exp(− )
+2𝜎2 2𝜎2 2𝜎2
+𝑥 𝑦 r
+𝐹(𝑖,𝑗) 본인 패치 𝐹′(𝑖′,𝑗′) 유사 패치
+src_noise
+
+=== PAGE 24 ===
+과제 : bilateral_filtering_with_similar_patch.py 24
+• my_bilateral_with_patch() 구현 과정
+– 현재 𝐹 + 𝐹′의 총합은 1이 아님
+– 𝑤 , 𝑤 를 조정하여 noise가 제거된 이미지를 생성하는 방법 고민하기
+1 2
+• 𝑤 = 0.5, 𝑤 = 0.5로 설정하면 𝐹와 𝐹′ 를 동일하게 반영
+1 2
+– 과제 목표
+• 𝑤 = 0.5, 𝑤 = 0.5보다 더 좋은 noise 제거 성능을 보이는 𝑤 , 𝑤 설정 방식 설계
+1 2 1 2
+• 본인이 설계한 𝑤 , 𝑤 계산 방식과 그 이유를 보고서에 설명
+1 2
+dst 𝑖,𝑗 = 𝑤 × ∗ + 𝑤 × ∗
+1 2
+𝐹(𝑖,𝑗) 본인 패치 𝐹′(𝑖′,𝑗′) 유사 패치
+src_noise dst
+
+=== PAGE 25 ===
+과제 : bilateral_filtering_with_similar_patch.py 25
+• 주의 사항
+
+=== PAGE 26 ===
+과제 : bilateral_filtering_with_similar_patch.py 26
+• 주의 사항
+
+=== PAGE 27 ===
+과제 : bilateral_filtering_with_similar_patch.py 27
+• my_bilateral_with_patch(src_noise, psize, bsize, sigma_xy, sigma_r,
+pad_type)
+– 입력
+• src_noise: noise가 적용된 입력 이미지
+• psize: 본인 패치와 유사 패치의 크기 (11로 사용)
+• bsize: 유사 패치를 찾기 위한 search box 크기 (17로 사용)
+• sigma_xy: 𝜎 , 𝜎 (5로 사용)
+𝑥 𝑦
+• sigma_r: 𝜎 (0.2로 사용)
+𝑟
+• pad_type: padding의 방식 지정
+– 반환
+• dst: edge를 유지하면서 noise를 제거한 이미지
+src_noise dst
+
+=== PAGE 28 ===
+과제 : bilateral_filtering_with_similar_patch.py 28
+• 최종 이미지
+Original Original + Gaussian noise Bilateral filtering with patch
+
+=== PAGE 29 ===
+과제 : bilateral_filtering_with_similar_patch.py 29
+• 결과 비교
+– 아래 두 가지 경우에 대한 정량 지표 비교
+• 𝑤 = 0.5, 𝑤 = 0.5
+1 2
+• 새롭게 설계한 𝑤 , 𝑤 설정 방식
+1 2
+< 𝑤 = 0.5, 𝑤 = 0.5 > < 새롭게 설계한 𝑤 , 𝑤 설정 방식 >
+1 2 1 2
+
+=== PAGE 30 ===
+과제 30
+• 보고서
+– 내용
+• 학과, 학번, 이름
+• 구현 코드: 구현한 코드에 대한 간단한 설명
+• 이미지: 총 5장
+– 원본 이미지(1ch), Gaussian noise 입힌 이미지, noise 제거된 흑백 아기 이미지
+– 𝑤 = 0.5, 𝑤 = 0.5 설정 후 정량 지표 캡쳐
+1 2
+– 𝑤 , 𝑤 조정 방법 설정 후 정량 지표 캡쳐
+1 2
+• 실습 24쪽 𝑤 , 𝑤 조정한 방법에 대한 구체적인 설명
+1 2
+• 느낀 점: 구현 결과를 보고 느낀 점, 혹은 어려운 점 등
+• 과제 난이도: 개인적으로 느낀 난이도 및 이유(과제가 쉽다, 어렵다 등)
+– .pdf 파일로 제출(이외의 파일 형식일 경우 감점)
+– 보고서 명
+• [IP]20xxxxxxx_이름_11주차_과제.pdf
+
+=== PAGE 31 ===
+과제 31
+• 과제 요약
+– 채점 기준
+• 구현을 못하거나 잘못 구현한 경우
+• 보고서 내용이 빠진 경우
+• 다른 사람의 코드 copy 적발 시 보여준 사람, copy한 사람 둘 다 0점
+• 내장 함수 사용시 감점(내장 함수를 사용해도 된다고 한 것 제외)
+– np.sum(), np.exp() 등 기본 배열 연산 함수 사용 가능
+– cv2.bilateralFilter() 등 bilateral filtering을 직접 수행하는 내장 함수 사용 X
+– 제출 파일
+• 아래의 파일을 압축해서 [IP]20XXXXXXX_이름_11주차_과제.zip 으로 제출
+– .py 파일
+– .pdf 보고서 파일
+– 제출 기한
+• 00분반 : 2026년 5월 29일 08시 59분까지
+• 01분반 : 2026년 5월 29일 10시 59분까지
+
+=== PAGE 32 ===
+32
+Q & A
+
