@@ -6,6 +6,7 @@ RAG 파이프라인
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import torch
 from src.vectordb.chroma_store import CNUVectorStore
+from src.rag.retriever import HybridRetriever
 
 # 속도 기준: Qwen2.5-3B (4bit ~2.5GB VRAM, 7B 대비 2~3배 빠름)
 DEFAULT_MODEL = "Qwen/Qwen2.5-3B-Instruct"
@@ -34,6 +35,7 @@ class RAGPipeline:
         use_4bit: bool = True,
     ):
         self.vectorstore = vectorstore or CNUVectorStore()
+        self.retriever = HybridRetriever(self.vectorstore)
         self._load_model(model_name, use_4bit)
 
     def _load_model(self, model_name: str, use_4bit: bool):
@@ -55,15 +57,16 @@ class RAGPipeline:
         self.model.eval()
 
     def retrieve(self, question: str, top_k: int = 3) -> tuple[str, float]:
-        """(context_str, best_score) 반환. 점수가 낮으면 관련 문서 없음."""
-        hits = self.vectorstore.search(question, top_k=top_k)
+        """(context_str, best_embed_score) 반환. 임베딩 유사도 기준 임계값 판단."""
+        hits = self.retriever.search(question, top_k=top_k)
         if not hits:
             return "", 0.0
-        best_score = hits[0]["score"]
+        # 할루시네이션 임계값은 RRF 점수가 아닌 임베딩 유사도로 판단
+        best_embed_score = max(h["embed_score"] for h in hits)
         context = "\n\n".join(
             f"[출처: {h['metadata'].get('title', '')}]\n{h['content']}" for h in hits
         )
-        return context, best_score
+        return context, best_embed_score
 
     def generate(self, question: str, max_new_tokens: int = 512) -> str:
         context, score = self.retrieve(question)
