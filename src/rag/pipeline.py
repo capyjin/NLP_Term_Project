@@ -56,6 +56,7 @@ class RAGPipeline:
         )
         self.model.eval()
 
+    # retrieve()는 질문과 유사한 문서를 벡터 검색으로 찾아서 컨텍스트로 조합. 임베딩 유사도 기준으로 할루시네이션 판단.
     def retrieve(self, question: str, top_k: int = 3) -> tuple[str, float]:
         """(context_str, best_embed_score) 반환. 임베딩 유사도 기준 임계값 판단."""
         hits = self.retriever.search(question, top_k=top_k)
@@ -63,9 +64,11 @@ class RAGPipeline:
             return "", 0.0
         # 할루시네이션 임계값은 RRF 점수가 아닌 임베딩 유사도로 판단
         best_embed_score = max(h["embed_score"] for h in hits)
-        context = "\n\n".join(
+        context = "\n\n".join( #\n\n으로 문서 간 구분
             f"[출처: {h['metadata'].get('title', '')}]\n{h['content']}" for h in hits
-        )
+        )#이 context가 generate()로 넘어가서 RAG_PROMPT_TEMPLATE에 들어감
+        # context는 여러 문서가 있을 수 있으니 \n\n으로 구분. 
+        # 각 문서 앞에 출처(제목) 표시. 임베딩 유사도는 가장 높은 점수로 판단하여 반환. generate()에서 이 점수가 임계값 미달 시 모른다고 답변하도록 함.
         return context, best_embed_score
 
     def generate(self, question: str, max_new_tokens: int = 512) -> str:
