@@ -1,0 +1,286 @@
+{
+  "fetched_at": "2026-06-01T20:51:54.766633",
+  "source_url": "https://mobileadmin.cnu.ac.kr/food/index.jsp",
+  "menus": [
+    {
+      "date": "2026-06-01",
+      "day": "월",
+      "restaurant": "제2학생회관",
+      "meal_type": "아침",
+      "menu": [
+        "짜장밥",
+        "계란파국",
+        "군만두",
+        "배추김치"
+      ],
+      "price": 1000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.01"
+    },
+    {
+      "date": "2026-06-01",
+      "day": "월",
+      "restaurant": "제2학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "냉우동",
+        "참치마요주먹밥",
+        "왕새우튀김",
+        "단무지"
+      ],
+      "price": 4500,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.01"
+    },
+    {
+      "date": "2026-06-01",
+      "day": "월",
+      "restaurant": "제3학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "돈까스",
+        "떡볶이"
+      ],
+      "price": 4000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.01"
+    },
+    {
+      "date": "2026-06-01",
+      "day": "월",
+      "restaurant": "제4학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "제육덮밥",
+        "유부된장국",
+        "쫄면무침",
+        "갈릭마요미트볼",
+        "배추김치"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.01"
+    },
+    {
+      "date": "2026-06-01",
+      "day": "월",
+      "restaurant": "생활과학대학",
+      "meal_type": "점심",
+      "menu": [
+        "고구마치즈돈까스",
+        "맑은우동국물",
+        "크림소스팬네파스타",
+        "파인애플샐러드",
+        "단무지"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.01"
+    },
+    {
+      "date": "2026-06-02",
+      "day": "화",
+      "restaurant": "제2학생회관",
+      "meal_type": "아침",
+      "menu": [
+        "삼계닭죽",
+        "메추리알장조림",
+        "우리쌀씨리얼",
+        "떠먹는 요거트",
+        "깍두기"
+      ],
+      "price": 1000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.02"
+    },
+    {
+      "date": "2026-06-02",
+      "day": "화",
+      "restaurant": "제2학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "순살감자탕",
+        "어묵볶음",
+        "요쿠르트",
+        "깍두기"
+      ],
+      "price": 5500,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.02"
+    },
+    {
+      "date": "2026-06-02",
+      "day": "화",
+      "restaurant": "제3학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "김치말이국수",
+        "함박스테이크"
+      ],
+      "price": 4000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.02"
+    },
+    {
+      "date": "2026-06-02",
+      "day": "화",
+      "restaurant": "제4학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "튀김우동",
+        "날치알김치비빔밥",
+        "갈비만두",
+        "마카로니샐러드",
+        "단무지"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.02"
+    },
+    {
+      "date": "2026-06-02",
+      "day": "화",
+      "restaurant": "생활과학대학",
+      "meal_type": "점심",
+      "menu": [
+        "육개장",
+        "고추메추리알조림",
+        "미니돈까스",
+        "연두부&양념장",
+        "깍두기"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.02"
+    },
+    {
+      "date": "2026-06-04",
+      "day": "목",
+      "restaurant": "제2학생회관",
+      "meal_type": "아침",
+      "menu": [
+        "햄야채볶음밥",
+        "맑은우동국물",
+        "새우카츠",
+        "깍두기"
+      ],
+      "price": 1000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.04"
+    },
+    {
+      "date": "2026-06-04",
+      "day": "목",
+      "restaurant": "제2학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "치킨마요덮밥",
+        "맑은우동국물",
+        "떡볶이",
+        "요쿠르트",
+        "깍두기"
+      ],
+      "price": 4500,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.04"
+    },
+    {
+      "date": "2026-06-04",
+      "day": "목",
+      "restaurant": "제3학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "김치치즈가츠동",
+        "소떡소떡꼬치"
+      ],
+      "price": 4000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.04"
+    },
+    {
+      "date": "2026-06-04",
+      "day": "목",
+      "restaurant": "제4학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "목살필라프&계란후라이",
+        "유부된장국",
+        "샐러드파스타",
+        "김떡만강정",
+        "배추김치"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.04"
+    },
+    {
+      "date": "2026-06-04",
+      "day": "목",
+      "restaurant": "생활과학대학",
+      "meal_type": "점심",
+      "menu": [
+        "스팸김치볶음밥",
+        "유부된장국",
+        "짜장떡볶이",
+        "고구마맛탕",
+        "깍두기"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.04"
+    },
+    {
+      "date": "2026-06-05",
+      "day": "금",
+      "restaurant": "제2학생회관",
+      "meal_type": "아침",
+      "menu": [
+        "오징어덮밥",
+        "맑은우동국물",
+        "요쿠르트",
+        "단무지"
+      ],
+      "price": 1000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.05"
+    },
+    {
+      "date": "2026-06-05",
+      "day": "금",
+      "restaurant": "제2학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "고구마치즈돈까스"
+      ],
+      "price": 5500,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.05"
+    },
+    {
+      "date": "2026-06-05",
+      "day": "금",
+      "restaurant": "제3학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "돼지국밥",
+        "손만두찜"
+      ],
+      "price": 4000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.05"
+    },
+    {
+      "date": "2026-06-05",
+      "day": "금",
+      "restaurant": "제4학생회관",
+      "meal_type": "점심",
+      "menu": [
+        "콩나물냉국",
+        "오징어초무침",
+        "소떡소떡볶음",
+        "고추메추리알조림",
+        "깻잎지",
+        "배추김치"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.05"
+    },
+    {
+      "date": "2026-06-05",
+      "day": "금",
+      "restaurant": "생활과학대학",
+      "meal_type": "점심",
+      "menu": [
+        "김치말이국수",
+        "후리가케주먹밥",
+        "찐만두",
+        "황도샐러드",
+        "열무김치"
+      ],
+      "price": 6000,
+      "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp?searchYmd=2026.06.05"
+    }
+  ]
+}

@@ -1,11 +1,23 @@
 """
 전처리 + 청킹 스크립트
-입력: data/raw/all_docs.json  (공지 크롤링 결과)
-      data/raw/pdf_docs.json  (PDF 크롤링 결과 — 있으면 자동 병합)
-출력: data/processed/chunks.json (정제된 청크)
+──────────────────────
+입력: data/raw/all_docs.json  (cnu_crawler.py 출력)
+      data/raw/pdf_docs.json  (pdf_crawler.py 출력 — 있으면 자동 병합)
+출력: data/processed/chunks.json
+
+실행:
+  python src/preprocessing/preprocess.py
 
 청크 형식:
   {"id": "...", "content": "...", "title": "...", "category": "...", "url": "..."}
+
+청킹 전략:
+  - 문자 단위 슬라이딩 윈도우 (CHUNK_SIZE=400자, CHUNK_OVERLAP=50자)
+  - 문장 경계 우선: 마침표·개행·!? 기준 ±30자 탐색 후 자름
+  - 30자 미만 청크 제거
+
+다음 단계:
+  python src/vectordb/build_db.py  (ChromaDB 구축)
 """
 
 import json
