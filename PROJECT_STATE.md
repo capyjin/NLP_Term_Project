@@ -44,7 +44,8 @@
 ### Optional — 실시간 정보 반영 (30점)
 - [x] `src/realtime_model.py`
   - 공지사항/학사일정: 기존 RAGPipeline으로 처리 ✅
-  - 식단/셔틀버스: fallback 응답 (포털 안내) ⚠️
+  - 식단: MealHandler (meal_crawler.py 크롤링 결과 기반) ✅
+  - 셔틀버스: ShuttleHandler (shuttle_bus.json + known_data fallback) ✅
   - `data/test_realtime.json` → `outputs/realtime_output.json`
 
 ### RAG 파이프라인 (기존 구현, 재사용)
@@ -115,8 +116,8 @@ chatbot.sh 실행 시:
 ### 알려진 한계
 | 항목 | 상태 | 비고 |
 |---|---|---|
-| 식단 실시간 크롤링 | ❌ 미구현 | fallback 응답으로 처리 |
-| 셔틀버스 실시간 크롤링 | ❌ 미구현 | fallback 응답으로 처리 |
+| 식단 실시간 크롤링 | ✅ 구현 완료 | meal_crawler.py → meal_menu.json → MealHandler |
+| 셔틀버스 실시간 크롤링 | ✅ 구현 완료 | shuttle_bus.json → ShuttleHandler (known_data fallback) |
 | Colab 실행 시 Drive 폴더명 | ⚠️ 확인 필요 | `classifier_박연진.ipynb` 셀 2 경로 수정 |
 | Windows에서 `chatbot.sh` | ⚠️ `.bat` 사용 | Linux/Mac에서는 `.sh` 사용 |
 | 모델 다운로드 시간 | ⚠️ ~20분 | 첫 실행 시 README 참조 |

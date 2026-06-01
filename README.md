@@ -63,7 +63,7 @@ pip install -r requirements.txt
 | 문서 검색 | BM25(Kiwi 형태소) + KURE-v1 Dense Retrieval + RRF |
 | 벡터 DB | ChromaDB (KURE-v1 1024d) |
 | UI | Gradio ChatInterface |
-| 실시간 정보 | 공지/학사일정: RAG, 식단/셔틀버스: 포털 안내 fallback |
+| 실시간 정보 | 공지/학사일정: RAG, 식단: meal_crawler.py 크롤링 → MealHandler, 셔틀버스: ShuttleHandler |
 
 ---
 

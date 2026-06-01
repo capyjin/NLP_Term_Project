@@ -3,7 +3,8 @@
 ──────────────────────────────────────────────────────────────────
 [전략]
   공지사항 / 학사일정: 기존 RAGPipeline (ChromaDB + BM25 + Qwen2.5-3B) 사용
-  식단 안내 / 셔틀버스: 실시간 크롤링 시도 → 실패 시 포털 안내 fallback
+  식단 안내:  MealHandler (meal_crawler.py 결과 → 공식 URL fallback)
+  셔틀버스:   ShuttleHandler (shuttle_bus.json → known_data fallback)
 
 실행:
   python src/realtime_model.py
@@ -18,32 +19,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-# ── Fallback 응답 (식단·셔틀버스 실시간 크롤링 불가 시) ─────────────────────
-FALLBACK = {
-    "식단": (
-        "오늘 학식 메뉴는 충남대학교 포털(plus.cnu.ac.kr) 또는 "
-        "충남대학교 생활관 홈페이지에서 확인하실 수 있습니다. "
-        "학생식당 운영 시간 및 메뉴는 매일 업데이트됩니다."
-    ),
-    "셔틀버스": (
-        "셔틀버스 시간표 및 운행 정보는 충남대학교 포털(plus.cnu.ac.kr) "
-        "또는 학생처 공지사항에서 확인하실 수 있습니다. "
-        "실시간 운행 여부는 학교 공식 앱에서 확인 가능합니다."
-    ),
-}
-
-# 카테고리 감지 키워드
-_MEAL_KW    = {"학식", "식단", "메뉴", "밥", "점심", "저녁", "식당", "구내식당"}
-_SHUTTLE_KW = {"셔틀", "통학버스", "버스", "정류장", "시간표", "운행"}
-
-
-def _detect_category(question: str) -> str:
-    q = question.replace(" ", "")
-    if any(k in q for k in _MEAL_KW):
-        return "식단"
-    if any(k in q for k in _SHUTTLE_KW):
-        return "셔틀버스"
-    return "rag"
+from src.chatbot_router import CNUChatRouter, detect_category
 
 
 def main():
@@ -64,28 +40,41 @@ def main():
 
     print(f"입력: {len(items)}건 ({input_path})")
 
-    # RAG 파이프라인 (공지/학사일정 처리용) — 필요 시 lazy 초기화
+    # RAG 파이프라인 — 식단/셔틀 질문에는 로드하지 않음 (lazy 초기화)
     pipeline = None
+    router   = None
 
     results = []
     for i, item in enumerate(items, 1):
         question = item.get("user", item.get("question", ""))
-        category = _detect_category(question)
-        print(f"[{i:3d}/{len(items)}] [{category}] {question[:50]}")
+        cat = detect_category(question)
+        cat_label = {3: "식단", 4: "셔틀버스", -1: "rag"}[cat]
+        print(f"[{i:3d}/{len(items)}] [{cat_label}] {question[:50]}")
 
-        if category in FALLBACK:
-            # 식단/셔틀버스: fallback 응답
-            answer = FALLBACK[category]
+        if cat in (3, 4):
+            # 식단/셔틀버스: handler 직접 응답 (Qwen 미사용)
+            if router is None:
+                # pipeline 없이 핸들러만 초기화하기 위해 None 전달
+                from src.handlers.meal_handler    import MealHandler
+                from src.handlers.shuttle_handler import ShuttleHandler
+                _meal_h    = MealHandler(BASE_DIR)
+                _shuttle_h = ShuttleHandler(BASE_DIR)
+
+            if cat == 3:
+                answer, source = _meal_h.answer(question)
+            else:
+                answer, source = _shuttle_h.answer(question)
         else:
             # 공지사항/학사일정: RAG
             if pipeline is None:
                 print("  RAGPipeline 초기화 중...")
                 from src.rag.pipeline import RAGPipeline
                 pipeline = RAGPipeline()
-            answer = pipeline.generate(question)
+                router   = CNUChatRouter(pipeline, BASE_DIR)
+            answer, source = router.chat(question)
 
         results.append({"user": question, "model": answer})
-        print(f"         A: {answer[:80]}")
+        print(f"  [{source}] A: {answer[:80]}")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
