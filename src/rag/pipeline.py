@@ -25,9 +25,11 @@ import torch
 from src.vectordb.chroma_store import CNUVectorStore
 from src.rag.retriever import HybridRetriever
 
-# 속도/품질 트레이드오프: 3B 4-bit ≈ 2.5GB VRAM, 7B 대비 2~3배 빠름
-# 파인튜닝 모델 사용 시: "./models/cnu-qa-lora" (finetune.py 결과)
-DEFAULT_MODEL = "Qwen/Qwen2.5-3B-Instruct"
+# Drive 저장 모델 우선 로드 → 재시작 시 재다운로드 없음
+# 없으면 HuggingFace에서 자동 다운로드
+import os as _os
+_DRIVE_MODEL = "/content/drive/MyDrive/models/qwen2.5-3b-4bit"
+DEFAULT_MODEL = _DRIVE_MODEL if _os.path.exists(_DRIVE_MODEL) else "Qwen/Qwen2.5-3B-Instruct"
 
 # 임계값: 가장 유사한 청크의 embed_score가 이 값 미만이면 모른다고 답변
 SIMILARITY_THRESHOLD = 0.40
