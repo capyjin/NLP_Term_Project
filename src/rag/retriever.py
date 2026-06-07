@@ -83,6 +83,16 @@ _SEASON_BOOST    = frozenset({"계절학기"})
 _COURSE_TRIGGERS = frozenset({"수강", "정정", "변경"})
 _COURSE_BOOST    = frozenset({"수강신청", "수강신청변경"})
 
+# 취업 의도 트리거 — 채용/공채/인턴 등
+# 크롤링 청크는 subcategory 없으므로 category="취업공지" 로 매칭
+_JOB_TRIGGERS = frozenset({"취업", "채용", "공채", "인턴", "구직", "취직"})
+_JOB_BOOST    = frozenset({"취업FAQ"})  # FAQ subcategory
+_JOB_CATEGORY = "취업공지"               # 크롤링 청크 category
+
+# 공지 의도 트리거 — "최근 공지", "학교 소식" 등 메타 쿼리
+_NOTICE_TRIGGERS = frozenset({"공지", "소식", "안내", "알림"})
+_NOTICE_BOOST    = frozenset({"공지FAQ"})
+
 
 class HybridRetriever:
     """
@@ -218,6 +228,20 @@ class HybridRetriever:
         # 계절학기와 elif: 계절학기 쿼리에서 수강신청 boost가 중복 발동하지 않도록
         elif query_tokens & _COURSE_TRIGGERS:
             if sub in _COURSE_BOOST:
+                return 2.0
+
+        # ⑤ 취업 의도 — subcategory(FAQ) 또는 category(크롤링 청크) 기반
+        # 크롤링 청크는 subcategory 없음 → category="취업공지"로 boost
+        if query_tokens & _JOB_TRIGGERS:
+            if sub in _JOB_BOOST:
+                return 2.5
+            cat = chunk.get("category", "")
+            if cat == _JOB_CATEGORY:
+                return 2.0
+
+        # ⑥ 공지 메타 쿼리 — "최근 공지", "학교 소식" 등
+        if query_tokens & _NOTICE_TRIGGERS:
+            if sub in _NOTICE_BOOST:
                 return 2.0
 
         return 1.0  # neutral

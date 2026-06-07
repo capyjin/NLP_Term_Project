@@ -1,132 +1,602 @@
 [
-  {"question": "졸업까지 몇 학점이 필요한가요?", "label": 0},
-  {"question": "전공 필수 과목은 몇 개 들어야 해요?", "label": 0},
-  {"question": "교양 필수 이수 방법이 뭐예요?", "label": 0},
-  {"question": "졸업 요건을 어디서 확인하나요?", "label": 0},
-  {"question": "졸업하려면 어떤 조건을 갖춰야 하나요?", "label": 0},
-  {"question": "졸업인증 영어 어떻게 받아요?", "label": 0},
-  {"question": "SW 졸업인증 이수 방법이 뭐예요?", "label": 0},
-  {"question": "봉사활동 시간이 졸업에 필요한가요?", "label": 0},
-  {"question": "복수전공하면 졸업요건이 어떻게 달라지나요?", "label": 0},
-  {"question": "부전공 이수하면 학점이 얼마나 더 필요해요?", "label": 0},
-  {"question": "졸업논문 제출해야 하나요?", "label": 0},
-  {"question": "조기졸업 조건이 뭐예요?", "label": 0},
-  {"question": "전공 학점은 몇 학점 들어야 해요?", "label": 0},
-  {"question": "졸업 신청 방법 알려줘", "label": 0},
-  {"question": "졸업 예정자 확인을 어떻게 하나요?", "label": 0},
-  {"question": "졸업요건 충족 여부를 포털에서 확인하는 방법", "label": 0},
-  {"question": "교양 선택 과목을 몇 학점 들어야 하나요?", "label": 0},
-  {"question": "전공선택 과목 이수 기준이 뭐예요?", "label": 0},
-  {"question": "학과별 졸업 요건이 달라요?", "label": 0},
-  {"question": "영어 졸업인증 면제 조건이 있나요?", "label": 0},
-  {"question": "졸업장 받으려면 어떤 절차가 있나요?", "label": 0},
-  {"question": "마지막 학기에 졸업 신청을 해야 하나요?", "label": 0},
-  {"question": "학적부에서 이수학점 확인하는 방법", "label": 0},
-  {"question": "교직이수하면 졸업요건이 바뀌나요?", "label": 0},
-  {"question": "이중전공 학생의 졸업 요건", "label": 0},
-  {"question": "필수 교양 과목 목록 알려줘", "label": 0},
-  {"question": "졸업할 때 학점 미달이면 어떻게 되나요?", "label": 0},
-  {"question": "총 몇 학점 이수해야 졸업할 수 있나요?", "label": 0},
-  {"question": "졸업 요건 중 창의적 사고 과목이 뭔가요?", "label": 0},
-  {"question": "제 이수 현황에서 졸업요건 남은 게 뭐예요?", "label": 0},
-  {"question": "학교 공지사항 어디서 봐요?", "label": 1},
-  {"question": "새로 올라온 공지사항 알려줘", "label": 1},
-  {"question": "이번에 올라온 공지사항 어디서 확인해요?", "label": 1},
-  {"question": "장학금 관련 공지 있나요?", "label": 1},
-  {"question": "취업 공지사항 어디서 봐요?", "label": 1},
-  {"question": "장학생 선발 공고가 올라왔나요?", "label": 1},
-  {"question": "충남대 포털에서 공지사항 보는 법", "label": 1},
-  {"question": "학교 소식 어디서 확인해요?", "label": 1},
-  {"question": "근로장학생 모집 공고 알려줘", "label": 1},
-  {"question": "교내 행사 공지 어디에 있어요?", "label": 1},
-  {"question": "인턴십 관련 공고 어디 있어요?", "label": 1},
-  {"question": "학생처 공지 어디서 봐요?", "label": 1},
-  {"question": "비교과 프로그램 신청 공지 있나요?", "label": 1},
-  {"question": "학교 행사 일정 공고 어디에 있어요?", "label": 1},
-  {"question": "장학금 신청 공지 어디서 봐요?", "label": 1},
-  {"question": "등록금 고지서 관련 공지 있나요?", "label": 1},
-  {"question": "포털에서 공지 검색하는 방법", "label": 1},
-  {"question": "최신 학교 소식이 뭐예요?", "label": 1},
-  {"question": "교외 장학금 공지 있나요?", "label": 1},
-  {"question": "취업 박람회 공고 올라왔나요?", "label": 1},
-  {"question": "학술 대회 관련 공지 어디 있나요?", "label": 1},
-  {"question": "재학생 대상 공고 어디서 봐요?", "label": 1},
-  {"question": "학교 홈페이지 공지사항 링크 알려줘", "label": 1},
-  {"question": "요즘 어떤 공지사항이 올라왔나요?", "label": 1},
-  {"question": "긴급 공지사항 어디서 확인해요?", "label": 1},
-  {"question": "학과 사무실 공지 어디 있어요?", "label": 1},
-  {"question": "국제교류 관련 공지 있나요?", "label": 1},
-  {"question": "실습 관련 공지사항 어디서 봐요?", "label": 1},
-  {"question": "삼성 장학금 공지 올라왔나요?", "label": 1},
-  {"question": "교내 공모전 공지 어디서 봐요?", "label": 1},
-  {"question": "이번 학기 수강신청 기간이 언제예요?", "label": 2},
-  {"question": "수강신청 변경 기간은 언제인가요?", "label": 2},
-  {"question": "수강 정정은 언제 할 수 있어요?", "label": 2},
-  {"question": "계절학기 신청은 언제 하나요?", "label": 2},
-  {"question": "기말고사 기간이 언제예요?", "label": 2},
-  {"question": "중간고사 일정 언제예요?", "label": 2},
-  {"question": "이번 학기 방학이 언제부터예요?", "label": 2},
-  {"question": "개강일이 언제예요?", "label": 2},
-  {"question": "종강일이 언제예요?", "label": 2},
-  {"question": "수강포기 기간이 언제예요?", "label": 2},
-  {"question": "등록금 납부 기간이 언제예요?", "label": 2},
-  {"question": "휴학 신청 기간이 언제예요?", "label": 2},
-  {"question": "복학 신청 언제까지 해야 해요?", "label": 2},
-  {"question": "성적 이의신청 기간이 언제예요?", "label": 2},
-  {"question": "성적 발표는 언제 되나요?", "label": 2},
-  {"question": "하기 계절학기 신청 기간 알려줘", "label": 2},
-  {"question": "동계 계절학기 일정 알려줘", "label": 2},
-  {"question": "학사일정 어디서 확인해요?", "label": 2},
-  {"question": "학기 시작이 언제예요?", "label": 2},
-  {"question": "시험 기간 일정 알려줘", "label": 2},
-  {"question": "수강신청 취소 언제까지 가능해요?", "label": 2},
-  {"question": "학사일정표 어디서 다운받아요?", "label": 2},
-  {"question": "재수강 신청 기간이 언제예요?", "label": 2},
-  {"question": "공휴일 수업 보강 일정 알려줘", "label": 2},
-  {"question": "수강신청 언제 해요?", "label": 2},
-  {"question": "이번 학기 첫 수업일이 언제예요?", "label": 2},
-  {"question": "계절학기 수강신청 기간이 언제예요?", "label": 2},
-  {"question": "방학 시작이 언제예요?", "label": 2},
-  {"question": "성적 확인은 언제 할 수 있어요?", "label": 2},
-  {"question": "이번 학기 수강신청은 언제 시작하나요?", "label": 2},
-  {"question": "오늘 학식 뭐 나와요?", "label": 3},
-  {"question": "오늘 점심 메뉴 알려줘", "label": 3},
-  {"question": "내일 학식 뭐예요?", "label": 3},
-  {"question": "이번 주 식단표 어디서 봐요?", "label": 3},
-  {"question": "학생식당 오늘 메뉴 알려줘", "label": 3},
-  {"question": "오늘 저녁 메뉴가 뭐예요?", "label": 3},
-  {"question": "오늘 학식 얼마예요?", "label": 3},
-  {"question": "학생식당 운영 시간이 어떻게 되나요?", "label": 3},
-  {"question": "내일 점심에 뭐 나와요?", "label": 3},
-  {"question": "A동 학생식당 오늘 메뉴 알려줘", "label": 3},
-  {"question": "주간 식단 알려줘", "label": 3},
-  {"question": "오늘 식단 뭐야?", "label": 3},
-  {"question": "학식 몇 시에 문 열어요?", "label": 3},
-  {"question": "오늘 학식 추천해줘", "label": 3},
-  {"question": "다음 주 식단 알 수 있나요?", "label": 3},
-  {"question": "학생식당 특식 오늘 있나요?", "label": 3},
-  {"question": "오늘 저녁 학식 뭐 나와?", "label": 3},
-  {"question": "내일 학식 메뉴 알려줘", "label": 3},
-  {"question": "학식 오늘 뭐야", "label": 3},
-  {"question": "학생식당 오늘 뭐 먹으면 좋아요?", "label": 3},
-  {"question": "셔틀버스 시간표 알려줘", "label": 4},
-  {"question": "통학버스 언제 출발해요?", "label": 4},
-  {"question": "셔틀버스 마지막 버스 몇 시예요?", "label": 4},
-  {"question": "셔틀버스 정류장 위치가 어디예요?", "label": 4},
-  {"question": "오늘 셔틀버스 운행하나요?", "label": 4},
-  {"question": "셔틀버스 노선 알려줘", "label": 4},
-  {"question": "다음 셔틀버스 언제 와요?", "label": 4},
-  {"question": "학교 버스 배차 간격이 어떻게 되나요?", "label": 4},
-  {"question": "셔틀버스 요금이 얼마예요?", "label": 4},
-  {"question": "방학 중 셔틀버스 운행해요?", "label": 4},
-  {"question": "셔틀버스 노선도 어디서 봐요?", "label": 4},
-  {"question": "학교 셔틀 탑승 장소 알려줘", "label": 4},
-  {"question": "대전역에서 학교 셔틀버스 타는 법", "label": 4},
-  {"question": "셔틀버스 첫차 몇 시예요?", "label": 4},
-  {"question": "학교 통학버스 정류장 어디예요?", "label": 4},
-  {"question": "셔틀버스 운행 안 하는 날 있나요?", "label": 4},
-  {"question": "주말에도 셔틀버스 있어요?", "label": 4},
-  {"question": "유성 방면 셔틀버스 있나요?", "label": 4},
-  {"question": "셔틀버스 탑승 방법 알려줘", "label": 4},
-  {"question": "학교까지 셔틀버스로 얼마나 걸려요?", "label": 4}
+  {
+    "question": "졸업까지 몇 학점이 필요한가요?",
+    "label": 0
+  },
+  {
+    "question": "전공 필수 과목은 몇 개 들어야 해요?",
+    "label": 0
+  },
+  {
+    "question": "교양 필수 이수 방법이 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "졸업 요건을 어디서 확인하나요?",
+    "label": 0
+  },
+  {
+    "question": "졸업하려면 어떤 조건을 갖춰야 하나요?",
+    "label": 0
+  },
+  {
+    "question": "졸업인증 영어 어떻게 받아요?",
+    "label": 0
+  },
+  {
+    "question": "SW 졸업인증 이수 방법이 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "봉사활동 시간이 졸업에 필요한가요?",
+    "label": 0
+  },
+  {
+    "question": "복수전공하면 졸업요건이 어떻게 달라지나요?",
+    "label": 0
+  },
+  {
+    "question": "부전공 이수하면 학점이 얼마나 더 필요해요?",
+    "label": 0
+  },
+  {
+    "question": "졸업논문 제출해야 하나요?",
+    "label": 0
+  },
+  {
+    "question": "조기졸업 조건이 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "전공 학점은 몇 학점 들어야 해요?",
+    "label": 0
+  },
+  {
+    "question": "졸업 신청 방법 알려줘",
+    "label": 0
+  },
+  {
+    "question": "졸업 예정자 확인을 어떻게 하나요?",
+    "label": 0
+  },
+  {
+    "question": "졸업요건 충족 여부를 포털에서 확인하는 방법",
+    "label": 0
+  },
+  {
+    "question": "교양 선택 과목을 몇 학점 들어야 하나요?",
+    "label": 0
+  },
+  {
+    "question": "전공선택 과목 이수 기준이 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "학과별 졸업 요건이 달라요?",
+    "label": 0
+  },
+  {
+    "question": "영어 졸업인증 면제 조건이 있나요?",
+    "label": 0
+  },
+  {
+    "question": "졸업장 받으려면 어떤 절차가 있나요?",
+    "label": 0
+  },
+  {
+    "question": "마지막 학기에 졸업 신청을 해야 하나요?",
+    "label": 0
+  },
+  {
+    "question": "학적부에서 이수학점 확인하는 방법",
+    "label": 0
+  },
+  {
+    "question": "교직이수하면 졸업요건이 바뀌나요?",
+    "label": 0
+  },
+  {
+    "question": "이중전공 학생의 졸업 요건",
+    "label": 0
+  },
+  {
+    "question": "필수 교양 과목 목록 알려줘",
+    "label": 0
+  },
+  {
+    "question": "졸업할 때 학점 미달이면 어떻게 되나요?",
+    "label": 0
+  },
+  {
+    "question": "총 몇 학점 이수해야 졸업할 수 있나요?",
+    "label": 0
+  },
+  {
+    "question": "졸업 요건 중 창의적 사고 과목이 뭔가요?",
+    "label": 0
+  },
+  {
+    "question": "제 이수 현황에서 졸업요건 남은 게 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "학교 공지사항 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "새로 올라온 공지사항 알려줘",
+    "label": 1
+  },
+  {
+    "question": "이번에 올라온 공지사항 어디서 확인해요?",
+    "label": 1
+  },
+  {
+    "question": "장학금 관련 공지 있나요?",
+    "label": 1
+  },
+  {
+    "question": "취업 공지사항 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "장학생 선발 공고가 올라왔나요?",
+    "label": 1
+  },
+  {
+    "question": "충남대 포털에서 공지사항 보는 법",
+    "label": 1
+  },
+  {
+    "question": "학교 소식 어디서 확인해요?",
+    "label": 1
+  },
+  {
+    "question": "근로장학생 모집 공고 알려줘",
+    "label": 1
+  },
+  {
+    "question": "교내 행사 공지 어디에 있어요?",
+    "label": 1
+  },
+  {
+    "question": "인턴십 관련 공고 어디 있어요?",
+    "label": 1
+  },
+  {
+    "question": "학생처 공지 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "비교과 프로그램 신청 공지 있나요?",
+    "label": 1
+  },
+  {
+    "question": "학교 행사 일정 공고 어디에 있어요?",
+    "label": 1
+  },
+  {
+    "question": "장학금 신청 공지 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "등록금 고지서 관련 공지 있나요?",
+    "label": 1
+  },
+  {
+    "question": "포털에서 공지 검색하는 방법",
+    "label": 1
+  },
+  {
+    "question": "최신 학교 소식이 뭐예요?",
+    "label": 1
+  },
+  {
+    "question": "교외 장학금 공지 있나요?",
+    "label": 1
+  },
+  {
+    "question": "취업 박람회 공고 올라왔나요?",
+    "label": 1
+  },
+  {
+    "question": "학술 대회 관련 공지 어디 있나요?",
+    "label": 1
+  },
+  {
+    "question": "재학생 대상 공고 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "학교 홈페이지 공지사항 링크 알려줘",
+    "label": 1
+  },
+  {
+    "question": "요즘 어떤 공지사항이 올라왔나요?",
+    "label": 1
+  },
+  {
+    "question": "긴급 공지사항 어디서 확인해요?",
+    "label": 1
+  },
+  {
+    "question": "학과 사무실 공지 어디 있어요?",
+    "label": 1
+  },
+  {
+    "question": "국제교류 관련 공지 있나요?",
+    "label": 1
+  },
+  {
+    "question": "실습 관련 공지사항 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "삼성 장학금 공지 올라왔나요?",
+    "label": 1
+  },
+  {
+    "question": "교내 공모전 공지 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "이번 학기 수강신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "수강신청 변경 기간은 언제인가요?",
+    "label": 2
+  },
+  {
+    "question": "수강 정정은 언제 할 수 있어요?",
+    "label": 2
+  },
+  {
+    "question": "계절학기 신청은 언제 하나요?",
+    "label": 2
+  },
+  {
+    "question": "기말고사 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "중간고사 일정 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 방학이 언제부터예요?",
+    "label": 2
+  },
+  {
+    "question": "개강일이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "종강일이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "수강포기 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "등록금 납부 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "휴학 신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "복학 신청 언제까지 해야 해요?",
+    "label": 2
+  },
+  {
+    "question": "성적 이의신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "성적 발표는 언제 되나요?",
+    "label": 2
+  },
+  {
+    "question": "하기 계절학기 신청 기간 알려줘",
+    "label": 2
+  },
+  {
+    "question": "동계 계절학기 일정 알려줘",
+    "label": 2
+  },
+  {
+    "question": "학사일정 어디서 확인해요?",
+    "label": 2
+  },
+  {
+    "question": "학기 시작이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "시험 기간 일정 알려줘",
+    "label": 2
+  },
+  {
+    "question": "수강신청 취소 언제까지 가능해요?",
+    "label": 2
+  },
+  {
+    "question": "학사일정표 어디서 다운받아요?",
+    "label": 2
+  },
+  {
+    "question": "재수강 신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "공휴일 수업 보강 일정 알려줘",
+    "label": 2
+  },
+  {
+    "question": "수강신청 언제 해요?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 첫 수업일이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "계절학기 수강신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "방학 시작이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "성적 확인은 언제 할 수 있어요?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 수강신청은 언제 시작하나요?",
+    "label": 2
+  },
+  {
+    "question": "오늘 학식 뭐 나와요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 점심 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "내일 학식 뭐예요?",
+    "label": 3
+  },
+  {
+    "question": "이번 주 식단표 어디서 봐요?",
+    "label": 3
+  },
+  {
+    "question": "학생식당 오늘 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "오늘 저녁 메뉴가 뭐예요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 학식 얼마예요?",
+    "label": 3
+  },
+  {
+    "question": "학생식당 운영 시간이 어떻게 되나요?",
+    "label": 3
+  },
+  {
+    "question": "내일 점심에 뭐 나와요?",
+    "label": 3
+  },
+  {
+    "question": "A동 학생식당 오늘 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "주간 식단 알려줘",
+    "label": 3
+  },
+  {
+    "question": "오늘 식단 뭐야?",
+    "label": 3
+  },
+  {
+    "question": "학식 몇 시에 문 열어요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 학식 추천해줘",
+    "label": 3
+  },
+  {
+    "question": "다음 주 식단 알 수 있나요?",
+    "label": 3
+  },
+  {
+    "question": "학생식당 특식 오늘 있나요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 저녁 학식 뭐 나와?",
+    "label": 3
+  },
+  {
+    "question": "내일 학식 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "학식 오늘 뭐야",
+    "label": 3
+  },
+  {
+    "question": "학생식당 오늘 뭐 먹으면 좋아요?",
+    "label": 3
+  },
+  {
+    "question": "셔틀버스 시간표 알려줘",
+    "label": 4
+  },
+  {
+    "question": "통학버스 언제 출발해요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 마지막 버스 몇 시예요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 정류장 위치가 어디예요?",
+    "label": 4
+  },
+  {
+    "question": "오늘 셔틀버스 운행하나요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 노선 알려줘",
+    "label": 4
+  },
+  {
+    "question": "다음 셔틀버스 언제 와요?",
+    "label": 4
+  },
+  {
+    "question": "학교 버스 배차 간격이 어떻게 되나요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 요금이 얼마예요?",
+    "label": 4
+  },
+  {
+    "question": "방학 중 셔틀버스 운행해요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 노선도 어디서 봐요?",
+    "label": 4
+  },
+  {
+    "question": "학교 셔틀 탑승 장소 알려줘",
+    "label": 4
+  },
+  {
+    "question": "대전역에서 학교 셔틀버스 타는 법",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 첫차 몇 시예요?",
+    "label": 4
+  },
+  {
+    "question": "학교 통학버스 정류장 어디예요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 운행 안 하는 날 있나요?",
+    "label": 4
+  },
+  {
+    "question": "주말에도 셔틀버스 있어요?",
+    "label": 4
+  },
+  {
+    "question": "유성 방면 셔틀버스 있나요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 탑승 방법 알려줘",
+    "label": 4
+  },
+  {
+    "question": "학교까지 셔틀버스로 얼마나 걸려요?",
+    "label": 4
+  },
+  {
+    "question": "오늘 저녁 학식 메뉴 뭐야?",
+    "label": 3
+  },
+  {
+    "question": "내일 점심 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "학생식당 오늘 뭐 나와?",
+    "label": 3
+  },
+  {
+    "question": "학식 메뉴 어디서 확인해?",
+    "label": 3
+  },
+  {
+    "question": "조식 제공 되나요?",
+    "label": 3
+  },
+  {
+    "question": "구내식당 오늘 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "제1학생회관 점심 뭐야",
+    "label": 3
+  },
+  {
+    "question": "학식 오늘 뭐 먹지?",
+    "label": 3
+  },
+  {
+    "question": "식당 오늘 밥 뭐예요?",
+    "label": 3
+  },
+  {
+    "question": "모레 학식 메뉴 알 수 있어?",
+    "label": 3
+  },
+  {
+    "question": "셔틀 몇 시에 있어?",
+    "label": 4
+  },
+  {
+    "question": "통학버스 시간 알려줘",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 첫차 언제야?",
+    "label": 4
+  },
+  {
+    "question": "버스 막차 몇 시야?",
+    "label": 4
+  },
+  {
+    "question": "셔틀 어디서 타?",
+    "label": 4
+  },
+  {
+    "question": "스쿨버스 운행 시간 알려줘",
+    "label": 4
+  },
+  {
+    "question": "버스 오늘 정상 운행해?",
+    "label": 4
+  },
+  {
+    "question": "셔틀 지금 있어요?",
+    "label": 4
+  },
+  {
+    "question": "통학버스 정류장 어디야?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 오늘 안 운행해?",
+    "label": 4
+  }
 ]
