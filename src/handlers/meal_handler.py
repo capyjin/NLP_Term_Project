@@ -147,12 +147,34 @@ class MealHandler:
             )
 
         if not filtered and target:
-            # 데이터에 해당 날짜가 없음
-            date_diff = (target - today).days
-            if date_diff < 0:
-                return f"{target.isoformat()} 식단 데이터는 제공되지 않습니다.\n" + _OFFICIAL
+            # 저장된 날짜 목록 추출
+            available = sorted(set(m.get("date", "") for m in menus if m.get("date")))
+            date_list = ", ".join(available) if available else "없음"
+
+            # 가장 최근 날짜 메뉴로 대체 표시
+            if available:
+                latest = available[-1]
+                latest_menus = [m for m in menus if m.get("date") == latest]
+                lunch = [m for m in latest_menus if m.get("meal_type") == "점심"] or latest_menus
+                preview_lines = [f"📅 {latest} 식단 (저장된 최신 데이터)\n"]
+                for m in lunch[:3]:
+                    r     = m.get("restaurant", "식당")
+                    mt    = m.get("meal_type", "")
+                    items = m.get("menu", [])
+                    preview_lines.append(f"🍱 {r} {mt}")
+                    if items:
+                        preview_lines.append("  " + " / ".join(items[:6]))
+                    preview_lines.append("")
+                preview = "\n".join(preview_lines)
+                return (
+                    f"⚠️ {target.isoformat()} 날짜의 식단 정보가 없습니다.\n"
+                    f"현재 저장된 날짜: {date_list}\n\n"
+                    + preview
+                    + f"📌 최신 식단: {MEAL_URL}"
+                )
+
             return (
-                f"{target.isoformat()} 식단 정보를 아직 불러오지 못했습니다.\n"
+                f"{target.isoformat()} 식단 정보가 없습니다.\n"
                 "최신 식단은 공식 페이지에서 확인하세요:\n"
                 + _OFFICIAL
             )
