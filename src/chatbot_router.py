@@ -16,8 +16,21 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-from src.handlers.meal_handler    import MealHandler
-from src.handlers.shuttle_handler import ShuttleHandler
+from src.handlers.meal_handler        import MealHandler
+from src.handlers.shuttle_handler     import ShuttleHandler
+from src.handlers.scholarship_handler import ScholarshipHandler
+
+# ── 장학공지 리스트 키워드 ────────────────────────────────────────────────────────
+# "리스트/목록/뭐있어/보여줘/공지/최근" 의도 → ScholarshipHandler
+# 설명형("신청방법", "얼마") → RAG/FAQ 유지
+_SCHOLARSHIP_LIST_KW = frozenset({
+    "장학금리스트", "장학공지", "장학금목록", "장학금종류",
+    "장학금뭐있어", "장학금있어", "장학있어", "장학금있나",
+    "최근장학금", "장학금보여", "장학공지보여", "장학금신청가능",
+    "장학금공지", "장학리스트",
+})
+# "장학" + 리스트 의도 트리거 — 짧은 질문에서 조합 감지
+_SCHOLARSHIP_TRIGGER = frozenset({"리스트", "목록", "뭐있어", "뭐있나", "보여줘", "알려줘"})
 
 # ── 셔틀버스 키워드 ────────────────────────────────────────────────────────────
 _SHUTTLE_KW = frozenset({
@@ -52,18 +65,37 @@ def _has_meal(nq: str) -> bool:
     return any(k in nq for k in _MEAL_KW)
 
 
+def _has_scholarship_list(nq: str) -> bool:
+    """
+    장학금 리스트/목록 의도 감지.
+    "장학" 포함 + 리스트 트리거 OR 명시적 복합 키워드.
+    설명형("신청방법", "얼마") 은 False → RAG/FAQ 유지.
+    """
+    # 명시적 복합 키워드 직접 매칭
+    if any(k in nq for k in _SCHOLARSHIP_LIST_KW):
+        return True
+    # "장학" + 리스트 트리거 조합
+    if "장학" in nq and any(t in nq for t in _SCHOLARSHIP_TRIGGER):
+        # 설명형 제외: "신청방법", "얼마", "어떻게", "어디서"는 RAG로
+        if not any(ex in nq for ex in ("신청방법", "얼마", "어떻게", "어디서", "어떤", "방법")):
+            return True
+    return False
+
+
 def detect_category(question: str) -> int:
     """
     키워드 기반 단일 카테고리 감지.
     복합 질문은 detect_all_categories() 사용.
 
-    Returns: 3(식단) | 4(셔틀) | -1(RAG)
+    Returns: 3(식단) | 4(셔틀) | 5(장학리스트) | -1(RAG)
     """
     nq = question.replace(" ", "")
     if _has_shuttle(nq):
         return 4
     if _has_meal(nq):
         return 3
+    if _has_scholarship_list(nq):
+        return 5
     return -1
 
 
@@ -74,16 +106,15 @@ def detect_all_categories(question: str) -> list[int]:
     단일 질문은 기존 detect_category()와 동일하게 동작.
     """
     nq = question.replace(" ", "")
-    has_s = _has_shuttle(nq)
-    has_m = _has_meal(nq)
+    has_s  = _has_shuttle(nq)
+    has_m  = _has_meal(nq)
+    has_sc = _has_scholarship_list(nq)
 
-    if has_s and has_m:
-        return [4, 3]   # 셔틀 먼저 표시
-    if has_s:
-        return [4]
-    if has_m:
-        return [3]
-    return [-1]
+    cats = []
+    if has_s:  cats.append(4)
+    if has_m:  cats.append(3)
+    if has_sc: cats.append(5)
+    return cats if cats else [-1]
 
 
 class CNUChatRouter:
@@ -104,16 +135,17 @@ class CNUChatRouter:
     """
 
     def __init__(self, pipeline, base_dir: Path = BASE_DIR):
-        self.pipeline = pipeline
-        self._meal    = MealHandler(base_dir)
-        self._shuttle = ShuttleHandler(base_dir)
+        self.pipeline     = pipeline
+        self._meal        = MealHandler(base_dir)
+        self._shuttle     = ShuttleHandler(base_dir)
+        self._scholarship = ScholarshipHandler(base_dir)
 
     def chat(self, question: str) -> tuple[str, str]:
         """질문 → (응답 텍스트, source_tag)"""
         cats = detect_all_categories(question)
 
         # ── 복합 질문: 식단 + 셔틀 ──────────────────────────────────────
-        if cats == [4, 3]:
+        if 4 in cats and 3 in cats:
             shuttle_ans, _ = self._shuttle.answer(question)
             meal_ans,    _ = self._meal.answer(question)
             combined = f"[셔틀버스 안내]\n{shuttle_ans}\n\n[식단 안내]\n{meal_ans}"
@@ -126,9 +158,11 @@ class CNUChatRouter:
         if cats == [4]:
             return self._shuttle.answer(question)
 
-        # ── RAG (졸업요건/공지/학사일정) ─────────────────────────────────
+        if cats == [5]:
+            return self._scholarship.answer(question)
+
+        # ── RAG (졸업요건/공지/학사일정/장학설명형) ───────────────────────
         answer = self.pipeline.generate(question)
-        # 카테고리별 fallback 메시지는 "확인 경로:" 포함 → threshold miss 판별
         source = (
             "rag_threshold_miss"
             if "확인 경로:" in answer or "관련 정보를 저장된 자료에서 찾지 못했습니다" in answer
