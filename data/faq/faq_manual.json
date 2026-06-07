@@ -390,5 +390,87 @@
     "content": "충남대학교 기숙사(생활관) 신청은 기숙사 홈페이지 또는 포털(plus.cnu.ac.kr)을 통해 진행합니다. 신청 기간과 입사 자격(성적, 거리 기준 등)은 매 학기 공지됩니다. 정확한 신청 기간, 입사비, 생활 규정 등은 기숙사 홈페이지 공지사항에서 확인하세요.",
     "url": "https://plus.cnu.ac.kr",
     "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_cal006",
+    "title": "개강·종강·방학 일정 확인 방법",
+    "category": "학사공지",
+    "subcategory": "학사일정",
+    "keywords": ["개강", "종강", "방학", "학사일정확인", "개강일정", "종강일정", "방학일정"],
+    "content": "개강·종강·방학 일정은 매 학년도 초에 학사일정으로 공지됩니다. 확인 경로: 충남대 포털(plus.cnu.ac.kr) → 학사서비스 → 학사일정. 정확한 날짜는 학기마다 달라지므로 포털 공지를 정기적으로 확인하세요.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_cal007",
+    "title": "시험 기간·성적 공시·이의신청 확인 방법",
+    "category": "학사공지",
+    "subcategory": "학사일정",
+    "keywords": ["시험기간", "중간고사일정", "기말고사일정", "성적공시", "성적이의신청", "이의신청기간"],
+    "content": "중간고사·기말고사 기간과 성적 공시 일정은 포털(plus.cnu.ac.kr) → 학사서비스 → 학사일정에서 확인합니다. 성적 이의신청은 공시 기간 내에만 가능하므로 공지 일정을 꼭 확인하세요. 성적 이의신청 방법: 포털 → 학사서비스 → 성적 이의신청 메뉴.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_c007",
+    "title": "수강정정 기간 및 방법 확인",
+    "category": "학사공지",
+    "subcategory": "수강신청변경",
+    "keywords": ["수강정정기간", "정정기간확인", "수강변경기간", "정정언제", "수강정정방법"],
+    "content": "수강정정 기간은 학기 시작 직후 1~2주 내 운영되나 정확한 날짜는 학기마다 다릅니다. 확인 경로: 충남대 포털(plus.cnu.ac.kr) → 학사서비스 → 학사일정 또는 수강신청 공지. 정정 기간 이후에는 수강 포기(W) 신청만 가능합니다.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_g008",
+    "title": "졸업인증제 확인 방법 (영어·봉사·SW)",
+    "category": "학사공지",
+    "subcategory": "졸업FAQ",
+    "keywords": ["졸업인증확인", "영어인증방법", "봉사인증확인", "SW인증확인", "인증제확인방법"],
+    "content": "졸업인증 요건(영어능력·봉사활동·SW 교육 등)은 학과·입학년도에 따라 다릅니다. 확인 경로: 충남대 포털(plus.cnu.ac.kr) → 학사정보 → 졸업인증, 또는 소속 학과 사무실. 인증 면제 조건 여부도 학과에 따라 다르므로 소속 학과에서 확인하세요.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual",
+    "needs_manual_verification": true
+  },
+  {
+    "id": "faq_s011",
+    "title": "장학금 금액·선발기준 확인 방법",
+    "category": "장학공지",
+    "subcategory": "장학FAQ",
+    "keywords": ["장학금금액", "장학금얼마", "장학선발기준", "장학자격확인", "장학금기준"],
+    "content": "장학금 금액과 선발 기준은 장학 종류마다 다릅니다. 국가장학금 지원 금액은 소득분위에 따라 달라 한국장학재단(www.kosaf.go.kr) 공지에서 확인해야 합니다. 교내장학금 선발 기준(성적·소득 등)은 포털(plus.cnu.ac.kr) → 장학공지 또는 학생처 장학팀에 문의하세요. 정확한 수치는 매 학기 공지를 통해 안내됩니다.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual",
+    "needs_manual_verification": true
+  },
+  {
+    "id": "faq_shuttle002",
+    "title": "방학·주말 셔틀버스 운행 확인 방법",
+    "category": "일반공지",
+    "subcategory": "셔틀버스FAQ",
+    "keywords": ["방학셔틀", "방학버스", "주말셔틀", "주말버스", "방학중운행", "방학통학버스"],
+    "content": "충남대학교 셔틀버스는 기본적으로 학기 중 평일에만 운행합니다. 방학 중이나 주말·공휴일에는 운행하지 않는 것이 일반적이나, 학기별로 변동될 수 있습니다. 확인 경로: 충남대 포털(plus.cnu.ac.kr) → 통학버스 안내 페이지(https://plus.cnu.ac.kr/html/kr/sub05/sub05_050403.html)에서 최신 운행 일정을 확인하세요.",
+    "url": "https://plus.cnu.ac.kr/html/kr/sub05/sub05_050403.html",
+    "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_meal003",
+    "title": "학생식당 운영일·운영시간 확인 방법",
+    "category": "일반공지",
+    "subcategory": "식당FAQ",
+    "keywords": ["식당운영일", "학식운영시간", "식당운영시간", "주말학식", "방학학식", "식당운영여부"],
+    "content": "충남대학교 학생식당은 일반적으로 학기 중 평일에 운영됩니다. 주말·공휴일·방학 중에는 운영하지 않거나 일부 식당만 운영할 수 있습니다. 정확한 운영 시간과 운영 식당 목록은 공식 식단 페이지(https://mobileadmin.cnu.ac.kr/food/index.jsp)에서 확인하세요.",
+    "url": "https://mobileadmin.cnu.ac.kr/food/index.jsp",
+    "source_type": "faq_manual"
+  },
+  {
+    "id": "faq_job005",
+    "title": "취업공지·채용정보 확인 방법",
+    "category": "취업공지",
+    "subcategory": "취업FAQ",
+    "keywords": ["취업공지확인", "채용정보확인", "취업정보어디서", "취업게시판확인", "공채확인"],
+    "content": "충남대학교 취업 관련 공지·채용설명회 일정은 포털(plus.cnu.ac.kr) → 취업공지 게시판에서 확인할 수 있습니다. 인재개발원 홈페이지에서도 채용 정보와 취업 지원 프로그램을 확인할 수 있습니다. 외부 채용 플랫폼(잡코리아, 사람인 등)도 병행 활용을 권장합니다. 공공기관 채용은 나라일터(www.gojobs.go.kr)를 참고하세요.",
+    "url": "https://plus.cnu.ac.kr",
+    "source_type": "faq_manual"
   }
 ]
