@@ -24,12 +24,6 @@ _REF_LINK = f"참고: {MEAL_URL}"
 _DAY_NAMES = ["월", "화", "수", "목", "금", "토", "일"]
 _DAY_MAP   = {n: i for i, n in enumerate(_DAY_NAMES)}
 
-_MEAL_KW_TODAY    = {"오늘", "지금", "현재"}
-_MEAL_KW_TOMORROW = {"내일"}
-_MEAL_KW_DAYAFTER = {"모레"}
-_MEAL_KW_WEEK     = {"이번주", "이번 주", "주간"}
-_MEAL_KW_NEXTWEEK = {"다음주", "다음 주"}
-
 _MEAL_TYPE_MAP = {
     "아침": {"조식", "아침"},
     "점심": {"중식", "점심"},
@@ -40,6 +34,23 @@ _RESTAURANTS = [
     "제1학생회관", "제2학생회관", "제3학생회관", "제4학생회관",
     "생활과학대학", "교직원식당",
 ]
+
+# 주간 의도 키워드 — today보다 먼저 검사해야 함
+_KW_LASTWEEK = {"지난주", "지난 주", "저번주", "저번 주"}
+_KW_THISWEEK = {"이번주", "이번 주", "주간", "이번주학식", "이번 주 학식"}
+_KW_NEXTWEEK = {"다음주", "다음 주", "다음주학식", "다음 주 학식"}
+
+# 단일 날짜 의도
+_KW_TODAY    = {"오늘", "지금", "현재"}
+_KW_TOMORROW = {"내일"}
+_KW_DAYAFTER = {"모레"}
+
+
+def _week_range(base: date) -> tuple[date, date]:
+    """base 날짜가 속한 주의 월요일~일요일 반환."""
+    monday = base - timedelta(days=base.weekday())
+    sunday = monday + timedelta(days=6)
+    return monday, sunday
 
 
 class MealHandler:
@@ -72,66 +83,62 @@ class MealHandler:
     def _available_dates(self, menus: list[dict]) -> list[str]:
         return sorted(set(m.get("date", "") for m in menus if m.get("date")))
 
-    # ── 질문 분석 ────────────────────────────────────────────────────
+    # ── 의도 감지 ────────────────────────────────────────────────────
+
+    def _detect_week_intent(self, q: str) -> Optional[str]:
+        """
+        주간 의도 우선 검사. today보다 먼저 호출해야 함.
+        반환: "last_week" | "this_week" | "next_week" | None
+        """
+        nq = q.replace(" ", "")
+        # 지난주 — "이번주" 보다 먼저 (부분 포함 방지)
+        if any(k.replace(" ", "") in nq for k in _KW_LASTWEEK):
+            return "last_week"
+        if any(k.replace(" ", "") in nq for k in _KW_NEXTWEEK):
+            return "next_week"
+        if any(k.replace(" ", "") in nq for k in _KW_THISWEEK):
+            return "this_week"
+        return None
 
     def _parse_specific_date(self, q: str) -> Optional[date]:
-        """
-        "6월 5일", "6/5", "06-05", "6.5" 형태의 특정 날짜 파싱.
-        연도 없으면 올해 기준.
-        """
+        """6월 5일 / 6/5 / 06-05 형태 파싱."""
         today = date.today()
         patterns = [
-            r"(\d{1,2})월\s*(\d{1,2})일",   # 6월 5일
-            r"(\d{1,2})[/.](\d{1,2})(?!\d)", # 6/5, 6.5
-            r"(\d{2})-(\d{2})(?!\d)",         # 06-05
+            r"(\d{1,2})월\s*(\d{1,2})일",
+            r"(\d{1,2})[/.](\d{1,2})(?!\d)",
+            r"(\d{2})-(\d{2})(?!\d)",
         ]
         for pat in patterns:
             m = re.search(pat, q)
             if m:
                 try:
-                    month, day = int(m.group(1)), int(m.group(2))
-                    return date(today.year, month, day)
+                    return date(today.year, int(m.group(1)), int(m.group(2)))
                 except ValueError:
                     continue
         return None
 
-    def _target_date(self, q: str) -> Optional[date]:
-        """질문에서 목표 날짜 추출. None = 이번 주 전체 / 다음 주."""
+    def _target_date(self, q: str) -> date:
+        """단일 날짜 추출. 주간 의도는 이미 제외된 상태에서 호출."""
         nq = q.replace(" ", "")
         today = date.today()
 
-        if any(k in nq for k in _MEAL_KW_NEXTWEEK):
-            return None  # 다음 주
-        if any(k in nq for k in _MEAL_KW_WEEK):
-            return None  # 이번 주 전체 → answer()에서 별도 처리
-
-        if any(k in nq for k in _MEAL_KW_DAYAFTER):
+        if any(k in nq for k in _KW_DAYAFTER):
             return today + timedelta(days=2)
-        if any(k in nq for k in _MEAL_KW_TOMORROW):
+        if any(k in nq for k in _KW_TOMORROW):
             return today + timedelta(days=1)
-        if any(k in nq for k in _MEAL_KW_TODAY):
+        if any(k in nq for k in _KW_TODAY):
             return today
 
-        # 요일 지정: "월요일 학식"
         for day_name, day_num in _DAY_MAP.items():
             if day_name + "요일" in q or day_name + "날" in q:
                 diff = (day_num - today.weekday()) % 7
                 return today + timedelta(days=diff)
 
-        # 특정 날짜: "6월 5일"
         specific = self._parse_specific_date(q)
         if specific:
             return specific
 
-        return today  # 기본: 오늘
-
-    def _is_week_query(self, q: str) -> bool:
-        nq = q.replace(" ", "")
-        return any(k in nq for k in _MEAL_KW_WEEK)
-
-    def _is_nextweek_query(self, q: str) -> bool:
-        nq = q.replace(" ", "")
-        return any(k in nq for k in _MEAL_KW_NEXTWEEK)
+        return today
 
     def _meal_type(self, q: str) -> Optional[str]:
         nq = q.replace(" ", "")
@@ -159,17 +166,17 @@ class MealHandler:
 
     # ── 응답 포매팅 ──────────────────────────────────────────────────
 
-    def _format_day(self, menus: list[dict], date_str: str,
+    def _format_day(self, day_menus: list[dict], date_str: str,
                     mtype: Optional[str], rest: Optional[str]) -> str:
         """특정 날짜 메뉴 포매팅."""
         try:
             d = date.fromisoformat(date_str)
-            day_str = _DAY_NAMES[d.weekday()]
-            header = f"{date_str} ({day_str}) 식단\n"
+            day_name = _DAY_NAMES[d.weekday()]
+            header = f"{date_str} ({day_name}) 식단\n"
         except ValueError:
             header = f"{date_str} 식단\n"
 
-        filtered = menus
+        filtered = day_menus
         if mtype:
             typed = [m for m in filtered if m.get("meal_type") == mtype]
             if typed:
@@ -201,23 +208,44 @@ class MealHandler:
                 lines.append("    " + " / ".join(items[:6]))
         return "\n".join(lines)
 
-    def _format_week(self, menus: list[dict], available: list[str]) -> str:
-        """이번 주 저장된 전체 날짜 요약."""
-        lines = ["저장된 식단 전체 요약\n"]
-        for d_str in available:
+    def _format_week_range(self, menus: list[dict],
+                           monday: date, sunday: date,
+                           label: str) -> str:
+        """주간 범위 내 날짜별 식단 요약."""
+        week_dates = [
+            (monday + timedelta(days=i)).isoformat()
+            for i in range(7)
+        ]
+        # 해당 주에 속하는 저장 날짜만
+        in_range = [d for d in self._available_dates(menus) if d in week_dates]
+
+        if not in_range:
+            all_dates = self._available_dates(menus)
+            date_list = ", ".join(all_dates) if all_dates else "없음"
+            return (
+                f"{label} ({monday.isoformat()} ~ {sunday.isoformat()}) 식단 데이터가 없습니다.\n"
+                f"현재 저장된 날짜: {date_list}\n"
+                f"{_REF_LINK}"
+            )
+
+        lines = [f"{label} 식단 ({monday.isoformat()} ~ {sunday.isoformat()})\n"]
+        for d_str in in_range:
             day_menus = [m for m in menus if m.get("date") == d_str]
-            lunch = [m for m in day_menus if m.get("meal_type") == "점심"] or day_menus[:1]
             try:
                 d = date.fromisoformat(d_str)
                 day_name = _DAY_NAMES[d.weekday()]
             except ValueError:
                 day_name = ""
-            lines.append(f"{d_str} ({day_name})")
-            for m in lunch[:2]:
+
+            lines.append(f"[{d_str} {day_name}]")
+            # 점심 우선, 없으면 다른 식사
+            lunch = [m for m in day_menus if m.get("meal_type") == "점심"] or day_menus
+            for m in lunch[:3]:
                 r     = m.get("restaurant", "식당")
                 items = m.get("menu", [])
-                lines.append(f"  [{r}] " + " / ".join(items[:4]))
+                lines.append(f"  - {r}: " + " / ".join(items[:5]))
             lines.append("")
+
         lines.append(_REF_LINK)
         return "\n".join(lines).strip()
 
@@ -228,8 +256,8 @@ class MealHandler:
 
         lines = [
             f"오늘({target_str}) 식단은 저장된 데이터에 없습니다.",
-            f"일요일·공휴일은 식당이 운영되지 않거나 식단이 게시되지 않을 수 있습니다.",
-            f"",
+            "일요일·공휴일은 식당이 운영되지 않거나 식단이 게시되지 않을 수 있습니다.",
+            "",
             f"현재 확인 가능한 식단 날짜: {date_list}",
         ]
 
@@ -242,15 +270,16 @@ class MealHandler:
                 day_name = _DAY_NAMES[d.weekday()]
             except ValueError:
                 day_name = ""
-            lines.append(f"")
-            lines.append(f"가장 최근 식단인 {latest} ({day_name}) 메뉴를 안내드립니다.")
+            lines += [
+                "",
+                f"가장 최근 식단인 {latest} ({day_name}) 메뉴를 안내드립니다.",
+            ]
             for m in lunch[:3]:
                 r     = m.get("restaurant", "식당")
                 items = m.get("menu", [])
                 lines.append(f"  [{r}] " + " / ".join(items[:5]))
 
-        lines.append("")
-        lines.append(_REF_LINK)
+        lines += ["", _REF_LINK]
         return "\n".join(lines)
 
     # ── 공개 API ─────────────────────────────────────────────────────
@@ -260,11 +289,9 @@ class MealHandler:
 
         if intent == "location":
             return (
-                "충남대학교 학생식당 식단은 아래 공식 페이지에서 확인하세요.\n"
-                f"{_REF_LINK}",
+                f"충남대학교 학생식당 식단은 아래 공식 페이지에서 확인하세요.\n{_REF_LINK}",
                 "meal_handler",
             )
-
         if intent == "hours":
             return (
                 f"학생식당 운영 시간은 식당마다 다릅니다.\n{_REF_LINK}",
@@ -273,40 +300,40 @@ class MealHandler:
 
         menus = self._load()
         if not menus:
-            return (
-                "현재 식단 정보를 불러올 수 없습니다.\n"
-                f"{_REF_LINK}",
-                "meal_official",
-            )
+            return f"현재 식단 정보를 불러올 수 없습니다.\n{_REF_LINK}", "meal_official"
 
-        available = self._available_dates(menus)
+        today = date.today()
 
-        # 다음 주 질문
-        if self._is_nextweek_query(question):
-            return (
-                "다음 주 식단 정보는 아직 게시되지 않았습니다.\n"
-                f"현재 확인 가능한 날짜: {', '.join(available)}\n"
-                f"{_REF_LINK}",
-                "meal_handler",
-            )
+        # ── 주간 의도 우선 검사 (today보다 먼저) ──────────────────────
+        week_intent = self._detect_week_intent(question)
 
-        # 이번 주 전체 질문
-        if self._is_week_query(question):
-            if not available:
-                return f"이번 주 식단 데이터가 없습니다.\n{_REF_LINK}", "meal_official"
-            return self._format_week(menus, available), "meal_handler"
+        if week_intent == "last_week":
+            last_monday = today - timedelta(days=today.weekday() + 7)
+            last_sunday = last_monday + timedelta(days=6)
+            text = self._format_week_range(menus, last_monday, last_sunday, "지난주")
+            return text, "meal_handler"
 
-        # 특정 날짜 / 오늘 / 내일 등
-        target = self._target_date(question)
-        mtype  = self._meal_type(question)
-        rest   = self._restaurant(question)
+        if week_intent == "next_week":
+            next_monday = today - timedelta(days=today.weekday()) + timedelta(days=7)
+            next_sunday = next_monday + timedelta(days=6)
+            text = self._format_week_range(menus, next_monday, next_sunday, "다음주")
+            return text, "meal_handler"
 
-        target_str = target.isoformat() if target else date.today().isoformat()
+        if week_intent == "this_week":
+            this_monday, this_sunday = _week_range(today)
+            text = self._format_week_range(menus, this_monday, this_sunday, "이번주")
+            return text, "meal_handler"
+
+        # ── 단일 날짜 처리 ────────────────────────────────────────────
+        target     = self._target_date(question)
+        target_str = target.isoformat()
         day_menus  = [m for m in menus if m.get("date") == target_str]
 
         if not day_menus:
             return self._format_no_data(target_str, menus), "meal_handler"
 
-        text = self._format_day(day_menus, target_str, mtype, rest)
+        mtype = self._meal_type(question)
+        rest  = self._restaurant(question)
+        text  = self._format_day(day_menus, target_str, mtype, rest)
         text += f"\n\n{_REF_LINK}"
         return text, "meal_handler"
