@@ -191,7 +191,7 @@ class RAGPipeline:
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
             quantization_config=quant_config,
-            device_map="auto",
+            device_map={"": 0},      # "auto" 대신 GPU 0 강제 배치 (CPU 오프로드 방지)
             trust_remote_code=True,
         )
         self.model.eval()
