@@ -225,7 +225,7 @@ class RAGPipeline:
         )
         return context, best_embed_score
 
-    def generate(self, question: str, max_new_tokens: int = 200) -> str:
+    def generate(self, question: str, max_new_tokens: int = 300) -> str:
         """
         RAG 전체 파이프라인 실행.
         1. retrieve()로 context + best_embed_score 획득

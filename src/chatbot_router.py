@@ -19,6 +19,7 @@ sys.path.insert(0, str(BASE_DIR))
 from src.handlers.meal_handler        import MealHandler
 from src.handlers.shuttle_handler     import ShuttleHandler
 from src.handlers.scholarship_handler import ScholarshipHandler
+from src.handlers.notice_handler      import NoticeHandler
 
 # ── 장학공지 리스트 키워드 ────────────────────────────────────────────────────────
 # "리스트/목록/뭐있어/보여줘/공지/최근" 의도 → ScholarshipHandler
@@ -75,6 +76,21 @@ _COURSE_DIRECT_KW = frozenset({
     "등록금납부", "등록금기간",
 })
 
+# ── 공지사항 목록 키워드 (NoticeHandler) ─────────────────────────────────────
+# 학사공지·취업공지·행사안내 → NoticeHandler 직행 (RAG 우회)
+# ※ 장학공지는 ScholarshipHandler가 처리 → 여기서 제외
+_NOTICE_LIST_KW = frozenset({
+    "최근공지", "최신공지", "학교공지", "공지사항알려줘", "공지사항보여줘",
+    "최근학사공지", "학사공지알려줘", "학사공지보여줘", "학사공지뭐",
+    "취업공지알려줘", "취업공지보여줘", "취업공지뭐", "취업공지있어",
+    "취업안내알려줘", "취업안내뭐올라", "취업뭐올라",
+    "행사공지", "행사안내알려줘", "최근행사", "행사뭐있어",
+    "최근소식", "공지뭐올라왔", "공지뭐있어", "공지뭐나왔",
+})
+# "최근/최신/요즘" + "공지/소식" 조합 트리거
+_NOTICE_RECENT_KW  = frozenset({"최근", "최신", "요즘", "새로운"})
+_NOTICE_SUBJECT_KW = frozenset({"공지", "소식", "안내"})
+
 
 def _has_shuttle(nq: str) -> bool:
     return any(k in nq for k in _SHUTTLE_KW) or any(k in nq for k in _SHUTTLE_BUS_KW)
@@ -114,6 +130,31 @@ def _has_grad_direct(nq: str) -> bool:
 def _has_course_direct(nq: str) -> bool:
     """수강신청/학사일정 직접 반환 대상 여부."""
     return any(k in nq for k in _COURSE_DIRECT_KW)
+
+
+def _has_notice_list(nq: str) -> bool:
+    """
+    공지사항 목록 조회 의도 감지 → NoticeHandler 라우팅.
+    ※ 장학공지는 ScholarshipHandler가 담당 → "장학" 포함 시 False 반환.
+    ※ 식단/셔틀 키워드와 겹치지 않으므로 별도 exclusion 불필요.
+    """
+    # 장학 관련은 ScholarshipHandler가 처리
+    if "장학" in nq:
+        return False
+    # 명시적 복합 키워드 직접 매칭
+    if any(k in nq for k in _NOTICE_LIST_KW):
+        return True
+    # "취업/행사" + ("공지"/"안내"/"알려줘"/"보여줘"/"뭐") 조합
+    if ("취업" in nq or "행사" in nq) and any(
+        k in nq for k in ("공지", "안내", "알려줘", "보여줘", "뭐올라", "뭐있어")
+    ):
+        return True
+    # "최근/최신/요즘" + "공지/소식/안내" 조합
+    if any(r in nq for r in _NOTICE_RECENT_KW) and any(
+        s in nq for s in _NOTICE_SUBJECT_KW
+    ):
+        return True
+    return False
 
 
 def _build_grad_answer(question: str) -> str:
@@ -291,7 +332,7 @@ def detect_category(question: str) -> int:
     키워드 기반 단일 카테고리 감지.
     복합 질문은 detect_all_categories() 사용.
 
-    Returns: 3(식단) | 4(셔틀) | 5(장학리스트) | -1(RAG)
+    Returns: 3(식단) | 4(셔틀) | 5(장학리스트) | 6(공지목록) | -1(RAG)
     """
     nq = question.replace(" ", "")
     if _has_shuttle(nq):
@@ -300,6 +341,8 @@ def detect_category(question: str) -> int:
         return 3
     if _has_scholarship_list(nq):
         return 5
+    if _has_notice_list(nq):
+        return 6
     return -1
 
 
@@ -313,11 +356,13 @@ def detect_all_categories(question: str) -> list[int]:
     has_s  = _has_shuttle(nq)
     has_m  = _has_meal(nq)
     has_sc = _has_scholarship_list(nq)
+    has_n  = _has_notice_list(nq)
 
     cats = []
     if has_s:  cats.append(4)
     if has_m:  cats.append(3)
     if has_sc: cats.append(5)
+    if has_n:  cats.append(6)
     return cats if cats else [-1]
 
 
@@ -337,6 +382,7 @@ class CNUChatRouter:
       "rag_pipeline"       — RAG 정상 응답
       "rag_threshold_miss" — RAG 임계값 미달 (카테고리별 안내 반환)
       "direct_handler"     — 졸업요건/수강신청 직접 반환 (Qwen 완전 우회, ~1ms)
+      "notice_handler"     — 공지사항 목록 반환 (학사·취업·행사, Qwen 완전 우회)
     """
 
     def __init__(self, pipeline, base_dir: Path = BASE_DIR):
@@ -344,6 +390,7 @@ class CNUChatRouter:
         self._meal        = MealHandler(base_dir)
         self._shuttle     = ShuttleHandler(base_dir)
         self._scholarship = ScholarshipHandler(base_dir)
+        self._notice      = NoticeHandler(base_dir)
 
     def chat(self, question: str) -> tuple[str, str]:
         """질문 → (응답 텍스트, source_tag)"""
@@ -365,6 +412,9 @@ class CNUChatRouter:
 
         if cats == [5]:
             return self._scholarship.answer(question)
+
+        if cats == [6]:
+            return self._notice.answer(question)
 
         # ── 졸업요건/수강신청 직접 반환 (Qwen 완전 우회, ~1ms) ─────────────
         nq = question.replace(" ", "")
