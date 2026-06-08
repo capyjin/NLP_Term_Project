@@ -44,28 +44,27 @@ def main():
     pipeline = None
     router   = None
 
+    # 핸들러 사전 초기화 (식단/셔틀 전용 — Qwen 로드 없이)
+    from src.handlers.meal_handler    import MealHandler
+    from src.handlers.shuttle_handler import ShuttleHandler
+    _meal_h    = MealHandler(BASE_DIR)
+    _shuttle_h = ShuttleHandler(BASE_DIR)
+
     results = []
     for i, item in enumerate(items, 1):
         question = item.get("user", item.get("question", ""))
         cat = detect_category(question)
-        cat_label = {3: "식단", 4: "셔틀버스", -1: "rag"}[cat]
+        # cat: 3=식단, 4=셔틀, 5=장학, 6=공지, -1=RAG
+        cat_names = {3: "식단", 4: "셔틀버스", 5: "장학", 6: "공지", -1: "rag"}
+        cat_label = cat_names.get(cat, "rag")
         print(f"[{i:3d}/{len(items)}] [{cat_label}] {question[:50]}")
 
-        if cat in (3, 4):
-            # 식단/셔틀버스: handler 직접 응답 (Qwen 미사용)
-            if router is None:
-                # pipeline 없이 핸들러만 초기화하기 위해 None 전달
-                from src.handlers.meal_handler    import MealHandler
-                from src.handlers.shuttle_handler import ShuttleHandler
-                _meal_h    = MealHandler(BASE_DIR)
-                _shuttle_h = ShuttleHandler(BASE_DIR)
-
-            if cat == 3:
-                answer, source = _meal_h.answer(question)
-            else:
-                answer, source = _shuttle_h.answer(question)
+        if cat == 3:
+            answer, source = _meal_h.answer(question)
+        elif cat == 4:
+            answer, source = _shuttle_h.answer(question)
         else:
-            # 공지사항/학사일정: RAG
+            # 장학(5), 공지(6), 학사일정/기타(-1): CNUChatRouter → RAG/Handler
             if pipeline is None:
                 print("  RAGPipeline 초기화 중...")
                 from src.rag.pipeline import RAGPipeline
