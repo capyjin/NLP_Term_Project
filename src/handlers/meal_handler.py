@@ -14,12 +14,18 @@
 
 import json
 import re
+import subprocess
+import sys
+import time
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional
 
 MEAL_URL  = "https://mobileadmin.cnu.ac.kr/food/index.jsp"
 _REF_LINK = f"참고: {MEAL_URL}"
+
+# TTL: 식단은 6시간마다 갱신 (주간 단위로 올라오므로 충분)
+_MEAL_TTL_SECONDS = 6 * 3600
 
 _DAY_NAMES = ["월", "화", "수", "목", "금", "토", "일"]
 _DAY_MAP   = {n: i for i, n in enumerate(_DAY_NAMES)}
@@ -61,14 +67,49 @@ class MealHandler:
     """
 
     def __init__(self, base_dir: Path):
-        self._path  = base_dir / "data" / "raw" / "meal_menu.json"
+        self._path     = base_dir / "data" / "raw" / "meal_menu.json"
+        self._crawler  = base_dir / "src" / "crawling" / "meal_crawler.py"
         self._cache: Optional[dict] = None
+
+    # ── TTL 캐시 ─────────────────────────────────────────────────────
+
+    def _is_stale(self) -> bool:
+        """파일이 없거나 TTL 초과 시 True."""
+        if not self._path.exists():
+            return True
+        age = time.time() - self._path.stat().st_mtime
+        return age > _MEAL_TTL_SECONDS
+
+    def _try_refresh(self) -> None:
+        """크롤러 실행으로 파일 갱신 시도. 실패해도 기존 파일 유지."""
+        if not self._crawler.exists():
+            print("[TTL] meal_crawler.py 없음 — 갱신 건너뜀")
+            return
+        print("[TTL] meal_menu.json stale — refreshing...")
+        result = subprocess.run(
+            [sys.executable, str(self._crawler)],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            print("[TTL] meal refresh success")
+            self._cache = None  # 인메모리 캐시 초기화 → 다음 _load에서 재로드
+        else:
+            err = (result.stderr or "").strip().splitlines()
+            print(f"[TTL] meal refresh failed — using cached file")
+            if err:
+                print(f"      {err[-1][:100]}")
 
     # ── 데이터 로딩 ──────────────────────────────────────────────────
 
     def _load(self) -> Optional[list[dict]]:
-        if self._cache:
+        # TTL 체크: 캐시가 없거나 파일이 stale이면 크롤러 실행
+        if self._cache is None and self._is_stale():
+            self._try_refresh()
+        elif self._cache is not None:
+            # 인메모리 캐시 유효 (프로세스 재시작 전까지 유지)
+            print("[TTL] meal using cached (in-memory)")
             return self._cache.get("menus")
+
         if not self._path.exists():
             return None
         try:

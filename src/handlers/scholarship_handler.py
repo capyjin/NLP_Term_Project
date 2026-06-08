@@ -24,8 +24,14 @@
 
 import json
 import re
+import subprocess
+import sys
+import time
 from pathlib import Path
 from typing import Optional
+
+# TTL: 장학공지는 6시간마다 갱신 (포털 공지 업데이트 주기)
+_SCHOLAR_TTL_SECONDS = 6 * 3600
 
 PORTAL_URL     = "https://plus.cnu.ac.kr"
 SCHOLAR_BOARD  = "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0702&site_dvs_cd=kr&menu_dvs_cd=0702"
@@ -52,12 +58,49 @@ class ScholarshipHandler:
 
     def __init__(self, base_dir: Path):
         self._chunks_path = base_dir / "data" / "processed" / "chunks.json"
+        self._crawler     = base_dir / "src" / "crawling" / "cnu_crawler.py"
         self._cache: Optional[list] = None
+
+    # ── TTL 캐시 ─────────────────────────────────────────────────────
+
+    def _is_stale(self) -> bool:
+        """chunks.json이 없거나 6시간 초과 시 True."""
+        if not self._chunks_path.exists():
+            return True
+        age = time.time() - self._chunks_path.stat().st_mtime
+        return age > _SCHOLAR_TTL_SECONDS
+
+    def _try_refresh(self) -> None:
+        """cnu_crawler 실행으로 chunks.json 갱신 시도. 실패 시 기존 유지."""
+        if not self._crawler.exists():
+            print("[TTL] cnu_crawler.py 없음 — 기존 chunks.json 사용")
+            return
+        print("[TTL] chunks.json stale — refreshing scholarship data...")
+        result = subprocess.run(
+            [sys.executable, str(self._crawler)],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            print("[TTL] scholarship refresh success")
+            self._cache = None  # 인메모리 캐시 초기화
+        else:
+            err = (result.stderr or "").strip().splitlines()
+            print("[TTL] scholarship refresh failed — using cached file")
+            if err:
+                print(f"      {err[-1][:100]}")
 
     def _load_notices(self) -> list[dict]:
         """chunks.json → 장학공지 크롤링 청크 → URL 중복 제거 → 최신순 정렬."""
+        # 인메모리 캐시 우선
         if self._cache is not None:
+            print("[TTL] scholarship using cached (in-memory)")
             return self._cache
+
+        # TTL 체크: stale이면 크롤러 실행
+        if self._is_stale():
+            self._try_refresh()
+        else:
+            print("[TTL] chunks.json fresh — using cached file")
 
         if not self._chunks_path.exists():
             return []

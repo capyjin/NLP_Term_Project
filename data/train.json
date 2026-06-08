@@ -152,10 +152,6 @@
     "label": 1
   },
   {
-    "question": "근로장학생 모집 공고 알려줘",
-    "label": 1
-  },
-  {
     "question": "교내 행사 공지 어디에 있어요?",
     "label": 1
   },
@@ -192,10 +188,6 @@
     "label": 1
   },
   {
-    "question": "교외 장학금 공지 있나요?",
-    "label": 1
-  },
-  {
     "question": "취업 박람회 공고 올라왔나요?",
     "label": 1
   },
@@ -229,10 +221,6 @@
   },
   {
     "question": "실습 관련 공지사항 어디서 봐요?",
-    "label": 1
-  },
-  {
-    "question": "삼성 장학금 공지 올라왔나요?",
     "label": 1
   },
   {
@@ -581,6 +569,310 @@
   },
   {
     "question": "셔틀 지금 있어요?",
+    "label": 4
+  },
+  {
+    "question": "졸업하려면 총 몇 학점이야?",
+    "label": 0
+  },
+  {
+    "question": "전공 필수 몇 개 들어야 해?",
+    "label": 0
+  },
+  {
+    "question": "교양 학점 얼마나 필요해요?",
+    "label": 0
+  },
+  {
+    "question": "컴퓨터공학과 졸업 요건 알려줘",
+    "label": 0
+  },
+  {
+    "question": "졸업인증제가 뭐예요?",
+    "label": 0
+  },
+  {
+    "question": "영어 졸업인증 어떻게 해요?",
+    "label": 0
+  },
+  {
+    "question": "편입생 졸업학점 달라요?",
+    "label": 0
+  },
+  {
+    "question": "복수전공하면 졸업학점 더 필요해요?",
+    "label": 0
+  },
+  {
+    "question": "학생편람 어디서 봐요?",
+    "label": 0
+  },
+  {
+    "question": "졸업 요건 충족했는지 어떻게 확인해요?",
+    "label": 0
+  },
+  {
+    "question": "이수 학점 얼마나 남았는지 어떻게 알아요?",
+    "label": 0
+  },
+  {
+    "question": "졸업예정자 확인 어디서 해요?",
+    "label": 0
+  },
+  {
+    "question": "전공 학점 부족하면 졸업 못 해요?",
+    "label": 0
+  },
+  {
+    "question": "졸업 요건이 학번마다 달라요?",
+    "label": 0
+  },
+  {
+    "question": "최근 학교 공지 보여줘",
+    "label": 1
+  },
+  {
+    "question": "학사 공지사항 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "충남대 포털 공지 확인 방법 알려줘",
+    "label": 1
+  },
+  {
+    "question": "학교 행사 일정 어디서 확인해요?",
+    "label": 1
+  },
+  {
+    "question": "취업 공지 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "최근 학교 뉴스 뭐 있어요?",
+    "label": 1
+  },
+  {
+    "question": "학교 홈페이지 공지 어디 있어요?",
+    "label": 1
+  },
+  {
+    "question": "일반 공지 어디 있어요?",
+    "label": 1
+  },
+  {
+    "question": "학교 소식 알려줘",
+    "label": 1
+  },
+  {
+    "question": "입학처 공지 어떻게 봐요?",
+    "label": 1
+  },
+  {
+    "question": "학생처 공지사항 확인 방법 알려줘",
+    "label": 1
+  },
+  {
+    "question": "학교 행사나 이벤트 공지 어디서 봐요?",
+    "label": 1
+  },
+  {
+    "question": "공지사항 알림 받는 방법 있어요?",
+    "label": 1
+  },
+  {
+    "question": "충남대 새로운 소식 어떻게 확인해요?",
+    "label": 1
+  },
+  {
+    "question": "이번 학기 종강 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "개강이 언제야?",
+    "label": 2
+  },
+  {
+    "question": "중간고사 일정 알려줘",
+    "label": 2
+  },
+  {
+    "question": "기말고사 언제야?",
+    "label": 2
+  },
+  {
+    "question": "방학이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "학사일정 전체 어디서 봐요?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 시험 기간 알려줘",
+    "label": 2
+  },
+  {
+    "question": "성적 발표 언제 해요?",
+    "label": 2
+  },
+  {
+    "question": "계절학기 신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "휴학 신청 언제까지예요?",
+    "label": 2
+  },
+  {
+    "question": "개강 첫날이 언제야?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 학사일정 전체 보여줘",
+    "label": 2
+  },
+  {
+    "question": "수강 취소 기간 언제까지예요?",
+    "label": 2
+  },
+  {
+    "question": "성적 이의신청 기간은 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "복학 신청 기간 알려줘",
+    "label": 2
+  },
+  {
+    "question": "학식 머나와",
+    "label": 3
+  },
+  {
+    "question": "밥 뭐 나와요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "학생회관 밥 뭐임?",
+    "label": 3
+  },
+  {
+    "question": "내일 학식 뭐 나와?",
+    "label": 3
+  },
+  {
+    "question": "점심 뭐 먹을 수 있어요?",
+    "label": 3
+  },
+  {
+    "question": "구내식당 오늘 뭐 팔아?",
+    "label": 3
+  },
+  {
+    "question": "저녁 식단 알려줘",
+    "label": 3
+  },
+  {
+    "question": "이번주 학식 메뉴 궁금해",
+    "label": 3
+  },
+  {
+    "question": "식당 몇 시에 열어요?",
+    "label": 3
+  },
+  {
+    "question": "제1학생회관 오늘 점심 뭐야?",
+    "label": 3
+  },
+  {
+    "question": "다음주 식단도 나와 있어요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 학교 밥 뭐임?",
+    "label": 3
+  },
+  {
+    "question": "학식 가격 알려줘",
+    "label": 3
+  },
+  {
+    "question": "조식 메뉴 뭐예요?",
+    "label": 3
+  },
+  {
+    "question": "지난주 식단 어땠어?",
+    "label": 3
+  },
+  {
+    "question": "이번주 수요일 식단 알려줘",
+    "label": 3
+  },
+  {
+    "question": "셔틀 언제와?",
+    "label": 4
+  },
+  {
+    "question": "버스 몇 시에 있어요?",
+    "label": 4
+  },
+  {
+    "question": "셧틀 시간 알려줘",
+    "label": 4
+  },
+  {
+    "question": "대덕캠퍼스 가는 버스 있어?",
+    "label": 4
+  },
+  {
+    "question": "통학버스 노선 알려줘",
+    "label": 4
+  },
+  {
+    "question": "교내순환버스 언제 다녀?",
+    "label": 4
+  },
+  {
+    "question": "캠퍼스 순환버스 타는 곳 어디야?",
+    "label": 4
+  },
+  {
+    "question": "보운 가는 셔틀 있어?",
+    "label": 4
+  },
+  {
+    "question": "첫차 몇 시예요?",
+    "label": 4
+  },
+  {
+    "question": "막차 시간 알려줘",
+    "label": 4
+  },
+  {
+    "question": "셔틀 오늘 운행해요?",
+    "label": 4
+  },
+  {
+    "question": "통학 버스 어디서 타요?",
+    "label": 4
+  },
+  {
+    "question": "버스 배차 간격이 어떻게 돼요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 방학에도 운행해요?",
+    "label": 4
+  },
+  {
+    "question": "캠퍼스 버스 정류장 어디 있어요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀 타려면 어디 가야 해요?",
     "label": 4
   }
 ]

@@ -13,9 +13,15 @@
 """
 
 import json
+import subprocess
+import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+# TTL: 셔틀 시간표는 하루 단위로 변경 가능성이 낮으므로 24시간
+_SHUTTLE_TTL_SECONDS = 24 * 3600
 
 SHUTTLE_URL = "https://plus.cnu.ac.kr/html/kr/sub05/sub05_050403.html"
 _OFFICIAL   = f"🔗 {SHUTTLE_URL}"
@@ -57,15 +63,53 @@ class ShuttleHandler:
     """
 
     def __init__(self, base_dir: Path):
-        self._path  = base_dir / "data" / "raw" / "shuttle_bus.json"
+        self._path    = base_dir / "data" / "raw" / "shuttle_bus.json"
+        self._crawler = base_dir / "src" / "crawling" / "shuttle_crawler.py"
         self._cache: Optional[dict] = None
+
+    # ── TTL 캐시 ─────────────────────────────────────────────────────
+
+    def _is_stale(self) -> bool:
+        """파일이 없거나 24시간 초과 시 True."""
+        if not self._path.exists():
+            return True
+        age = time.time() - self._path.stat().st_mtime
+        return age > _SHUTTLE_TTL_SECONDS
+
+    def _try_refresh(self) -> None:
+        """크롤러 실행으로 파일 갱신 시도. 실패 시 known_data 유지."""
+        if not self._crawler.exists():
+            print("[TTL] shuttle_crawler.py 없음 — known_data 사용")
+            return
+        print("[TTL] shuttle_bus.json stale — refreshing...")
+        result = subprocess.run(
+            [sys.executable, str(self._crawler)],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            print("[TTL] shuttle refresh success")
+            self._cache = None
+        else:
+            err = (result.stderr or "").strip().splitlines()
+            print("[TTL] shuttle refresh failed — using known_data")
+            if err:
+                print(f"      {err[-1][:100]}")
 
     # ── 데이터 로딩 ──────────────────────────────────────────────────
 
     def _load(self) -> tuple[list[dict], str]:
         """(routes, source)"""
-        if self._cache:
+        # 인메모리 캐시 우선
+        if self._cache is not None:
+            print("[TTL] shuttle using cached (in-memory)")
             return self._cache.get("routes", []), "file"
+
+        # TTL 체크: stale이면 크롤러 실행
+        if self._is_stale():
+            self._try_refresh()
+        else:
+            print("[TTL] shuttle_bus.json fresh — using cached file")
+
         if self._path.exists():
             try:
                 with open(self._path, encoding="utf-8") as f:
