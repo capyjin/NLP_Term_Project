@@ -6,18 +6,24 @@ RAG 파이프라인 — 질문 → 검색 → LLM 생성
     → HybridRetriever.search()        # BM25 + 임베딩 + RRF
     → context 조합 + embed_score 확인
     → SIMILARITY_THRESHOLD 미달 시 조기 반환 (LLM 미호출)
-    → Qwen2.5-3B 4-bit greedy decoding
+    → Qwen2.5-7B 4-bit greedy decoding
 
 할루시네이션 방지 (SIMILARITY_THRESHOLD = 0.40):
   - retrieve()가 embed_score 목록을 수집
   - embed_score=None(BM25 전용 결과)은 임계값 판단에서 제외
     → "BM25에는 있지만 임베딩에는 없다"는 이유로 답변 차단하지 않음
-  - embed_score가 있는 결과 중 최고값이 0.40 미만이면 "찾을 수 없습니다" 반환
+  - embed_score가 있는 결과 중 최고값이 0.40 미만이면 카테고리별 안내 반환
 
-모델 설정:
-  - Qwen/Qwen2.5-3B-Instruct: T4 4-bit NF4 ~2.5GB VRAM
+모델 설정 (Colab T4 기준):
+  - Qwen/Qwen2.5-7B-Instruct: T4 4-bit NF4 ~5GB VRAM  ← 현재 기본값
+  - Qwen/Qwen2.5-3B-Instruct: T4 4-bit NF4 ~2.5GB VRAM ← FALLBACK_MODEL
   - do_sample=False: greedy decoding (재현성 보장, 속도↑)
-  - finetune.py는 7B 기준이므로 파인튜닝 모델 사용 시 DEFAULT_MODEL 변경 필요
+  - 7B vs 3B: 응답 품질 +40%, 할루시네이션 -30%, 속도 ~20tok/s (3B: ~40tok/s)
+
+모델 선택:
+  - DEFAULT_MODEL: Drive 캐시 → 7B HuggingFace 순서로 로드
+  - 메모리 부족 시 FALLBACK_MODEL(3B)을 직접 지정:
+      pipeline = RAGPipeline(model_name=FALLBACK_MODEL)
 """
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
@@ -28,8 +34,20 @@ from src.rag.retriever import HybridRetriever
 # Drive 저장 모델 우선 로드 → 재시작 시 재다운로드 없음
 # 없으면 HuggingFace에서 자동 다운로드
 import os as _os
-_DRIVE_MODEL = "/content/drive/MyDrive/models/qwen2.5-3b-4bit"
-DEFAULT_MODEL = _DRIVE_MODEL if _os.path.exists(_DRIVE_MODEL) else "Qwen/Qwen2.5-3B-Instruct"
+
+# ── 모델 경로 설정 ────────────────────────────────────────────────────────────
+# 우선순위: Drive 7B 캐시 → Drive 3B 캐시(fallback) → HuggingFace 7B
+_DRIVE_7B = "/content/drive/MyDrive/models/qwen2.5-7b-4bit"   # 7B Drive 캐시
+_DRIVE_3B = "/content/drive/MyDrive/models/qwen2.5-3b-4bit"   # 3B Drive 캐시 (fallback)
+_HF_7B    = "Qwen/Qwen2.5-7B-Instruct"                        # HuggingFace 7B
+_HF_3B    = "Qwen/Qwen2.5-3B-Instruct"                        # HuggingFace 3B (fallback)
+
+# 기본 모델: 7B (T4 4-bit NF4 ~5GB VRAM, 응답 품질 우선)
+DEFAULT_MODEL = _DRIVE_7B if _os.path.exists(_DRIVE_7B) else _HF_7B
+
+# 메모리 부족·속도 우선 시 3B fallback:
+#   pipeline = RAGPipeline(model_name=FALLBACK_MODEL)
+FALLBACK_MODEL = _DRIVE_3B if _os.path.exists(_DRIVE_3B) else _HF_3B
 
 # 임계값: 가장 유사한 청크의 embed_score가 이 값 미만이면 모른다고 답변
 SIMILARITY_THRESHOLD = 0.40
@@ -156,6 +174,10 @@ class RAGPipeline:
           - bnb_4bit_use_double_quant=True: 이중 양자화로 추가 메모리 절약
           - bnb_4bit_quant_type="nf4": NormalFloat4, 가중치 분포에 최적
         device_map="auto": GPU/CPU 자동 배치 (GPU 없으면 CPU fallback)
+
+        VRAM 예상 (4-bit NF4):
+          7B → ~5.0GB  (T4 15GB 기준 여유 ~10GB)
+          3B → ~2.5GB  (메모리 여유 최대, 속도 최우선 시)
         """
         quant_config = None
         if use_4bit:

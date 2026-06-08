@@ -1,67 +1,11 @@
 [
   {
-    "question": "내일 학식 메뉴 알려줘",
-    "label": 3
-  },
-  {
-    "question": "성적 발표는 언제 되나요?",
-    "label": 2
-  },
-  {
     "question": "영어 졸업인증 면제 조건이 있나요?",
     "label": 0
   },
   {
-    "question": "성적 이의신청 기간이 언제예요?",
-    "label": 2
-  },
-  {
-    "question": "장학금 신청 공지 어디서 봐요?",
-    "label": 1
-  },
-  {
     "question": "봉사활동 시간이 졸업에 필요한가요?",
     "label": 0
-  },
-  {
-    "question": "주말에도 셔틀버스 있어요?",
-    "label": 4
-  },
-  {
-    "question": "셔틀버스 탑승 방법 알려줘",
-    "label": 4
-  },
-  {
-    "question": "학식 몇 시에 문 열어요?",
-    "label": 3
-  },
-  {
-    "question": "교내 행사 공지 어디에 있어요?",
-    "label": 1
-  },
-  {
-    "question": "학과 사무실 공지 어디 있어요?",
-    "label": 1
-  },
-  {
-    "question": "휴학 신청 기간이 언제예요?",
-    "label": 2
-  },
-  {
-    "question": "수강 정정은 언제 할 수 있어요?",
-    "label": 2
-  },
-  {
-    "question": "다음 주 식단 알 수 있나요?",
-    "label": 3
-  },
-  {
-    "question": "삼성 장학금 공지 올라왔나요?",
-    "label": 1
-  },
-  {
-    "question": "이번 학기 방학이 언제부터예요?",
-    "label": 2
   },
   {
     "question": "졸업 예정자 확인을 어떻게 하나요?",
@@ -72,35 +16,107 @@
     "label": 0
   },
   {
-    "question": "셔틀버스 마지막 버스 몇 시예요?",
-    "label": 4
-  },
-  {
     "question": "SW 졸업인증 이수 방법이 뭐예요?",
     "label": 0
-  },
-  {
-    "question": "등록금 고지서 관련 공지 있나요?",
-    "label": 1
   },
   {
     "question": "졸업장 받으려면 어떤 절차가 있나요?",
     "label": 0
   },
   {
-    "question": "학교 버스 배차 간격이 어떻게 되나요?",
-    "label": 4
+    "question": "장학금 신청 공지 어디서 봐요?",
+    "label": 1
   },
   {
-    "question": "개강일이 언제예요?",
-    "label": 2
+    "question": "교내 행사 공지 어디에 있어요?",
+    "label": 1
+  },
+  {
+    "question": "학과 사무실 공지 어디 있어요?",
+    "label": 1
+  },
+  {
+    "question": "삼성 장학금 공지 올라왔나요?",
+    "label": 1
+  },
+  {
+    "question": "등록금 고지서 관련 공지 있나요?",
+    "label": 1
   },
   {
     "question": "실습 관련 공지사항 어디서 봐요?",
     "label": 1
   },
   {
+    "question": "성적 발표는 언제 되나요?",
+    "label": 2
+  },
+  {
+    "question": "성적 이의신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "휴학 신청 기간이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "수강 정정은 언제 할 수 있어요?",
+    "label": 2
+  },
+  {
+    "question": "이번 학기 방학이 언제부터예요?",
+    "label": 2
+  },
+  {
+    "question": "개강일이 언제예요?",
+    "label": 2
+  },
+  {
+    "question": "내일 학식 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "학식 몇 시에 문 열어요?",
+    "label": 3
+  },
+  {
+    "question": "다음 주 식단 알 수 있나요?",
+    "label": 3
+  },
+  {
     "question": "학생식당 특식 오늘 있나요?",
     "label": 3
+  },
+  {
+    "question": "식당 오늘 밥 뭐예요?",
+    "label": 3
+  },
+  {
+    "question": "모레 학식 메뉴 알 수 있어?",
+    "label": 3
+  },
+  {
+    "question": "주말에도 셔틀버스 있어요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 탑승 방법 알려줘",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 마지막 버스 몇 시예요?",
+    "label": 4
+  },
+  {
+    "question": "학교 버스 배차 간격이 어떻게 되나요?",
+    "label": 4
+  },
+  {
+    "question": "통학버스 정류장 어디야?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 오늘 안 운행해?",
+    "label": 4
   }
 ]

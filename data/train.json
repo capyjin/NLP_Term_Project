@@ -440,6 +440,38 @@
     "label": 3
   },
   {
+    "question": "오늘 저녁 학식 메뉴 뭐야?",
+    "label": 3
+  },
+  {
+    "question": "내일 점심 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "학생식당 오늘 뭐 나와?",
+    "label": 3
+  },
+  {
+    "question": "학식 메뉴 어디서 확인해?",
+    "label": 3
+  },
+  {
+    "question": "조식 제공 되나요?",
+    "label": 3
+  },
+  {
+    "question": "구내식당 오늘 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "제1학생회관 점심 뭐야",
+    "label": 3
+  },
+  {
+    "question": "학식 오늘 뭐 먹지?",
+    "label": 3
+  },
+  {
     "question": "셔틀버스 시간표 알려줘",
     "label": 4
   },
@@ -520,46 +552,6 @@
     "label": 4
   },
   {
-    "question": "오늘 저녁 학식 메뉴 뭐야?",
-    "label": 3
-  },
-  {
-    "question": "내일 점심 메뉴 알려줘",
-    "label": 3
-  },
-  {
-    "question": "학생식당 오늘 뭐 나와?",
-    "label": 3
-  },
-  {
-    "question": "학식 메뉴 어디서 확인해?",
-    "label": 3
-  },
-  {
-    "question": "조식 제공 되나요?",
-    "label": 3
-  },
-  {
-    "question": "구내식당 오늘 메뉴 알려줘",
-    "label": 3
-  },
-  {
-    "question": "제1학생회관 점심 뭐야",
-    "label": 3
-  },
-  {
-    "question": "학식 오늘 뭐 먹지?",
-    "label": 3
-  },
-  {
-    "question": "식당 오늘 밥 뭐예요?",
-    "label": 3
-  },
-  {
-    "question": "모레 학식 메뉴 알 수 있어?",
-    "label": 3
-  },
-  {
     "question": "셔틀 몇 시에 있어?",
     "label": 4
   },
@@ -589,14 +581,6 @@
   },
   {
     "question": "셔틀 지금 있어요?",
-    "label": 4
-  },
-  {
-    "question": "통학버스 정류장 어디야?",
-    "label": 4
-  },
-  {
-    "question": "셔틀버스 오늘 안 운행해?",
     "label": 4
   }
 ]
