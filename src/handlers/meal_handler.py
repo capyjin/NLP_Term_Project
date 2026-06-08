@@ -41,7 +41,7 @@ _RESTAURANTS = [
     "생활과학대학", "교직원식당",
 ]
 
-# 주간 의도 키워드 — today보다 먼저 검사해야 함
+# 주간 의도 키워드 -- today보다 먼저 검사해야 함
 _KW_LASTWEEK = {"지난주", "지난 주", "저번주", "저번 주"}
 _KW_THISWEEK = {"이번주", "이번 주", "주간", "이번주학식", "이번 주 학식"}
 _KW_NEXTWEEK = {"다음주", "다음 주", "다음주학식", "다음 주 학식"}
@@ -83,9 +83,9 @@ class MealHandler:
     def _try_refresh(self) -> None:
         """크롤러 실행으로 파일 갱신 시도. 실패해도 기존 파일 유지."""
         if not self._crawler.exists():
-            print("[TTL] meal_crawler.py 없음 — 갱신 건너뜀")
+            print("[TTL] meal_crawler.py 없음 -- 갱신 건너뜀")
             return
-        print("[TTL] meal_menu.json stale — refreshing...")
+        print("[TTL] meal_menu.json stale -- refreshing...")
         result = subprocess.run(
             [sys.executable, str(self._crawler)],
             capture_output=True, text=True,
@@ -95,7 +95,7 @@ class MealHandler:
             self._cache = None  # 인메모리 캐시 초기화 → 다음 _load에서 재로드
         else:
             err = (result.stderr or "").strip().splitlines()
-            print(f"[TTL] meal refresh failed — using cached file")
+            print(f"[TTL] meal refresh failed -- using cached file")
             if err:
                 print(f"      {err[-1][:100]}")
 
@@ -132,7 +132,7 @@ class MealHandler:
         반환: "last_week" | "this_week" | "next_week" | None
         """
         nq = q.replace(" ", "")
-        # 지난주 — "이번주" 보다 먼저 (부분 포함 방지)
+        # 지난주 -- "이번주" 보다 먼저 (부분 포함 방지)
         if any(k.replace(" ", "") in nq for k in _KW_LASTWEEK):
             return "last_week"
         if any(k.replace(" ", "") in nq for k in _KW_NEXTWEEK):

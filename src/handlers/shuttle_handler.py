@@ -79,9 +79,9 @@ class ShuttleHandler:
     def _try_refresh(self) -> None:
         """크롤러 실행으로 파일 갱신 시도. 실패 시 known_data 유지."""
         if not self._crawler.exists():
-            print("[TTL] shuttle_crawler.py 없음 — known_data 사용")
+            print("[TTL] shuttle_crawler.py 없음 -- known_data 사용")
             return
-        print("[TTL] shuttle_bus.json stale — refreshing...")
+        print("[TTL] shuttle_bus.json stale -- refreshing...")
         result = subprocess.run(
             [sys.executable, str(self._crawler)],
             capture_output=True, text=True,
@@ -91,7 +91,7 @@ class ShuttleHandler:
             self._cache = None
         else:
             err = (result.stderr or "").strip().splitlines()
-            print("[TTL] shuttle refresh failed — using known_data")
+            print("[TTL] shuttle refresh failed -- using known_data")
             if err:
                 print(f"      {err[-1][:100]}")
 
@@ -108,7 +108,7 @@ class ShuttleHandler:
         if self._is_stale():
             self._try_refresh()
         else:
-            print("[TTL] shuttle_bus.json fresh — using cached file")
+            print("[TTL] shuttle_bus.json fresh -- using cached file")
 
         if self._path.exists():
             try:

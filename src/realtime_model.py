@@ -23,6 +23,11 @@ from src.chatbot_router import CNUChatRouter, detect_category
 
 
 def main():
+    # Windows CP949 환경에서 이모지/한글 출력 오류 방지
+    import sys as _sys
+    if hasattr(_sys.stdout, "reconfigure"):
+        _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(description="CNU Realtime Info Model")
     parser.add_argument("--input",  default="data/test_realtime.json")
     parser.add_argument("--output", default="outputs/realtime_output.json")
@@ -44,11 +49,15 @@ def main():
     pipeline = None
     router   = None
 
-    # 핸들러 사전 초기화 (식단/셔틀 전용 — Qwen 로드 없이)
-    from src.handlers.meal_handler    import MealHandler
-    from src.handlers.shuttle_handler import ShuttleHandler
+    # 핸들러 사전 초기화 (Qwen 로드 없이 처리 가능한 핸들러)
+    from src.handlers.meal_handler        import MealHandler
+    from src.handlers.shuttle_handler     import ShuttleHandler
+    from src.handlers.scholarship_handler import ScholarshipHandler
+    from src.handlers.notice_handler      import NoticeHandler
     _meal_h    = MealHandler(BASE_DIR)
     _shuttle_h = ShuttleHandler(BASE_DIR)
+    _scholar_h = ScholarshipHandler(BASE_DIR)
+    _notice_h  = NoticeHandler(BASE_DIR)
 
     results = []
     for i, item in enumerate(items, 1):
@@ -63,8 +72,14 @@ def main():
             answer, source = _meal_h.answer(question)
         elif cat == 4:
             answer, source = _shuttle_h.answer(question)
+        elif cat == 5:
+            # 장학공지: ScholarshipHandler 직접 (Qwen 불필요)
+            answer, source = _scholar_h.answer(question)
+        elif cat == 6:
+            # 공지사항: NoticeHandler 직접 (Qwen 불필요)
+            answer, source = _notice_h.answer(question)
         else:
-            # 장학(5), 공지(6), 학사일정/기타(-1): CNUChatRouter → RAG/Handler
+            # RAG (-1): 학사일정/기타 → Qwen 필요
             if pipeline is None:
                 print("  RAGPipeline 초기화 중...")
                 from src.rag.pipeline import RAGPipeline

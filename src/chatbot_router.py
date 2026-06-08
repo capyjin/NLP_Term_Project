@@ -10,6 +10,7 @@ CNU Campus ChatBot 라우터 — 질문 유형별 핸들러 분기
 chatbot_model.py 와 chatbot_ui.py 에서 공유 사용.
 """
 
+import re
 import sys
 from pathlib import Path
 
@@ -86,6 +87,11 @@ _NOTICE_LIST_KW = frozenset({
     "취업안내알려줘", "취업안내뭐올라", "취업뭐올라",
     "행사공지", "행사안내알려줘", "최근행사", "행사뭐있어",
     "최근소식", "공지뭐올라왔", "공지뭐있어", "공지뭐나왔",
+    # 가장 최근 게시일 질문
+    "가장최근공지", "언제게시", "게시되었나요", "게시됐나요", "최근게시",
+    # 학사일정 변동 질문
+    "학사일정변동", "변동된학사일정", "학사변동", "변동학사일정",
+    "이후학사공지", "이후변동공지",
 })
 # "최근/최신/요즘" + "공지/소식" 조합 트리거
 _NOTICE_RECENT_KW  = frozenset({"최근", "최신", "요즘", "새로운"})
@@ -149,10 +155,24 @@ def _has_notice_list(nq: str) -> bool:
         k in nq for k in ("공지", "안내", "알려줘", "보여줘", "뭐올라", "뭐있어")
     ):
         return True
-    # "최근/최신/요즘" + "공지/소식/안내" 조합
+    # "최근/최신/요즘/새로운" + "공지/소식/안내" 조합
     if any(r in nq for r in _NOTICE_RECENT_KW) and any(
         s in nq for s in _NOTICE_SUBJECT_KW
     ):
+        return True
+    # "N월이후" + "학사/공지/일정/변동" 조합 (예: "5월이후로변동된학사일정")
+    if re.search(r"\d+월이후", nq) and any(
+        k in nq for k in ("학사", "공지", "일정", "변동")
+    ):
+        return True
+    # "가장최근" + "공지/게시/안내"
+    if "가장최근" in nq and any(k in nq for k in ("공지", "게시", "안내")):
+        return True
+    # "게시" + "언제/됐나/되었나" (게시일 질문)
+    if "게시" in nq and any(k in nq for k in ("언제", "됐나", "되었나")):
+        return True
+    # "변동" + "학사/일정/공지" (변동 여부 질문)
+    if "변동" in nq and any(k in nq for k in ("학사", "일정", "공지")):
         return True
     return False
 

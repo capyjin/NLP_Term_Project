@@ -60,16 +60,26 @@ def _get_no(url: str) -> int:
 
 def _extract_date(content: str) -> str:
     """
-    content에서 날짜 추출.
-    패턴 1: 2026-05-27
-    패턴 2: 2026. 5. 27. (또는 2026. 5. 27)
+    content에서 날짜 추출 (우선순위 순).
+    패턴 1: 등록일YYYY-MM-DD  (크롤링 데이터)
+    패턴 2: 접수기간YYYY-MM-DD (행사 데이터)
+    패턴 3: YYYY-MM-DD        (ISO 형식 직접)
+    패턴 4: YYYY. M. D.       (한국 점 형식)
     추출 실패 시 빈 문자열 반환.
     """
-    # 패턴 1: ISO 형식
+    # 패턴 1: 등록일 태그 (크롤링 메타)
+    m = re.search(r"등록일\s*(\d{4}-\d{2}-\d{2})", content)
+    if m:
+        return m.group(1)
+    # 패턴 2: 접수기간 태그
+    m = re.search(r"접수기간\s*(\d{4}-\d{2}-\d{2})", content)
+    if m:
+        return m.group(1)
+    # 패턴 3: ISO 형식
     m = re.search(r"(\d{4}-\d{2}-\d{2})", content)
     if m:
         return m.group(1)
-    # 패턴 2: 한국 점 형식
+    # 패턴 4: 한국 점 형식 (2026. 5. 27. 또는 2026. 5. 27)
     m = re.search(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content)
     if m:
         y = m.group(1)
@@ -165,36 +175,178 @@ class NoticeHandler:
         lines.append(f"\n전체 공지 확인: {portal_url}")
         return "\n".join(lines)
 
+    # ── 전용 응답 메서드 ──────────────────────────────────────────────
+
+    def _answer_most_recent(self) -> tuple[str, str]:
+        """
+        "가장 최근에 올라온 공지사항은 언제 게시되었나요?" 유형.
+        날짜 추출 가능한 공지를 날짜 내림차순 정렬 → 상위 3개 + 최신 게시일 명시.
+        """
+        notices = self._get_notices(["학사공지", "취업공지", "행사안내"])
+        if not notices:
+            return (
+                "현재 저장된 공지 데이터가 없습니다.\n"
+                f"포털 공지사항에서 확인하세요: {_PORTAL_URLS['학사공지']}"
+            ), "notice_handler"
+
+        # 날짜 추출 후 분류
+        dated, undated = [], []
+        for n in notices:
+            d = _extract_date(n.get("content", ""))
+            if d:
+                dated.append((d, n))
+            else:
+                undated.append(n)
+        dated.sort(key=lambda x: x[0], reverse=True)
+
+        lines = ["현재 저장된 공지 데이터 기준 가장 최근 공지사항은 다음과 같습니다.\n"]
+
+        # 날짜 있는 항목 상위 3개
+        shown = dated[:3]
+        for i, (d, n) in enumerate(shown, 1):
+            title = n.get("title", "") or "제목 없음"
+            url   = n.get("url", "")
+            lines.append(f"{i}. [{d}] {title}")
+            if url:
+                lines.append(f"   → {url}")
+
+        # 부족하면 날짜 없는 항목으로 보충
+        extra_start = len(shown) + 1
+        for j, n in enumerate(undated[:max(0, 3 - len(shown))], extra_start):
+            title = n.get("title", "") or "제목 없음"
+            url   = n.get("url", "")
+            lines.append(f"{j}. [날짜 확인 불가] {title}")
+            if url:
+                lines.append(f"   → {url}")
+
+        if dated:
+            lines.append(f"\n가장 최근 게시일: {dated[0][0]}")
+
+        lines.append(
+            f"\n자세한 내용은 충남대학교 포털 공지사항에서 확인하세요:\n"
+            f"{_PORTAL_URLS['학사공지']}"
+        )
+        return "\n".join(lines), "notice_handler"
+
+    def _answer_academic_filter(self, question: str) -> tuple[str, str]:
+        """
+        "5월 이후로 변동된 학사일정이 있을까요?" 유형.
+        질문에서 월(N월) 추출 → 학사공지에서 해당 월 이후 항목 필터링.
+        """
+        nq = question.replace(" ", "")
+        portal_url = _PORTAL_URLS["학사공지"]
+
+        # 질문에서 월 추출 ("5월이후", "6월이후" 등)
+        month_m = re.search(r"(\d+)월이후", nq)
+        filter_month = int(month_m.group(1)) if month_m else None
+        month_label  = f"{filter_month}월" if filter_month else "최근"
+
+        notices = self._get_notices(["학사공지"])
+        if not notices:
+            return (
+                f"현재 저장된 학사공지 데이터가 없습니다.\n"
+                f"포털 학사공지에서 확인하세요: {portal_url}"
+            ), "notice_handler"
+
+        # 날짜 추출 후 월 필터
+        matched, undated_top = [], []
+        for n in notices:
+            d = _extract_date(n.get("content", ""))
+            if d:
+                try:
+                    d_month = int(d.split("-")[1])
+                    if filter_month is None or d_month >= filter_month:
+                        matched.append((d, n))
+                except Exception:
+                    pass
+            else:
+                undated_top.append(n)
+
+        matched.sort(key=lambda x: x[0], reverse=True)
+
+        if matched:
+            lines = [
+                f"현재 저장된 학사공지 기준으로 {month_label} 이후 확인되는 학사 관련 공지는 "
+                f"다음과 같습니다.\n"
+            ]
+            for i, (d, n) in enumerate(matched[:5], 1):
+                title = n.get("title", "") or "제목 없음"
+                url   = n.get("url", "")
+                lines.append(f"{i}. [{d}] {title}")
+                if url:
+                    lines.append(f"   → {url}")
+            lines.append("\n정확한 변동 여부는 각 공지 상세 내용을 확인해야 합니다.")
+            lines.append(f"포털 학사공지: {portal_url}")
+            return "\n".join(lines), "notice_handler"
+
+        # 날짜 추출 실패 — no= 기준 최신 항목으로 대체
+        if undated_top:
+            lines = [
+                f"저장된 데이터에서 날짜를 직접 확인하기 어렵지만,\n"
+                f"학사공지 최근 게시물 기준으로 관련 공지는 다음과 같습니다.\n"
+            ]
+            for i, n in enumerate(undated_top[:3], 1):
+                title = n.get("title", "") or "제목 없음"
+                url   = n.get("url", "")
+                lines.append(f"{i}. {title}")
+                if url:
+                    lines.append(f"   → {url}")
+            lines.append("\n정확한 변동 여부는 각 공지 상세 내용을 확인해야 합니다.")
+            lines.append(f"포털 학사공지: {portal_url}")
+            return "\n".join(lines), "notice_handler"
+
+        return (
+            f"현재 저장된 데이터에서는 {month_label} 이후 학사일정 변동 공지를 찾지 못했습니다.\n"
+            "학사일정 변동은 학사공지에 게시되므로 포털 학사공지를 직접 확인해 주세요.\n"
+            f"포털 학사공지: {portal_url}"
+        ), "notice_handler"
+
     # ── 메인 진입점 ───────────────────────────────────────────────────
 
     def answer(self, question: str) -> tuple[str, str]:
         """
-        질문 분석 → 카테고리 결정 → 최근 공지 목록 반환.
+        질문 분석 → 유형 감지 → 적합한 응답 생성.
+
+        유형 1: "가장 최근 게시일" → _answer_most_recent()
+        유형 2: "N월 이후 변동"   → _answer_academic_filter()
+        유형 3: 카테고리 목록      → _format_list()
 
         Returns: (answer_text, source)
         source: "notice_handler"
         """
         nq = question.replace(" ", "")
 
-        # 카테고리 자동 감지
+        # 유형 1: 가장 최근 게시일 질문
+        if (
+            ("가장최근" in nq and any(k in nq for k in ("공지", "게시", "안내")))
+            or ("게시" in nq and any(k in nq for k in ("언제", "됐나", "되었나")))
+        ):
+            return self._answer_most_recent()
+
+        # 유형 2: N월 이후 학사 변동 질문
+        if re.search(r"\d+월이후", nq) or ("변동" in nq and any(
+            k in nq for k in ("학사", "일정", "공지")
+        )):
+            return self._answer_academic_filter(question)
+
+        # 유형 3: 카테고리별 목록
         if "취업" in nq:
             categories = ["취업공지"]
-            label = _CATEGORY_LABEL["취업공지"]
+            label      = _CATEGORY_LABEL["취업공지"]
             portal_url = _PORTAL_URLS["취업공지"]
         elif "학사" in nq:
             categories = ["학사공지"]
-            label = _CATEGORY_LABEL["학사공지"]
+            label      = _CATEGORY_LABEL["학사공지"]
             portal_url = _PORTAL_URLS["학사공지"]
         elif "행사" in nq:
             categories = ["행사안내"]
-            label = _CATEGORY_LABEL["행사안내"]
+            label      = _CATEGORY_LABEL["행사안내"]
             portal_url = _PORTAL_URLS["행사안내"]
         else:
-            # 기본: 학사+취업+행사 통합 (최신순 혼합)
             categories = ["학사공지", "취업공지", "행사안내"]
-            label = "공지사항 (학사·취업·행사)"
+            label      = "공지사항 (학사·취업·행사)"
             portal_url = _PORTAL_URLS["학사공지"]
 
         notices = self._get_notices(categories)
-        text = self._format_list(notices, label, portal_url)
+        text    = self._format_list(notices, label, portal_url)
         return text, "notice_handler"

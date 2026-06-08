@@ -19,7 +19,7 @@
 주의:
   - 크롤링된 장학공지 게시판에는 장학금 이외 항목(계절학기, 교수 프로그램 등)도 포함될 수 있음
   - 교수/포스트닥 대상 항목은 자동 필터링
-  - 허위 장학금 생성 금지 — 반드시 실제 크롤링 데이터만 사용
+  - 허위 장학금 생성 금지 -- 반드시 실제 크롤링 데이터만 사용
 """
 
 import json
@@ -73,9 +73,9 @@ class ScholarshipHandler:
     def _try_refresh(self) -> None:
         """cnu_crawler 실행으로 chunks.json 갱신 시도. 실패 시 기존 유지."""
         if not self._crawler.exists():
-            print("[TTL] cnu_crawler.py 없음 — 기존 chunks.json 사용")
+            print("[TTL] cnu_crawler.py 없음 -- 기존 chunks.json 사용")
             return
-        print("[TTL] chunks.json stale — refreshing scholarship data...")
+        print("[TTL] chunks.json stale -- refreshing scholarship data...")
         result = subprocess.run(
             [sys.executable, str(self._crawler)],
             capture_output=True, text=True,
@@ -85,7 +85,7 @@ class ScholarshipHandler:
             self._cache = None  # 인메모리 캐시 초기화
         else:
             err = (result.stderr or "").strip().splitlines()
-            print("[TTL] scholarship refresh failed — using cached file")
+            print("[TTL] scholarship refresh failed -- using cached file")
             if err:
                 print(f"      {err[-1][:100]}")
 
@@ -100,7 +100,7 @@ class ScholarshipHandler:
         if self._is_stale():
             self._try_refresh()
         else:
-            print("[TTL] chunks.json fresh — using cached file")
+            print("[TTL] chunks.json fresh -- using cached file")
 
         if not self._chunks_path.exists():
             return []
