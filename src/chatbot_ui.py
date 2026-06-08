@@ -33,6 +33,7 @@ _SOURCE_LABELS = {
     "scholarship_no_data": "🎓 장학공지 (데이터 없음)",
     "rag_pipeline":        "🔍 RAG 검색",
     "rag_threshold_miss":  "💡 일반 안내",
+    "direct_handler":      "⚡ 직접 안내",
 }
 
 

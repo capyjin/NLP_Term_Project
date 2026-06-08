@@ -248,15 +248,14 @@ class HybridRetriever:
 
     # ── 검색 ──────────────────────────────────────────────────
 
-    def _bm25_search(self, query: str, top_k: int) -> list[dict]:
+    def _bm25_search(self, q_tokens: list[str], top_k: int) -> list[dict]:
         """
         BM25 키워드 검색.
-        쿼리 형태소 분석 → BM25 점수 계산 → 상위 top_k 반환.
+        search()에서 1회 토큰화된 q_tokens를 직접 받아 사용 (Kiwi 중복 호출 제거).
         반환: [{"chunk_idx": int, "bm25_score": float}]
         """
-        q_tokens = self._tokenize(query)
-        scores   = self._bm25.get_scores(q_tokens)
-        ranked   = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)[:top_k]
+        scores = self._bm25.get_scores(q_tokens)
+        ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)[:top_k]
         return [{"chunk_idx": idx, "bm25_score": score} for idx, score in ranked]
 
     def _embed_search(self, query: str, top_k: int) -> list[dict]:
@@ -283,6 +282,7 @@ class HybridRetriever:
         embed_hits: list[dict],
         top_k:      int,
         query:      str = "",
+        q_tokens:   set = None,
     ) -> list[dict]:
         """
         RRF(Reciprocal Rank Fusion)로 BM25·임베딩 결과 순위 결합.
@@ -312,11 +312,12 @@ class HybridRetriever:
             idx = hit["chunk_idx"]
             rrf_scores[idx] = rrf_scores.get(idx, 0) + 1 / (RRF_K + rank + 1)
 
-        # [Phase2] boost/penalty 적용 — query가 있을 때만 실행
-        if query:
-            q_tokens = set(self._tokenize(query))
+        # [Phase2] boost/penalty 적용
+        # q_tokens 우선(search()에서 1회 토큰화 후 전달), 없으면 query 문자열로 토큰화 (하위 호환)
+        _qt = q_tokens if q_tokens is not None else (set(self._tokenize(query)) if query else None)
+        if _qt:
             for idx in rrf_scores:
-                rrf_scores[idx] *= self._get_boost_factor(q_tokens, self._chunks[idx])
+                rrf_scores[idx] *= self._get_boost_factor(_qt, self._chunks[idx])
 
         # RRF 점수 기준 상위 top_k 선택
         top_idxs = sorted(rrf_scores, key=lambda i: rrf_scores[i], reverse=True)[:top_k]
@@ -347,8 +348,9 @@ class HybridRetriever:
         BM25 + 임베딩 결과를 RRF로 결합해 top_k 반환.
         반환: [{"content", "metadata", "score"(RRF+boost), "embed_score"(float or None)}]
 
-        [Phase2 수정] query를 _rrf에 전달 → boost/penalty 적용
+        [Speed] Kiwi 토큰화 1회로 통합: q_tokens를 BM25·RRF 양쪽에 재사용 (~160ms 절약)
         """
-        bm25_hits  = self._bm25_search(query, TOP_K_BM25)
+        q_tokens   = self._tokenize(query)                     # 1회만 토큰화
+        bm25_hits  = self._bm25_search(q_tokens, TOP_K_BM25)  # 토큰 재사용
         embed_hits = self._embed_search(query, TOP_K_EMBED)
-        return self._rrf(bm25_hits, embed_hits, top_k, query=query)
+        return self._rrf(bm25_hits, embed_hits, top_k, q_tokens=set(q_tokens))

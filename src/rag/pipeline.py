@@ -196,7 +196,7 @@ class RAGPipeline:
         )
         self.model.eval()
 
-    def retrieve(self, question: str, top_k: int = 3) -> tuple[str, float]:
+    def retrieve(self, question: str, top_k: int = 2) -> tuple[str, float]:
         """
         HybridRetriever로 관련 청크 검색 후 context 문자열 조합.
 
@@ -221,7 +221,7 @@ class RAGPipeline:
         )
         return context, best_embed_score
 
-    def generate(self, question: str, max_new_tokens: int = 512) -> str:
+    def generate(self, question: str, max_new_tokens: int = 200) -> str:
         """
         RAG 전체 파이프라인 실행.
         1. retrieve()로 context + best_embed_score 획득
