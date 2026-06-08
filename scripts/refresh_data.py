@@ -78,6 +78,24 @@ def refresh_shuttle():
     run_crawler(crawler, "셔틀버스")
 
 
+def refresh_academic_calendar():
+    """학사일정 크롤링 → data/raw/academic_calendar.json 갱신 (TTL 24h 체크)."""
+    _sep("학사일정 데이터 갱신")
+    cal_json = BASE_DIR / "data" / "raw" / "academic_calendar.json"
+    import time
+    if cal_json.exists():
+        age = time.time() - cal_json.stat().st_mtime
+        if age < 24 * 3600:
+            age_h = age / 3600
+            _ok(f"학사일정 파일 유효 (갱신된 지 {age_h:.1f}시간) — 스킵")
+            return
+    crawler = BASE_DIR / "src" / "crawling" / "academic_calendar_crawler.py"
+    if not crawler.exists():
+        _warn(f"academic_calendar_crawler.py 없음: {crawler}")
+        return
+    run_crawler(crawler, "학사일정")
+
+
 def refresh_notice():
     """공지/장학 크롤링 → chunks.json 갱신."""
     _sep("공지/장학 데이터 갱신")
@@ -139,15 +157,16 @@ def main():
     parser = argparse.ArgumentParser(
         description="CNU ChatBot 데이터 갱신 스크립트"
     )
-    parser.add_argument("--meal",    action="store_true", help="식단 크롤링만")
-    parser.add_argument("--shuttle", action="store_true", help="셔틀 크롤링만")
-    parser.add_argument("--notice",  action="store_true", help="공지/장학 크롤링만")
-    parser.add_argument("--db",      action="store_true", help="벡터 DB 재구축만")
-    parser.add_argument("--ui",      action="store_true", help="UI 바로 실행")
+    parser.add_argument("--meal",     action="store_true", help="식단 크롤링만")
+    parser.add_argument("--shuttle",  action="store_true", help="셔틀 크롤링만")
+    parser.add_argument("--notice",   action="store_true", help="공지/장학 크롤링만")
+    parser.add_argument("--calendar", action="store_true", help="학사일정 크롤링만")
+    parser.add_argument("--db",       action="store_true", help="벡터 DB 재구축만")
+    parser.add_argument("--ui",       action="store_true", help="UI 바로 실행")
     args = parser.parse_args()
 
     # 플래그 없으면 전체 갱신 (UI 제외)
-    run_all = not any([args.meal, args.shuttle, args.notice, args.db, args.ui])
+    run_all = not any([args.meal, args.shuttle, args.notice, args.calendar, args.db, args.ui])
 
     print("\n" + "=" * 50)
     print("  CNU ChatBot — 데이터 갱신")
@@ -161,6 +180,9 @@ def main():
 
     if run_all or args.notice:
         refresh_notice()
+
+    if run_all or args.calendar:
+        refresh_academic_calendar()
 
     if run_all or args.db:
         rebuild_db()

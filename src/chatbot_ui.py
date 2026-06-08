@@ -34,7 +34,8 @@ _SOURCE_LABELS = {
     "rag_pipeline":        "🔍 RAG 검색",
     "rag_threshold_miss":  "💡 일반 안내",
     "direct_handler":      "⚡ 직접 안내",
-    "notice_handler":      "📋 공지사항 DB",
+    "notice_handler":              "📋 공지사항 DB",
+    "academic_calendar_handler":   "📅 학사일정 DB",
 }
 
 

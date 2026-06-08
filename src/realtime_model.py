@@ -50,21 +50,23 @@ def main():
     router   = None
 
     # 핸들러 사전 초기화 (Qwen 로드 없이 처리 가능한 핸들러)
-    from src.handlers.meal_handler        import MealHandler
-    from src.handlers.shuttle_handler     import ShuttleHandler
-    from src.handlers.scholarship_handler import ScholarshipHandler
-    from src.handlers.notice_handler      import NoticeHandler
+    from src.handlers.meal_handler               import MealHandler
+    from src.handlers.shuttle_handler            import ShuttleHandler
+    from src.handlers.scholarship_handler        import ScholarshipHandler
+    from src.handlers.notice_handler             import NoticeHandler
+    from src.handlers.academic_calendar_handler  import AcademicCalendarHandler
     _meal_h    = MealHandler(BASE_DIR)
     _shuttle_h = ShuttleHandler(BASE_DIR)
     _scholar_h = ScholarshipHandler(BASE_DIR)
     _notice_h  = NoticeHandler(BASE_DIR)
+    _acal_h    = AcademicCalendarHandler(BASE_DIR)
 
     results = []
     for i, item in enumerate(items, 1):
         question = item.get("user", item.get("question", ""))
         cat = detect_category(question)
-        # cat: 3=식단, 4=셔틀, 5=장학, 6=공지, -1=RAG
-        cat_names = {3: "식단", 4: "셔틀버스", 5: "장학", 6: "공지", -1: "rag"}
+        # cat: 3=식단, 4=셔틀, 5=장학, 6=공지, 7=학사일정, -1=RAG
+        cat_names = {3: "식단", 4: "셔틀버스", 5: "장학", 6: "공지", 7: "학사일정", -1: "rag"}
         cat_label = cat_names.get(cat, "rag")
         print(f"[{i:3d}/{len(items)}] [{cat_label}] {question[:50]}")
 
@@ -78,6 +80,9 @@ def main():
         elif cat == 6:
             # 공지사항: NoticeHandler 직접 (Qwen 불필요)
             answer, source = _notice_h.answer(question)
+        elif cat == 7:
+            # 학사일정: AcademicCalendarHandler 직접 (Qwen 불필요)
+            answer, source = _acal_h.answer(question)
         else:
             # RAG (-1): 학사일정/기타 → Qwen 필요
             if pipeline is None:

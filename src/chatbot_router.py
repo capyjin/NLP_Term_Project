@@ -17,10 +17,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-from src.handlers.meal_handler        import MealHandler
-from src.handlers.shuttle_handler     import ShuttleHandler
-from src.handlers.scholarship_handler import ScholarshipHandler
-from src.handlers.notice_handler      import NoticeHandler
+from src.handlers.meal_handler               import MealHandler
+from src.handlers.shuttle_handler            import ShuttleHandler
+from src.handlers.scholarship_handler        import ScholarshipHandler
+from src.handlers.notice_handler             import NoticeHandler
+from src.handlers.academic_calendar_handler  import AcademicCalendarHandler
 
 # ── 장학공지 리스트 키워드 ────────────────────────────────────────────────────────
 # "리스트/목록/뭐있어/보여줘/공지/최근" 의도 → ScholarshipHandler
@@ -89,9 +90,17 @@ _NOTICE_LIST_KW = frozenset({
     "최근소식", "공지뭐올라왔", "공지뭐있어", "공지뭐나왔",
     # 가장 최근 게시일 질문
     "가장최근공지", "언제게시", "게시되었나요", "게시됐나요", "최근게시",
-    # 학사일정 변동 질문
-    "학사일정변동", "변동된학사일정", "학사변동", "변동학사일정",
+    # 학사일정 변동 질문 (학사공지 기반)
+    "학사변동", "변동학사일정",
     "이후학사공지", "이후변동공지",
+})
+
+# ── 학사일정 캘린더 키워드 (AcademicCalendarHandler) ──────────────────────────
+# academic_calendar.json 기반 실제 학사일정 조회
+_ACAL_KW = frozenset({
+    "학사일정", "이번달일정", "다음학사", "개강언제", "종강언제",
+    "시험기간", "계절학기일정", "수강신청일정", "수강정정일정",
+    "성적공시", "등록금납부일정",
 })
 # "최근/최신/요즘" + "공지/소식" 조합 트리거
 _NOTICE_RECENT_KW  = frozenset({"최근", "최신", "요즘", "새로운"})
@@ -142,10 +151,13 @@ def _has_notice_list(nq: str) -> bool:
     """
     공지사항 목록 조회 의도 감지 → NoticeHandler 라우팅.
     ※ 장학공지는 ScholarshipHandler가 담당 → "장학" 포함 시 False 반환.
-    ※ 식단/셔틀 키워드와 겹치지 않으므로 별도 exclusion 불필요.
+    ※ 학사일정 캘린더는 AcademicCalendarHandler가 담당 → "학사일정" 포함 시 False 반환.
     """
     # 장학 관련은 ScholarshipHandler가 처리
     if "장학" in nq:
+        return False
+    # 학사일정 캘린더는 AcademicCalendarHandler가 처리
+    if _has_academic_calendar(nq):
         return False
     # 명시적 복합 키워드 직접 매칭
     if any(k in nq for k in _NOTICE_LIST_KW):
@@ -160,19 +172,34 @@ def _has_notice_list(nq: str) -> bool:
         s in nq for s in _NOTICE_SUBJECT_KW
     ):
         return True
-    # "N월이후" + "학사/공지/일정/변동" 조합 (예: "5월이후로변동된학사일정")
-    if re.search(r"\d+월이후", nq) and any(
-        k in nq for k in ("학사", "공지", "일정", "변동")
-    ):
-        return True
     # "가장최근" + "공지/게시/안내"
     if "가장최근" in nq and any(k in nq for k in ("공지", "게시", "안내")):
         return True
     # "게시" + "언제/됐나/되었나" (게시일 질문)
     if "게시" in nq and any(k in nq for k in ("언제", "됐나", "되었나")):
         return True
-    # "변동" + "학사/일정/공지" (변동 여부 질문)
-    if "변동" in nq and any(k in nq for k in ("학사", "일정", "공지")):
+    # "변동" + "공지" (학사일정 제외)
+    if "변동" in nq and "공지" in nq:
+        return True
+    return False
+
+
+def _has_academic_calendar(nq: str) -> bool:
+    """
+    학사일정 캘린더 조회 의도 감지 → AcademicCalendarHandler 라우팅.
+    ※ "학사공지" or "공지" 포함 시 False (NoticeHandler 유지).
+    """
+    # 공지 관련이면 NoticeHandler로
+    if "학사공지" in nq or ("공지" in nq and "학사일정" not in nq):
+        return False
+    # 명시적 키워드
+    if any(k in nq for k in _ACAL_KW):
+        return True
+    # "N월이후" + ("학사일정" or "일정")
+    if re.search(r"\d+월이후", nq) and any(k in nq for k in ("학사일정", "일정")):
+        return True
+    # "N월" + "학사일정"
+    if re.search(r"\d+월", nq) and "학사일정" in nq:
         return True
     return False
 
@@ -352,7 +379,7 @@ def detect_category(question: str) -> int:
     키워드 기반 단일 카테고리 감지.
     복합 질문은 detect_all_categories() 사용.
 
-    Returns: 3(식단) | 4(셔틀) | 5(장학리스트) | 6(공지목록) | -1(RAG)
+    Returns: 3(식단) | 4(셔틀) | 5(장학리스트) | 6(공지목록) | 7(학사일정) | -1(RAG)
     """
     nq = question.replace(" ", "")
     if _has_shuttle(nq):
@@ -361,6 +388,8 @@ def detect_category(question: str) -> int:
         return 3
     if _has_scholarship_list(nq):
         return 5
+    if _has_academic_calendar(nq):
+        return 7
     if _has_notice_list(nq):
         return 6
     return -1
@@ -373,15 +402,17 @@ def detect_all_categories(question: str) -> list[int]:
     단일 질문은 기존 detect_category()와 동일하게 동작.
     """
     nq = question.replace(" ", "")
-    has_s  = _has_shuttle(nq)
-    has_m  = _has_meal(nq)
-    has_sc = _has_scholarship_list(nq)
-    has_n  = _has_notice_list(nq)
+    has_s   = _has_shuttle(nq)
+    has_m   = _has_meal(nq)
+    has_sc  = _has_scholarship_list(nq)
+    has_ac  = _has_academic_calendar(nq)
+    has_n   = _has_notice_list(nq)
 
     cats = []
     if has_s:  cats.append(4)
     if has_m:  cats.append(3)
     if has_sc: cats.append(5)
+    if has_ac: cats.append(7)
     if has_n:  cats.append(6)
     return cats if cats else [-1]
 
@@ -411,6 +442,7 @@ class CNUChatRouter:
         self._shuttle     = ShuttleHandler(base_dir)
         self._scholarship = ScholarshipHandler(base_dir)
         self._notice      = NoticeHandler(base_dir)
+        self._acal        = AcademicCalendarHandler(base_dir)
 
     def chat(self, question: str) -> tuple[str, str]:
         """질문 → (응답 텍스트, source_tag)"""
@@ -435,6 +467,9 @@ class CNUChatRouter:
 
         if cats == [6]:
             return self._notice.answer(question)
+
+        if cats == [7]:
+            return self._acal.answer(question)
 
         # ── 졸업요건/수강신청 직접 반환 (Qwen 완전 우회, ~1ms) ─────────────
         nq = question.replace(" ", "")
