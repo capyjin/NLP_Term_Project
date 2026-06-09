@@ -247,7 +247,7 @@ with gr.Blocks(css=_CSS, theme=gr.themes.Base(), title="CNU Campus ChatBot") as 
     # 헤더
     gr.HTML("""
     <div class="cnu-header">
-      <h1>🎓 CNU Campus ChatBot</h1>
+      <h1 style="color:#ffffff;">🎓 CNU Campus ChatBot</h1>
       <p>충남대학교 학사정보 · 공지사항 · 식단 · 셔틀버스 안내 AI 챗봇</p>
     </div>
     """)
