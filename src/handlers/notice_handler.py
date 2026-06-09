@@ -27,6 +27,7 @@
 import json
 import re
 import time
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -75,10 +76,12 @@ def _extract_date(content: str) -> str:
     m = re.search(r"접수기간\s*(\d{4}-\d{2}-\d{2})", content)
     if m:
         return m.group(1)
-    # 패턴 3: ISO 형식
-    m = re.search(r"(\d{4}-\d{2}-\d{2})", content)
-    if m:
-        return m.group(1)
+    # 패턴 3: ISO 형식 — 오늘 이후 날짜는 게시일이 아닌 본문 내 마감일일 수 있으므로 제외
+    today_str = date.today().isoformat()
+    for m in re.finditer(r"(\d{4}-\d{2}-\d{2})", content):
+        d = m.group(1)
+        if d <= today_str:
+            return d
     # 패턴 4: 한국 점 형식 (2026. 5. 27. 또는 2026. 5. 27)
     m = re.search(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content)
     if m:
