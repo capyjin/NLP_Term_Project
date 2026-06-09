@@ -85,9 +85,11 @@ def _extract_date(content: str) -> str:
         d = m.group(1)
         if d <= today_str:
             return d
-    m = re.search(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content)
-    if m:
-        return f"{m.group(1)}-{m.group(2).zfill(2)}-{m.group(3).zfill(2)}"
+    # 패턴 4: 한국 점 형식 — 미래 날짜(마감일·행사일) 제외, 오늘 이전만 허용
+    for m in re.finditer(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content):
+        candidate = f"{m.group(1)}-{m.group(2).zfill(2)}-{m.group(3).zfill(2)}"
+        if candidate <= today_str:
+            return candidate
     return ""
 
 

@@ -83,12 +83,14 @@ def _extract_date(content: str) -> str:
         if d <= today_str:
             return d
     # 패턴 4: 한국 점 형식 (2026. 5. 27. 또는 2026. 5. 27)
-    m = re.search(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content)
-    if m:
-        y = m.group(1)
+    # ※ 미래 날짜는 본문 내 행사기간·마감일일 수 있으므로 오늘 이전만 허용
+    for m in re.finditer(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content):
+        y  = m.group(1)
         mo = m.group(2).zfill(2)
-        d = m.group(3).zfill(2)
-        return f"{y}-{mo}-{d}"
+        dy = m.group(3).zfill(2)
+        candidate = f"{y}-{mo}-{dy}"
+        if candidate <= today_str:
+            return candidate
     return ""
 
 
@@ -183,7 +185,11 @@ class NoticeHandler:
     def _answer_most_recent(self) -> tuple[str, str]:
         """
         "가장 최근에 올라온 공지사항은 언제 게시되었나요?" 유형.
-        날짜 추출 가능한 공지를 날짜 내림차순 정렬 → 상위 3개 + 최신 게시일 명시.
+
+        정렬 기준: URL의 no= 번호 내림차순 (_get_notices가 이미 보장)
+          → 날짜 재정렬 금지: 본문 추출 날짜에는 마감일·행사기간 등 미래 날짜가
+            섞일 수 있어 재정렬 시 순서가 역전될 수 있음.
+          → 날짜는 "표시 레이블"로만 사용하고 정렬에는 사용하지 않음.
         """
         notices = self._get_notices(["학사공지", "취업공지", "행사안내"])
         if not notices:
@@ -192,38 +198,26 @@ class NoticeHandler:
                 f"포털 공지사항에서 확인하세요: {_PORTAL_URLS['학사공지']}"
             ), "notice_handler"
 
-        # 날짜 추출 후 분류
-        dated, undated = [], []
-        for n in notices:
-            d = _extract_date(n.get("content", ""))
-            if d:
-                dated.append((d, n))
-            else:
-                undated.append(n)
-        dated.sort(key=lambda x: x[0], reverse=True)
-
+        # no= 정렬 순서 그대로 상위 3건 사용 (재정렬 없음)
+        top3  = notices[:3]
         lines = ["현재 저장된 공지 데이터 기준 가장 최근 공지사항은 다음과 같습니다.\n"]
 
-        # 날짜 있는 항목 상위 3개
-        shown = dated[:3]
-        for i, (d, n) in enumerate(shown, 1):
-            title = n.get("title", "") or "제목 없음"
-            url   = n.get("url", "")
-            lines.append(f"{i}. [{d}] {title}")
+        first_date = ""
+        for i, n in enumerate(top3, 1):
+            title    = n.get("title", "") or "제목 없음"
+            url      = n.get("url", "")
+            d        = _extract_date(n.get("content", ""))
+            date_str = f"[{d}] " if d else "[날짜 확인 불가] "
+            if i == 1 and d:
+                first_date = d
+            lines.append(f"{i}. {date_str}{title}")
             if url:
                 lines.append(f"   → {url}")
 
-        # 부족하면 날짜 없는 항목으로 보충
-        extra_start = len(shown) + 1
-        for j, n in enumerate(undated[:max(0, 3 - len(shown))], extra_start):
-            title = n.get("title", "") or "제목 없음"
-            url   = n.get("url", "")
-            lines.append(f"{j}. [날짜 확인 불가] {title}")
-            if url:
-                lines.append(f"   → {url}")
-
-        if dated:
-            lines.append(f"\n가장 최근 게시일: {dated[0][0]}")
+        if first_date:
+            lines.append(f"\n가장 최근 게시일(추정): {first_date}")
+        else:
+            lines.append("\n※ 게시일은 포털에서 직접 확인하세요.")
 
         lines.append(
             f"\n자세한 내용은 충남대학교 포털 공지사항에서 확인하세요:\n"
