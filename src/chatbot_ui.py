@@ -67,26 +67,224 @@ def chat(message: str, history: list) -> str:
     return f"{answer}\n\n---\n*처리 경로: {badge}*"
 
 
+# ── 마스코트 이미지 base64 인코딩 ───────────────────────────────────────────────
+import base64 as _b64
+
+_mascot_path = BASE_DIR / "src" / "ui" / "chacha.png"
+_MASCOT_HTML = ""
+if _mascot_path.exists():
+    with open(_mascot_path, "rb") as _f:
+        _b64_str = _b64.b64encode(_f.read()).decode()
+    _MASCOT_HTML = (
+        '<div id="cnu-mascot">'
+        f'<img src="data:image/png;base64,{_b64_str}" alt="차차" />'
+        '</div>'
+    )
+
+
+# ── CSS ───────────────────────────────────────────────────────────────────────
+_CSS = """
+/* ── 전체 배경 ── */
+body, .gradio-container {
+    background: #f2f5fa !important;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* ── 헤더 카드 ── */
+.cnu-header {
+    background: linear-gradient(135deg, #002d72 0%, #0047b3 100%);
+    color: #ffffff;
+    padding: 26px 32px 20px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 20px rgba(0, 45, 114, 0.20);
+}
+.cnu-header h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.80rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+}
+.cnu-header p {
+    margin: 0;
+    font-size: 0.91rem;
+    opacity: 0.85;
+    line-height: 1.55;
+}
+
+/* ── 채팅 영역 감싸는 카드 ── */
+.chat-card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    padding: 4px;
+}
+
+/* ── Chatbot 메시지 창 높이 ── */
+#cnu-chatbot {
+    height: 530px !important;
+    min-height: 530px !important;
+}
+
+/* ── 사용자 메시지 말풍선 ── */
+.message.user > div,
+div[data-testid="user"] .prose {
+    background: #002d72 !important;
+    color: #ffffff !important;
+    border-radius: 18px 18px 4px 18px !important;
+}
+
+/* ── 봇 메시지 말풍선 ── */
+.message.bot > div,
+div[data-testid="bot"] .prose {
+    background: #eef3fb !important;
+    color: #1a1f36 !important;
+    border-radius: 18px 18px 18px 4px !important;
+}
+
+/* ── 입력창 ── */
+#cnu-input textarea {
+    border: 1.5px solid #c2cfe0 !important;
+    border-radius: 10px !important;
+    font-size: 0.94rem !important;
+    padding: 10px 14px !important;
+    background: #fafcff !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: none !important;
+}
+#cnu-input textarea:focus {
+    border-color: #002d72 !important;
+    box-shadow: 0 0 0 3px rgba(0, 45, 114, 0.09) !important;
+    outline: none !important;
+}
+
+/* ── 전송 버튼 ── */
+#cnu-submit {
+    background: #002d72 !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: 0.94rem !important;
+    transition: background 0.18s, transform 0.12s;
+}
+#cnu-submit:hover {
+    background: #0047b3 !important;
+    transform: translateY(-1px);
+}
+#cnu-submit:active {
+    transform: translateY(0px);
+}
+
+/* ── 예시 질문 버튼 ── */
+.gr-button-secondary,
+button.secondary {
+    background: #ffffff !important;
+    color: #002d72 !important;
+    border: 1.5px solid #b8cce8 !important;
+    border-radius: 20px !important;
+    padding: 7px 15px !important;
+    font-size: 0.87rem !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 7px rgba(0, 45, 114, 0.09) !important;
+    transition: all 0.18s ease !important;
+}
+.gr-button-secondary:hover,
+button.secondary:hover {
+    background: #eef3fb !important;
+    border-color: #002d72 !important;
+    box-shadow: 0 5px 14px rgba(0, 45, 114, 0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ── 마스코트 고정 오버레이 ── */
+#cnu-mascot {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.16));
+    animation: mascot-float 3.2s ease-in-out infinite;
+}
+#cnu-mascot img {
+    width: 108px;
+    height: auto;
+    display: block;
+}
+@keyframes mascot-float {
+    0%   { transform: translateY(0px);  }
+    50%  { transform: translateY(-8px); }
+    100% { transform: translateY(0px);  }
+}
+
+/* ── 푸터 ── */
+.cnu-footer {
+    text-align: center;
+    color: #8a9ab8;
+    font-size: 0.76rem;
+    padding: 10px 0 2px;
+    letter-spacing: 0.2px;
+}
+
+/* ── 반응형 (모바일) ── */
+@media (max-width: 640px) {
+    .cnu-header h1  { font-size: 1.30rem; }
+    #cnu-chatbot    { height: 380px !important; min-height: 380px !important; }
+    #cnu-mascot img { width: 78px; }
+}
+"""
+
 # ── Gradio UI ─────────────────────────────────────────────────────────────────
-demo = gr.ChatInterface(
-    fn=chat,
-    title="🎓 충남대학교 Campus ChatBot",
-    description=(
-        "충남대학교 재학생을 위한 AI 챗봇입니다.\n"
-        "졸업요건 · 학사일정 · 장학금 · 식단 · 셔틀버스 관련 질문을 입력하세요.\n"
-        "아래 예시 버튼을 클릭하면 바로 질문할 수 있습니다."
-    ),
-    examples=[
-        "오늘 학식 뭐 나와요?",
-        "이번주 식단 알려줘",
-        "셔틀버스 시간표 알려줘",
-        "최근 장학금 공지 보여줘",
-        "졸업학점 몇 점이에요?",
-        "수강신청 정정기간 언제예요?",
-    ],
-    theme=gr.themes.Soft(),
-    # Gradio 4.x: show_copy_button 기본 활성화
-)
+with gr.Blocks(css=_CSS, theme=gr.themes.Base(), title="CNU Campus ChatBot") as demo:
+
+    # 마스코트 오버레이 (base64 인라인 이미지)
+    if _MASCOT_HTML:
+        gr.HTML(_MASCOT_HTML)
+
+    # 헤더
+    gr.HTML("""
+    <div class="cnu-header">
+      <h1>🎓 CNU Campus ChatBot</h1>
+      <p>충남대학교 학사정보 · 공지사항 · 식단 · 셔틀버스 안내 AI 챗봇</p>
+    </div>
+    """)
+
+    # 채팅 인터페이스 (fn=chat 및 내부 로직 변경 없음)
+    with gr.Column(elem_classes=["chat-card"]):
+        gr.ChatInterface(
+            fn=chat,
+            chatbot=gr.Chatbot(
+                elem_id="cnu-chatbot",
+                show_label=False,
+                bubble_full_width=False,
+                type="messages",       # deprecation warning 제거
+            ),
+            textbox=gr.Textbox(
+                elem_id="cnu-input",
+                placeholder="질문을 입력하세요  예) 오늘 학식 뭐 나와요?",
+                show_label=False,
+                lines=1,
+                max_lines=4,
+            ),
+            submit_btn=gr.Button("전송 ▶", elem_id="cnu-submit", variant="primary"),
+            examples=[
+                "🎓  졸업 학점이 몇 점인가요?",
+                "📢  최근 공지사항 알려줘",
+                "📅  이번 학기 수강신청 일정 알려줘",
+                "🍱  오늘 학식 뭐 나와요?",
+                "🚌  셔틀버스 시간표 알려줘",
+                "💰  장학금 신청은 어디서 해?",
+            ],
+            examples_per_page=6,
+            cache_examples=False,
+        )
+
+    # 푸터
+    gr.HTML('<div class="cnu-footer">Chungnam National University · AI ChatBot · 자연어처리 텀프로젝트</div>')
+
 
 if __name__ == "__main__":
     # share=True: Gradio 공개 URL (Colab 환경 필수)
