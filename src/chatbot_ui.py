@@ -260,7 +260,6 @@ with gr.Blocks(css=_CSS, theme=gr.themes.Base(), title="CNU Campus ChatBot") as 
                 elem_id="cnu-chatbot",
                 show_label=False,
                 bubble_full_width=False,
-                type="messages",       # deprecation warning 제거
             ),
             textbox=gr.Textbox(
                 elem_id="cnu-input",
