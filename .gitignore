@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 환경
+.env
+.venv/
+venv/
+
+# 벡터DB (매 세션 rebuild)
+chroma_db/
+
+# 모델 캐시
+models/
+*.bin
+*.safetensors
+
+# 임시 텍스트 파일
+*.txt
+!requirements.txt
+
+# 테스트/검증 임시 파일
+check_result.json
+bm25_validation.txt
+rag_*.txt
+routing_test*.txt
+scholar_check.txt
+scholarship_test.txt
+meal_test*.txt
+retrieval_eval.txt
+
+# 백업 데이터
+data/*_backup.json
+data/fake_*.json
+data/processed/chunks_original.json
+
+# OMC 내부 상태 (도구 전용)
+.omc/sessions/
+.omc/state/
+.omc/logs/
+
+# Jupyter 체크포인트
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
