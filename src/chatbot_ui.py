@@ -269,7 +269,7 @@ with gr.Blocks(css=_CSS, theme=gr.themes.Base(), title="CNU Campus ChatBot") as 
                 lines=1,
                 max_lines=4,
             ),
-            submit_btn=gr.Button("전송 ▶", elem_id="cnu-submit", variant="primary"),
+            submit_btn="전송 ▶",
             examples=[
                 "🎓  졸업 학점이 몇 점인가요?",
                 "📢  최근 공지사항 알려줘",
