@@ -1,8 +1,8 @@
 # ================================================================
 # 과제 지정 환경: Python 3.10.12 / torch 2.5.1
 # 버전 전부 고정 — Colab T4 기준 검증된 조합
-# transformers==4.44.2: 4.45.0+ extra_special_tokens list→dict 버그 회피
-# tokenizers==0.19.1  : transformers 4.44.2 호환
+# transformers==4.47.1: extra_special_tokens 버그 4.47.0에서 공식 수정
+# tokenizers==0.21.0  : Qwen2.5 tokenizer.json 포맷 호환 (0.19는 파싱 불가)
 # sentence-transformers==3.0.1: 3.4+의 torchcodec 충돌 방지
 # ================================================================
 
@@ -12,8 +12,8 @@ torchvision==0.20.1
 torchaudio==2.5.1
 
 # Transformers / 양자화 — 버전 고정 필수
-transformers==4.44.2
-tokenizers==0.19.1
+transformers==4.47.1
+tokenizers==0.21.0
 accelerate==0.34.2
 bitsandbytes==0.43.3
 datasets==2.21.0
