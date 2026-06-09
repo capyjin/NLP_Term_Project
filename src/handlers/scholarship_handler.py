@@ -1,7 +1,7 @@
 """
 장학공지 핸들러
 ────────────────
-역할: chunks.json의 장학공지 크롤링 데이터에서 최근 게시글 목록 반환.
+역할: chunks.json의 장학공지 크롤링 데이터에서 실제 장학 관련 게시글 목록 반환.
 
 처리 대상 질문:
   "최근 장학금 리스트 보여줘", "장학공지 알려줘", "장학금 뭐 있어?" 등
@@ -14,11 +14,12 @@
 데이터 소스:
   data/processed/chunks.json → category="장학공지", source_type="crawl"
   URL의 no= 번호 기준 내림차순 정렬 (높은 번호 = 최신)
-  날짜 필드 없음 → no= 번호로 최신도 추정
+  날짜 필드 없음 → content에서 regex 추출 시도
 
 주의:
-  - 크롤링된 장학공지 게시판에는 장학금 이외 항목(계절학기, 교수 프로그램 등)도 포함될 수 있음
-  - 교수/포스트닥 대상 항목은 자동 필터링
+  - 장학공지 게시판(code=sub07_0702)에는 계절학기·취업·멘토 등 비장학 글도 올라옴
+  - _SCHOLAR_TITLE_KW 화이트리스트로 실제 장학 관련 게시글만 선별
+  - 교수/포스트닥 대상 항목은 추가 블랙리스트 필터링
   - 허위 장학금 생성 금지 -- 반드시 실제 크롤링 데이터만 사용
 """
 
@@ -27,6 +28,7 @@ import re
 import subprocess
 import sys
 import time
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -36,10 +38,24 @@ _SCHOLAR_TTL_SECONDS = 6 * 3600
 PORTAL_URL     = "https://plus.cnu.ac.kr"
 SCHOLAR_BOARD  = "https://plus.cnu.ac.kr/_prog/_board/?code=sub07_0702&site_dvs_cd=kr&menu_dvs_cd=0702"
 
-# 교수/대학원 대상 항목 필터링 키워드 (학생 장학금 리스트에서 제외)
+# ── 장학 관련 제목 화이트리스트 ──────────────────────────────────────────────
+# 장학공지 게시판에 비장학 글이 섞이므로, 제목에 아래 키워드가 있는 것만 장학공지로 인정
+_SCHOLAR_TITLE_KW = frozenset({
+    "장학",       # 장학금, 장학생, 장학프로그램 등 전부 포함
+    "드림클래스",  # 삼성드림클래스
+    "파란사다리",  # 교육부 파란사다리
+    "한국장학",   # 한국장학재단
+    "지원금",     # 각종 학생 지원금
+    "학비지원",
+    "등록금지원",
+})
+
+# ── 비학생 대상 블랙리스트 (화이트리스트 통과 후 추가 제외) ────────────────────
+# "장학" 키워드가 있어도 교수·대학원 전용이면 제외
 _PROF_FILTER_KW = frozenset({
     "풀브라이트", "포스트닥", "신약전문대학원", "연구년",
     "교원", "교수", "교직원", "대학원신입생", "보충강의",
+    "연구비지원", "외국인교원",
 })
 
 
@@ -47,6 +63,32 @@ def _get_no(url: str) -> int:
     """URL에서 no= 번호 추출 (최신도 추정용)."""
     m = re.search(r"no=(\d+)", url)
     return int(m.group(1)) if m else 0
+
+
+def _extract_date(content: str) -> str:
+    """
+    content에서 날짜 추출.
+    패턴 1: 등록일YYYY-MM-DD
+    패턴 2: 접수기간YYYY-MM-DD
+    패턴 3: YYYY-MM-DD (오늘 이전 날짜만)
+    패턴 4: YYYY. M. D.
+    추출 실패 시 빈 문자열 반환.
+    """
+    m = re.search(r"등록일\s*(\d{4}-\d{2}-\d{2})", content)
+    if m:
+        return m.group(1)
+    m = re.search(r"접수기간\s*(\d{4}-\d{2}-\d{2})", content)
+    if m:
+        return m.group(1)
+    today_str = date.today().isoformat()
+    for m in re.finditer(r"(\d{4}-\d{2}-\d{2})", content):
+        d = m.group(1)
+        if d <= today_str:
+            return d
+    m = re.search(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content)
+    if m:
+        return f"{m.group(1)}-{m.group(2).zfill(2)}-{m.group(3).zfill(2)}"
+    return ""
 
 
 class ScholarshipHandler:
@@ -111,11 +153,11 @@ class ScholarshipHandler:
         except Exception:
             return []
 
-        # 장학공지 크롤링 청크만 (FAQ 제외)
+        # 장학공지 게시판 청크만 (FAQ 제외)
         scholar = [
             c for c in chunks
             if c.get("category") == "장학공지"
-            and c.get("source_type", "crawl") != "faq_manual"
+            and c.get("source_type", "") != "faq_manual"
         ]
 
         # URL 기준 중복 제거 (같은 URL = 같은 게시글)
@@ -125,9 +167,17 @@ class ScholarshipHandler:
             if url and url not in seen:
                 seen[url] = c
 
-        # 교수/대학원 대상 필터링
+        # ① 장학 관련 제목 화이트리스트 — 비장학 게시글 제외
+        # 장학공지 게시판에는 계절학기·취업·멘토 등 비장학 글도 올라오므로
+        # 제목에 장학 관련 키워드가 있는 것만 인정
         notices = [
             n for n in seen.values()
+            if any(kw in n.get("title", "") for kw in _SCHOLAR_TITLE_KW)
+        ]
+
+        # ② 교수/대학원 전용 블랙리스트 추가 제외
+        notices = [
+            n for n in notices
             if not any(kw in n.get("title", "") for kw in _PROF_FILTER_KW)
         ]
 
@@ -137,21 +187,21 @@ class ScholarshipHandler:
         self._cache = notices
         return notices
 
-    def _format_list(self, notices: list[dict], top_n: int = 10) -> str:
-        """최근 장학공지 목록 포매팅."""
+    def _format_list(self, notices: list[dict], top_n: int = 5) -> str:
+        """최근 장학공지 목록 포매팅 (날짜 포함)."""
         items = notices[:top_n]
         lines = [f"충남대학교 최근 장학공지 {len(items)}건\n"]
 
         for i, n in enumerate(items, 1):
-            title = n.get("title", "제목 없음")
-            url   = n.get("url", "")
-            lines.append(f"{i}. {title}")
+            title   = n.get("title", "제목 없음")
+            url     = n.get("url", "")
+            d       = _extract_date(n.get("content", ""))
+            date_str = f"[{d}] " if d else "[날짜 미확인] "
+            lines.append(f"{i}. {date_str}{title}")
             if url:
                 lines.append(f"   → {url}")
 
-        lines.append(
-            f"\n전체 장학공지 확인: {SCHOLAR_BOARD}"
-        )
+        lines.append(f"\n전체 장학공지 확인: {SCHOLAR_BOARD}")
         return "\n".join(lines)
 
     def answer(self, question: str) -> tuple[str, str]:
