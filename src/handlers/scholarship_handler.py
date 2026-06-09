@@ -188,20 +188,35 @@ class ScholarshipHandler:
         return notices
 
     def _format_list(self, notices: list[dict], top_n: int = 5) -> str:
-        """최근 장학공지 목록 포매팅 (날짜 포함)."""
+        """최근 장학/지원 공지 목록 포매팅 (날짜 포함)."""
         items = notices[:top_n]
-        lines = [f"충남대학교 최근 장학공지 {len(items)}건\n"]
+        total = len(items)
+
+        # 헤더: 5건 미만이면 자연스럽게 안내
+        if total < 5:
+            header = (
+                f"충남대학교 최근 장학/지원 관련 공지 {total}건\n"
+                f"(현재 저장된 장학/지원 관련 공지는 {total}건입니다.)\n"
+            )
+        else:
+            header = f"충남대학교 최근 장학/지원 관련 공지 {total}건\n"
+
+        lines = [header]
 
         for i, n in enumerate(items, 1):
-            title   = n.get("title", "제목 없음")
-            url     = n.get("url", "")
-            d       = _extract_date(n.get("content", ""))
+            title    = n.get("title", "제목 없음")
+            url      = n.get("url", "")
+            d        = _extract_date(n.get("content", ""))
             date_str = f"[{d}] " if d else "[날짜 미확인] "
             lines.append(f"{i}. {date_str}{title}")
             if url:
                 lines.append(f"   → {url}")
 
         lines.append(f"\n전체 장학공지 확인: {SCHOLAR_BOARD}")
+        lines.append(
+            "※ 장학공지 게시판에는 장학금 외에도 학생지원·멘토·파란사다리 등 "
+            "지원성 공지가 포함될 수 있습니다."
+        )
         return "\n".join(lines)
 
     def answer(self, question: str) -> tuple[str, str]:
