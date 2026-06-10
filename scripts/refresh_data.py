@@ -126,8 +126,6 @@ def refresh_notice():
 def rebuild_db():
     """벡터 DB (chroma_db) 재구축."""
     _sep("벡터 DB 재구축")
-    chroma = BASE_DIR / "chroma_db"
-
     # FAQ 재삽입
     inject = BASE_DIR / "scripts" / "inject_faq.py"
     if inject.exists():
@@ -148,7 +146,7 @@ def rebuild_db():
         return
     _info("ChromaDB 임베딩 중... (~5~10분)")
     r = subprocess.run(
-        [sys.executable, str(build)],
+        [sys.executable, str(build), "--fresh"],
         capture_output=True, text=True, cwd=str(BASE_DIR)
     )
     if r.returncode == 0:

@@ -12,11 +12,14 @@ echo ========================================
 
 mkdir outputs 2>nul
 
-if not exist "chroma_db" (
+python scripts\inject_faq.py
+if errorlevel 1 exit /b 1
+python scripts\check_vector_db.py
+if errorlevel 1 (
     echo.
-    echo [1/3] 벡터 DB 구축 중 ^(처음 1회^)...
-    python scripts\inject_faq.py
-    python src\vectordb\build_db.py
+    echo [1/3] 벡터 DB 재구축 중...
+    python src\vectordb\build_db.py --fresh
+    if errorlevel 1 exit /b 1
 )
 
 echo.

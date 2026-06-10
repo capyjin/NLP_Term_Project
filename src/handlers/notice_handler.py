@@ -68,20 +68,32 @@ def _extract_date(content: str) -> str:
     패턴 4: YYYY. M. D.       (한국 점 형식)
     추출 실패 시 빈 문자열 반환.
     """
+    today = date.today()
+
+    def valid_past_or_today(value: str) -> str:
+        try:
+            parsed = date.fromisoformat(value)
+        except ValueError:
+            return ""
+        return value if parsed <= today else ""
+
     # 패턴 1: 등록일 태그 (크롤링 메타)
     m = re.search(r"등록일\s*(\d{4}-\d{2}-\d{2})", content)
     if m:
-        return m.group(1)
+        candidate = valid_past_or_today(m.group(1))
+        if candidate:
+            return candidate
     # 패턴 2: 접수기간 태그
     m = re.search(r"접수기간\s*(\d{4}-\d{2}-\d{2})", content)
     if m:
-        return m.group(1)
+        candidate = valid_past_or_today(m.group(1))
+        if candidate:
+            return candidate
     # 패턴 3: ISO 형식 — 오늘 이후 날짜는 게시일이 아닌 본문 내 마감일일 수 있으므로 제외
-    today_str = date.today().isoformat()
     for m in re.finditer(r"(\d{4}-\d{2}-\d{2})", content):
-        d = m.group(1)
-        if d <= today_str:
-            return d
+        candidate = valid_past_or_today(m.group(1))
+        if candidate:
+            return candidate
     # 패턴 4: 한국 점 형식 (2026. 5. 27. 또는 2026. 5. 27)
     # ※ 미래 날짜는 본문 내 행사기간·마감일일 수 있으므로 오늘 이전만 허용
     for m in re.finditer(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", content):
@@ -89,8 +101,9 @@ def _extract_date(content: str) -> str:
         mo = m.group(2).zfill(2)
         dy = m.group(3).zfill(2)
         candidate = f"{y}-{mo}-{dy}"
-        if candidate <= today_str:
-            return candidate
+        valid = valid_past_or_today(candidate)
+        if valid:
+            return valid
     return ""
 
 

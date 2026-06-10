@@ -4,7 +4,7 @@
 # 사용: bash chatbot.sh
 #
 # 1. outputs/ 폴더 생성
-# 2. chroma_db 없으면 벡터 DB 자동 구축 (처음 1회만)
+# 2. chunks와 chroma_db 정합성 검사 후 필요 시 자동 재구축
 # 3. data/test_chat.json → outputs/chat_output.json 생성
 # 4. Gradio UI 실행 (http://localhost:7860)
 # ─────────────────────────────────────────────────────────────
@@ -22,12 +22,12 @@ echo "========================================"
 # 1. outputs/ 폴더 보장
 mkdir -p outputs
 
-# 2. chroma_db 없으면 구축 (FAQ 삽입 → 임베딩 → DB 저장)
-if [ ! -d "chroma_db" ]; then
+# 2. FAQ 반영 후 벡터 DB 정합성 검사 (불일치 시 전체 재구축)
+python scripts/inject_faq.py
+if ! python scripts/check_vector_db.py; then
     echo ""
-    echo "[1/3] 벡터 DB 구축 중 (처음 1회, ~10분 소요)..."
-    python scripts/inject_faq.py
-    python src/vectordb/build_db.py
+    echo "[1/4] 벡터 DB 재구축 중 (~10분 소요)..."
+    python src/vectordb/build_db.py --fresh
     echo "벡터 DB 구축 완료"
 fi
 
