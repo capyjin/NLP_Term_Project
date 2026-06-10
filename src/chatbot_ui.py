@@ -129,57 +129,22 @@ body, .gradio-container {
     min-height: 530px !important;
 }
 
-/* ── 사용자 메시지 말풍선 — 봇 답변과 동일 스타일 ── */
-.message.user > div,
-div[data-testid="user"] .prose,
-div[data-testid="user"],
-div[data-testid="user"] p,
-div[data-testid="user"] span {
-    background: #eef3fb !important;
-    color: #1a1f36 !important;
-    border-radius: 18px !important;
-}
-div[data-testid="user"] {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-div[data-testid="user"] .prose {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 12px 16px !important;
+/* ── 아바타(프로필 이미지) 완전 숨김 ── */
+.avatar-container,
+.avatar,
+img.avatar,
+div.avatar,
+span.avatar {
+    display: none !important;
 }
 
-/* ── 봇 메시지 말풍선 ── */
-.message.bot > div,
+/* ── 메시지 말풍선 — 사용자/봇 동일 색상 ── */
+.prose,
+.message .prose,
+div[data-testid="user"] .prose,
 div[data-testid="bot"] .prose {
     background: #eef3fb !important;
     color: #1a1f36 !important;
-    border-radius: 18px !important;
-}
-
-/* ── 말풍선 꼬리(화살표) 완전 제거 ──
-   Gradio 4.42는 .message / .bubble / .message-row 의 pseudo-element 와
-   clip-path 로 삼각형 꼬리를 그림. 모든 경로를 차단. */
-.message::before, .message::after,
-.message-row::before, .message-row::after,
-.bubble::before, .bubble::after,
-.bubble-wrap::before, .bubble-wrap::after,
-.user::before, .user::after,
-.bot::before, .bot::after,
-div[data-testid="user"]::before, div[data-testid="user"]::after,
-div[data-testid="bot"]::before,  div[data-testid="bot"]::after,
-div[data-testid="user"] *::before, div[data-testid="user"] *::after,
-div[data-testid="bot"] *::before,  div[data-testid="bot"] *::after {
-    display: none !important;
-    content: none !important;
-    border: none !important;
-}
-
-/* 꼬리를 clip-path 로 그리는 경우 해제 */
-.message, .message > div, .bubble,
-div[data-testid="user"], div[data-testid="user"] .prose,
-div[data-testid="bot"],  div[data-testid="bot"] .prose {
-    clip-path: none !important;
 }
 
 /* ── 입력창 ── */
