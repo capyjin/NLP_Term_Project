@@ -129,15 +129,15 @@ body, .gradio-container {
     min-height: 530px !important;
 }
 
-/* ── 사용자 메시지 말풍선 — 꽉 채우기 ── */
+/* ── 사용자 메시지 말풍선 — 봇 답변과 동일 스타일 ── */
 .message.user > div,
 div[data-testid="user"] .prose,
 div[data-testid="user"],
 div[data-testid="user"] p,
 div[data-testid="user"] span {
-    background: #002d72 !important;
-    color: #ffffff !important;
-    border-radius: 18px 18px 4px 18px !important;
+    background: #eef3fb !important;
+    color: #1a1f36 !important;
+    border-radius: 18px 18px 18px 4px !important;
 }
 div[data-testid="user"] {
     width: 100% !important;
