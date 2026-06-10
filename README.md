@@ -17,6 +17,10 @@
 5. 결과: outputs/cls_output.json 자동 생성
 ```
 
+- 셀 2는 `data/train.json`과 `src/`를 기준으로 프로젝트 루트를 자동 탐색합니다.
+- `valid.json`이 train과 겹치면 누수를 경고하고 고정 시드로 검증셋을 다시 분리합니다.
+- clean-run 증거 확보를 위해 기본값은 `FORCE_RETRAIN=True`입니다.
+
 ### Task 2 — 챗봇 실행 (60점)
 
 **평가용 (추론 + UI):**
@@ -44,7 +48,7 @@ chatbot.bat
 ```
 
 실행 흐름:
-1. 첫 실행: 벡터 DB 자동 구축 (~10분, Qwen2.5-7B 다운로드 포함, ~15GB)
+1. FAQ 반영 후 벡터 DB 정합성 검사, 불일치 시 자동 전체 재구축 (~10분)
 2. data/test_chat.json → outputs/chat_output.json 생성
 3. Gradio UI 실행 → http://localhost:7860
 
@@ -66,6 +70,13 @@ python src/realtime_model.py --input data/test_realtime.json --output outputs/re
 pip install -r requirements.txt
 ```
 
+### 모델 전달 및 다운로드
+
+- 분류 모델 원본: `klue/bert-base` (노트북 셀 6에서 fine-tuning 후 `model/cls_model` 저장)
+- 기본 생성 모델: https://huggingface.co/Qwen/Qwen2.5-3B-Instruct
+- 검색 임베딩 모델: https://huggingface.co/nlpai-lab/KURE-v1
+- 첫 실행에는 Hugging Face 다운로드가 필요하므로 네트워크 연결이 필요합니다.
+
 ---
 
 ## 구현 내용
@@ -73,7 +84,7 @@ pip install -r requirements.txt
 | Task | 방법 |
 |---|---|
 | 질문 분류기 | klue/bert-base fine-tuning (5-class, macro F1) |
-| 응답 생성 | Qwen/Qwen2.5-7B-Instruct (4-bit NF4 양자화, T4 ~5GB VRAM) |
+| 응답 생성 | Qwen/Qwen2.5-3B-Instruct 기본 (4-bit NF4), 7B는 실험용 선택지 |
 | 문서 검색 | BM25(Kiwi 형태소) + KURE-v1 Dense Retrieval + RRF |
 | 벡터 DB | ChromaDB (KURE-v1 1024d) |
 | UI | Gradio ChatInterface |
@@ -96,6 +107,6 @@ pip install -r requirements.txt
 ## 학습 데이터
 
 - `data/train.json`: 219개 (라벨별 41~45개 균등, 라우팅 충돌 제거)
-- `data/valid.json`: 30개 (라벨별 6개 균등)
+- `data/valid.json`: 30개 (현재 train 중복이 있어 노트북이 누수 없는 자동 분리를 사용)
 - `data/test_cls.json`: 조교 제공 파일 (현재 placeholder)
 - `data/test_chat.json`: 조교 제공 파일 (현재 placeholder)
