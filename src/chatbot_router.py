@@ -22,6 +22,7 @@ from src.handlers.shuttle_handler            import ShuttleHandler
 from src.handlers.scholarship_handler        import ScholarshipHandler
 from src.handlers.notice_handler             import NoticeHandler
 from src.handlers.academic_calendar_handler  import AcademicCalendarHandler
+from src.handlers.college_handler            import CollegeHandler
 
 # ── 장학공지 리스트 키워드 ────────────────────────────────────────────────────────
 # "리스트/목록/뭐있어/보여줘/공지/최근" 의도 → ScholarshipHandler
@@ -105,6 +106,26 @@ _ACAL_KW = frozenset({
 # "최근/최신/요즘" + "공지/소식" 조합 트리거
 _NOTICE_RECENT_KW  = frozenset({"최근", "최신", "요즘", "새로운"})
 _NOTICE_SUBJECT_KW = frozenset({"공지", "소식", "안내"})
+
+# ── 단과대/학과 소속 키워드 (CollegeHandler) ──────────────────────────────────
+_COLLEGE_KW = frozenset({
+    "단과대", "어느대학", "어디대학", "어디소속", "소속학과",
+    "학과목록", "학부목록", "무슨대학", "어디단과대", "소속이야",
+    "소속입니까", "소속되어", "어느단과대", "몇학과", "어느학부",
+})
+
+
+def _has_college(nq: str) -> bool:
+    """단과대/학과 소속 조회 의도 감지 → CollegeHandler 라우팅."""
+    import re
+    if any(k in nq for k in _COLLEGE_KW):
+        return True
+    # (학과/학부/전공으로 끝나는 단어) + (어디/소속/단과대/대학) 조합
+    has_dept_word = bool(re.search(r"[\w]+(?:학과|학부|전공)", nq))
+    has_location  = any(k in nq for k in ("어디", "소속", "단과대", "대학", "어느"))
+    if has_dept_word and has_location:
+        return True
+    return False
 
 
 def _has_shuttle(nq: str) -> bool:
@@ -407,6 +428,7 @@ def detect_all_categories(question: str) -> list[int]:
     has_sc  = _has_scholarship_list(nq)
     has_ac  = _has_academic_calendar(nq)
     has_n   = _has_notice_list(nq)
+    has_co  = _has_college(nq)
 
     cats = []
     if has_s:  cats.append(4)
@@ -414,6 +436,7 @@ def detect_all_categories(question: str) -> list[int]:
     if has_sc: cats.append(5)
     if has_ac: cats.append(7)
     if has_n:  cats.append(6)
+    if has_co: cats.append(8)
     return cats if cats else [-1]
 
 
@@ -443,6 +466,7 @@ class CNUChatRouter:
         self._scholarship = ScholarshipHandler(base_dir)
         self._notice      = NoticeHandler(base_dir)
         self._acal        = AcademicCalendarHandler(base_dir)
+        self._college     = CollegeHandler(base_dir)
 
     def chat(self, question: str) -> tuple[str, str]:
         """질문 → (응답 텍스트, source_tag)"""
@@ -470,6 +494,9 @@ class CNUChatRouter:
 
         if cats == [7]:
             return self._acal.answer(question)
+
+        if cats == [8]:
+            return self._college.answer(question)
 
         # ── 졸업요건/수강신청 직접 반환 (Qwen 완전 우회, ~1ms) ─────────────
         nq = question.replace(" ", "")

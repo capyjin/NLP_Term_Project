@@ -96,6 +96,22 @@ def refresh_academic_calendar():
     run_crawler(crawler, "학사일정")
 
 
+def refresh_college():
+    """단과대/학과 구조 크롤링 → data/raw/college_departments.json 갱신 (TTL 7일)."""
+    _sep("단과대/학과 데이터 갱신")
+    import time
+    college_path = BASE_DIR / "data" / "raw" / "college_departments.json"
+    age_days = (time.time() - college_path.stat().st_mtime) / 86400 if college_path.exists() else 999
+    if age_days <= 7:
+        _ok(f"college_departments.json 유효 (갱신된 지 {age_days:.1f}일) — 스킵")
+        return
+    crawler = BASE_DIR / "src" / "crawling" / "college_crawler.py"
+    if not crawler.exists():
+        _warn(f"college_crawler.py 없음: {crawler}")
+        return
+    run_crawler(crawler, "단과대/학과")
+
+
 def refresh_notice():
     """공지/장학 크롤링 → chunks.json 갱신."""
     _sep("공지/장학 데이터 갱신")
@@ -160,13 +176,14 @@ def main():
     parser.add_argument("--meal",     action="store_true", help="식단 크롤링만")
     parser.add_argument("--shuttle",  action="store_true", help="셔틀 크롤링만")
     parser.add_argument("--notice",   action="store_true", help="공지/장학 크롤링만")
+    parser.add_argument("--college",  action="store_true", help="단과대/학과 크롤링만")
     parser.add_argument("--calendar", action="store_true", help="학사일정 크롤링만")
     parser.add_argument("--db",       action="store_true", help="벡터 DB 재구축만")
     parser.add_argument("--ui",       action="store_true", help="UI 바로 실행")
     args = parser.parse_args()
 
     # 플래그 없으면 전체 갱신 (UI 제외)
-    run_all = not any([args.meal, args.shuttle, args.notice, args.calendar, args.db, args.ui])
+    run_all = not any([args.meal, args.shuttle, args.notice, args.calendar, args.college, args.db, args.ui])
 
     print("\n" + "=" * 50)
     print("  CNU ChatBot — 데이터 갱신")
@@ -177,6 +194,9 @@ def main():
 
     if run_all or args.shuttle:
         refresh_shuttle()
+
+    if run_all or args.college:
+        refresh_college()
 
     if run_all or args.notice:
         refresh_notice()
