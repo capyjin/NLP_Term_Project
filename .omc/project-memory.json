@@ -217,8 +217,8 @@
     },
     {
       "path": "",
-      "accessCount": 6,
-      "lastAccessed": 1780996335876,
+      "accessCount": 7,
+      "lastAccessed": 1781093627537,
       "type": "directory"
     },
     {
@@ -250,6 +250,12 @@
       "accessCount": 4,
       "lastAccessed": 1780939728652,
       "type": "directory"
+    },
+    {
+      "path": "classifier_박연진.ipynb",
+      "accessCount": 4,
+      "lastAccessed": 1781108501626,
+      "type": "file"
     },
     {
       "path": "colab_main_clean.ipynb",
@@ -285,12 +291,6 @@
       "path": "scripts\\make_kaggle_notebook.py",
       "accessCount": 2,
       "lastAccessed": 1780986342874,
-      "type": "file"
-    },
-    {
-      "path": "classifier_박연진.ipynb",
-      "accessCount": 2,
-      "lastAccessed": 1781085254836,
       "type": "file"
     },
     {
