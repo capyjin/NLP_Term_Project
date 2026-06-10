@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1779972313603,
+  "lastScanned": 1781077726406,
   "projectRoot": "C:\\충남대학교\\3-1\\자연어처리\\Termproject",
   "techStack": {
     "languages": [
@@ -34,9 +34,14 @@
     "isMonorepo": false,
     "workspaces": [],
     "mainDirectories": [
-      "src"
+      "scripts",
+      "src",
+      "tests"
     ],
-    "gitBranches": null
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
   },
   "customNotes": [],
   "directoryMap": {
@@ -44,7 +49,7 @@
       "path": "chroma_db",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1779972313565,
+      "lastAccessed": 1781077726379,
       "keyFiles": [
         "chroma.sqlite3"
       ]
@@ -52,41 +57,94 @@
     "data": {
       "path": "data",
       "purpose": "Data files",
+      "fileCount": 9,
+      "lastAccessed": 1781077726380,
+      "keyFiles": [
+        "fake_test_chat.json",
+        "test_chat.json",
+        "test_cls.json",
+        "test_realtime.json",
+        "train.json"
+      ]
+    },
+    "model": {
+      "path": "model",
+      "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779972313566,
+      "lastAccessed": 1781077726380,
       "keyFiles": []
     },
     "models": {
       "path": "models",
       "purpose": "Data models",
       "fileCount": 0,
-      "lastAccessed": 1779972313567,
+      "lastAccessed": 1781077726381,
       "keyFiles": []
     },
     "notebooks": {
       "path": "notebooks",
       "purpose": null,
-      "fileCount": 2,
-      "lastAccessed": 1779972313568,
+      "fileCount": 1,
+      "lastAccessed": 1781077726382,
       "keyFiles": [
-        "colab_main.ipynb",
-        "colab_main.py"
+        "colab_main.ipynb"
+      ]
+    },
+    "outputs": {
+      "path": "outputs",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1781077726382,
+      "keyFiles": [
+        "chat_output.json",
+        "cls_output.json",
+        "eval_result.json",
+        "eval_summary.txt",
+        "realtime_output.json"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 7,
+      "lastAccessed": 1781077726383,
+      "keyFiles": [
+        "augment_train.py",
+        "evaluate_chatbot.py",
+        "inject_faq.py",
+        "make_notebook.py",
+        "refresh_data.py"
       ]
     },
     "src": {
       "path": "src",
       "purpose": "Source code",
-      "fileCount": 1,
-      "lastAccessed": 1779972313569,
+      "fileCount": 5,
+      "lastAccessed": 1781077726383,
       "keyFiles": [
-        "evaluate.py"
+        "chatbot_model.py",
+        "chatbot_router.py",
+        "chatbot_ui.py",
+        "evaluate.py",
+        "realtime_model.py"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 3,
+      "lastAccessed": 1781077726384,
+      "keyFiles": [
+        "test_embedding.py",
+        "test_params.py",
+        "verify_pipeline.py"
       ]
     },
     "__pycache__": {
       "path": "__pycache__",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1779972313570,
+      "lastAccessed": 1781077726384,
       "keyFiles": [
         "test_search.cpython-311.pyc",
         "test_search.cpython-313.pyc"
@@ -96,7 +154,7 @@
       "path": "src\\api",
       "purpose": "API routes",
       "fileCount": 1,
-      "lastAccessed": 1779972313573,
+      "lastAccessed": 1781077726386,
       "keyFiles": [
         "server.py"
       ]
@@ -104,111 +162,303 @@
   },
   "hotPaths": [
     {
-      "path": "src\\rag\\pipeline.py",
-      "accessCount": 7,
-      "lastAccessed": 1780027386921,
+      "path": "src\\chatbot_router.py",
+      "accessCount": 48,
+      "lastAccessed": 1781077135323,
       "type": "file"
     },
     {
-      "path": "test_search.py",
-      "accessCount": 4,
-      "lastAccessed": 1779951318877,
+      "path": "src\\chatbot_ui.py",
+      "accessCount": 30,
+      "lastAccessed": 1781080372399,
+      "type": "file"
+    },
+    {
+      "path": "src\\rag\\pipeline.py",
+      "accessCount": 29,
+      "lastAccessed": 1780998290729,
+      "type": "file"
+    },
+    {
+      "path": "src\\handlers\\scholarship_handler.py",
+      "accessCount": 14,
+      "lastAccessed": 1781000532461,
+      "type": "file"
+    },
+    {
+      "path": "src\\handlers\\meal_handler.py",
+      "accessCount": 11,
+      "lastAccessed": 1780941651189,
+      "type": "file"
+    },
+    {
+      "path": "src\\handlers\\notice_handler.py",
+      "accessCount": 11,
+      "lastAccessed": 1781085142615,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\refresh_data.py",
+      "accessCount": 10,
+      "lastAccessed": 1781077157121,
+      "type": "file"
+    },
+    {
+      "path": "src\\realtime_model.py",
+      "accessCount": 9,
+      "lastAccessed": 1780944491540,
+      "type": "file"
+    },
+    {
+      "path": "src\\handlers\\shuttle_handler.py",
+      "accessCount": 7,
+      "lastAccessed": 1780941650374,
       "type": "file"
     },
     {
       "path": "",
-      "accessCount": 4,
-      "lastAccessed": 1780024728153,
+      "accessCount": 6,
+      "lastAccessed": 1780996335876,
       "type": "directory"
     },
     {
-      "path": "src\\preprocessing\\preprocess.py",
-      "accessCount": 4,
-      "lastAccessed": 1780025272717,
-      "type": "file"
-    },
-    {
       "path": "requirements.txt",
+      "accessCount": 6,
+      "lastAccessed": 1780997648491,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 5,
+      "lastAccessed": 1780901646677,
+      "type": "directory"
+    },
+    {
+      "path": "src\\rag\\retriever.py",
+      "accessCount": 5,
+      "lastAccessed": 1780933322458,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\_fix_valid.py",
       "accessCount": 4,
-      "lastAccessed": 1780027392806,
+      "lastAccessed": 1780900848167,
       "type": "file"
     },
     {
-      "path": "src\\crawling\\cnu_crawler.py",
+      "path": "src",
+      "accessCount": 4,
+      "lastAccessed": 1780939728652,
+      "type": "directory"
+    },
+    {
+      "path": "colab_main_clean.ipynb",
       "accessCount": 3,
-      "lastAccessed": 1780027907973,
+      "lastAccessed": 1780998291589,
       "type": "file"
     },
     {
-      "path": "notebooks\\colab_main.py",
+      "path": "scripts\\evaluate_chatbot.py",
       "accessCount": 2,
-      "lastAccessed": 1779951267716,
+      "lastAccessed": 1780901343660,
       "type": "file"
     },
     {
-      "path": "src\\embedding\\embedder.py",
+      "path": "chatbot.sh",
+      "accessCount": 2,
+      "lastAccessed": 1780939709672,
+      "type": "file"
+    },
+    {
+      "path": "src\\chatbot_model.py",
+      "accessCount": 2,
+      "lastAccessed": 1780939710101,
+      "type": "file"
+    },
+    {
+      "path": "src\\crawling\\academic_calendar_crawler.py",
+      "accessCount": 2,
+      "lastAccessed": 1780944349242,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\make_kaggle_notebook.py",
+      "accessCount": 2,
+      "lastAccessed": 1780986342874,
+      "type": "file"
+    },
+    {
+      "path": "classifier_박연진.ipynb",
+      "accessCount": 2,
+      "lastAccessed": 1781085254836,
+      "type": "file"
+    },
+    {
+      "path": "src\\crawling\\meal_crawler.py",
       "accessCount": 1,
-      "lastAccessed": 1779883798579,
+      "lastAccessed": 1780816195057,
+      "type": "file"
+    },
+    {
+      "path": "meal_test.txt",
+      "accessCount": 1,
+      "lastAccessed": 1780816282275,
+      "type": "file"
+    },
+    {
+      "path": "meal_test2.txt",
+      "accessCount": 1,
+      "lastAccessed": 1780817727093,
+      "type": "file"
+    },
+    {
+      "path": "meal_test3.txt",
+      "accessCount": 1,
+      "lastAccessed": 1780818381125,
+      "type": "file"
+    },
+    {
+      "path": "check_result.json",
+      "accessCount": 1,
+      "lastAccessed": 1780820135151,
       "type": "file"
     },
     {
       "path": "src\\vectordb\\chroma_store.py",
       "accessCount": 1,
-      "lastAccessed": 1779883799148,
+      "lastAccessed": 1780820136046,
       "type": "file"
     },
     {
-      "path": "data\\raw\\all_docs.json",
+      "path": "outputs\\cls_output.json",
       "accessCount": 1,
-      "lastAccessed": 1779883805594,
+      "lastAccessed": 1780820183412,
       "type": "file"
     },
     {
-      "path": "src\\crawling\\add_pdf.py",
+      "path": "src\\crawling\\shuttle_crawler.py",
       "accessCount": 1,
-      "lastAccessed": 1779887180542,
+      "lastAccessed": 1780820184233,
       "type": "file"
     },
     {
-      "path": "src\\api\\server.py",
+      "path": "src\\embedding\\embedder.py",
       "accessCount": 1,
-      "lastAccessed": 1779951292553,
+      "lastAccessed": 1780820184594,
       "type": "file"
     },
     {
-      "path": "src\\ui\\app.py",
+      "path": "routing_test.txt",
       "accessCount": 1,
-      "lastAccessed": 1779951292636,
+      "lastAccessed": 1780821190491,
       "type": "file"
     },
     {
-      "path": "README.md",
+      "path": "routing_test2.txt",
       "accessCount": 1,
-      "lastAccessed": 1779951338584,
+      "lastAccessed": 1780821236996,
       "type": "file"
     },
     {
-      "path": "notebooks\\colab_main.ipynb",
+      "path": "data\\fake_test_chat.json",
       "accessCount": 1,
-      "lastAccessed": 1779951381156,
+      "lastAccessed": 1780821279749,
       "type": "file"
     },
     {
-      "path": "src\\crawling\\pdf_crawler.py",
+      "path": "outputs\\eval_summary.txt",
       "accessCount": 1,
-      "lastAccessed": 1780025253977,
+      "lastAccessed": 1780821414323,
       "type": "file"
     },
     {
-      "path": "src\\rag\\retriever.py",
+      "path": "data\\faq\\faq_manual.json",
       "accessCount": 1,
-      "lastAccessed": 1780027357034,
+      "lastAccessed": 1780822448896,
       "type": "file"
     },
     {
-      "path": "test_hybrid.py",
+      "path": "scholar_check.txt",
       "accessCount": 1,
-      "lastAccessed": 1780027401528,
+      "lastAccessed": 1780824106516,
+      "type": "file"
+    },
+    {
+      "path": "scholarship_test.txt",
+      "accessCount": 1,
+      "lastAccessed": 1780824215543,
+      "type": "file"
+    },
+    {
+      "path": "data\\train.json",
+      "accessCount": 1,
+      "lastAccessed": 1780900433965,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\augment_train.py",
+      "accessCount": 1,
+      "lastAccessed": 1780901435191,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\test_threshold.py",
+      "accessCount": 1,
+      "lastAccessed": 1780901469811,
+      "type": "file"
+    },
+    {
+      "path": "run_ui.sh",
+      "accessCount": 1,
+      "lastAccessed": 1780901554513,
+      "type": "file"
+    },
+    {
+      "path": "colab_main.ipynb",
+      "accessCount": 1,
+      "lastAccessed": 1780906544046,
+      "type": "file"
+    },
+    {
+      "path": "data",
+      "accessCount": 1,
+      "lastAccessed": 1780937018396,
+      "type": "directory"
+    },
+    {
+      "path": "src\\handlers",
+      "accessCount": 1,
+      "lastAccessed": 1780941632480,
+      "type": "directory"
+    },
+    {
+      "path": "src\\handlers\\academic_calendar_handler.py",
+      "accessCount": 1,
+      "lastAccessed": 1780944398889,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\kaggle_setup_and_run.py",
+      "accessCount": 1,
+      "lastAccessed": 1780983454094,
+      "type": "file"
+    },
+    {
+      "path": "KAGGLE_README.md",
+      "accessCount": 1,
+      "lastAccessed": 1780983507170,
+      "type": "file"
+    },
+    {
+      "path": "SAFEPOINT.md",
+      "accessCount": 1,
+      "lastAccessed": 1781000206729,
+      "type": "file"
+    },
+    {
+      "path": "src\\crawling\\cnu_crawler.py",
+      "accessCount": 1,
+      "lastAccessed": 1781000441068,
       "type": "file"
     }
   ],
