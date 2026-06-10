@@ -1,0 +1,834 @@
+{
+  "routing": {
+    "routing_accuracy": 1.0,
+    "per_label": {
+      "졸업요건": {
+        "correct": 20,
+        "total": 20,
+        "accuracy": 1.0
+      },
+      "학교공지": {
+        "correct": 20,
+        "total": 20,
+        "accuracy": 1.0
+      },
+      "학사일정": {
+        "correct": 20,
+        "total": 20,
+        "accuracy": 1.0
+      },
+      "식단": {
+        "correct": 20,
+        "total": 20,
+        "accuracy": 1.0
+      },
+      "셔틀버스": {
+        "correct": 20,
+        "total": 20,
+        "accuracy": 1.0
+      }
+    },
+    "details": [
+      {
+        "question": "졸업학점 몇 점이에요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업하려면 전공 몇 학점 들어야 함?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업 요건이 어떻게 돼요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학과별로 졸업 조건이 다른가요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "복수전공하면 졸업학점 더 들어야 해?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업인증제 뭐야?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "교양필수 다 들어야 졸업해?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업 신청은 어떻게 하나요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업예정자 확인 어디서 해?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "SW 졸업인증 면제 받으려면?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "영어 졸업인증 어떻게 해요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학점 몇개 있으면 졸업 가능함?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업할때 논문 써야 하나요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "입학 때랑 졸업요건 바뀌었는데 어떤 기준 적용해요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "조기졸업 가능한가요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "전공필수 안 들으면 졸업 못해?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "이수학점 어디서 확인해?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "교육과정표 어디 있어요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "졸업 시기가 언제예요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학생편람 어디서 받아요?",
+        "label": 0,
+        "label_name": "졸업요건",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "최근 학교 공지 있어?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "장학 공지 어디서 봐?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학사 공지사항 어떻게 확인해요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "요즘 행사 공지 있나요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "이번달 행사 뭐 있어?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "취업 공고 어디서 확인해?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "장학금 관련 공지 올라온 거 있어?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "채용설명회 공지 있나요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "포털에서 공지 어떻게 찾아요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "최근에 올라온 공지 알려줘",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "일반공지랑 학사공지 차이가 뭐야?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "행사 신청 어떻게 해요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "취업 관련 최신 공지 알려줘",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학교 소식 어디서 확인해?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "휴강 공지 어디서 봐요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "국가장학금 공지 올라왔어?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학교 홈페이지 공지사항 어디야?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "이번 주 학교 행사 뭐 있어요?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "공지사항 알림 받는 방법 있어?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "중요 공지 놓쳤는데 어디서 확인해?",
+        "label": 1,
+        "label_name": "학교공지",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "수강신청 언제야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "수강정정 기간이 언제까지야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "이번 학기 종강이 언제예요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "중간고사 기간 알려줘",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "기말고사 언제야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "방학이 언제 시작돼?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "개강은 언제야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "계절학기 신청 기간이요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "등록금 납부 기간 알려줘",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "성적 발표 언제 해요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "휴학 신청 기간 언제야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "복학 신청 어떻게 해요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "수강신청 몇 시부터야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "수강 취소하고 싶은데 정정 기간 지났어",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "계절학기 수강료 얼마야?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "성적 이의신청은 언제까지예요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학사일정 달력 어디서 봐?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "동기계절학기 신청 방법 알려줘",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "수강신청 튕기면 어떡해요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "시험 기간 어떻게 돼요?",
+        "label": 2,
+        "label_name": "학사일정",
+        "expected_route": "rag_pipeline",
+        "actual_route": "rag_pipeline",
+        "route_correct": true
+      },
+      {
+        "question": "학식 뭐나와?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 점심 메뉴 알려줘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "이번주 식단 알려줘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "지난주 식단 뭐 나왔어?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "제1학생회관 오늘 메뉴요",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "내일 저녁 학식 뭐야?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "학생식당 운영시간 알려줘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "조식 있나요?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "식단 어디서 확인해?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "학식 얼마야?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "주말에도 학식 해요?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 석식 뭐 나와요",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "구내식당 메뉴 알려줘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "뭐먹지 오늘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "다음주 학식 미리 알 수 있어?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "학식 앱 있어?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘밥 뭐야",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "6월 5일 학식 알려줘",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 뭐 나오나요?",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "점심 메뉴 뭐야",
+        "label": 3,
+        "label_name": "식단",
+        "expected_route": "meal_handler",
+        "actual_route": "meal_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀버스 시간표 알려줘",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 셔틀 정상운행?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀 첫차 몇 시야?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "막차 언제야?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀 어디서 타?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "통학버스 노선 알려줘",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "캠퍼스 순환버스 시간 알려줘",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "보운캠퍼스 가는 버스 있어?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 버스 운행해?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀버스 정류장 위치 알려줘",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "방학 때도 셔틀 다녀요?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "주말에 셔틀버스 있어?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "교내순환 버스 언제 출발해?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "대덕에서 보운 가는 버스 시간?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀버스 공식 홈페이지 어디야?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "버스 취소됐나요?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "오늘 버스 몇 시에 있어?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "통학버스 노선이 바뀌었나요?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "셔틀 탈 때 학생증 필요해요?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      },
+      {
+        "question": "버스 몇 분 간격으로 와요?",
+        "label": 4,
+        "label_name": "셔틀버스",
+        "expected_route": "shuttle_handler",
+        "actual_route": "shuttle_handler",
+        "route_correct": true
+      }
+    ]
+  }
+}
