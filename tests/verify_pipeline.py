@@ -50,10 +50,14 @@ print("="*55)
 
 target_files = [
     "src/vectordb/chroma_store.py",
+    "src/vectordb/integrity.py",
     "src/rag/retriever.py",
     "src/rag/pipeline.py",
+    "src/embedding/config.py",
     "src/embedding/embedder.py",
     "src/vectordb/build_db.py",
+    "src/handlers/notice_handler.py",
+    "scripts/check_vector_db.py",
     "src/api/server.py",
     "src/ui/app.py",
     "src/llm/finetune.py",
@@ -277,13 +281,19 @@ print("="*55)
 
 chroma_store_path = BASE_DIR / "src" / "vectordb" / "chroma_store.py"
 chroma_src        = chroma_store_path.read_text(encoding="utf-8")
+chroma_tree       = ast.parse(chroma_src)
+called_methods    = {
+    node.func.attr
+    for node in ast.walk(chroma_tree)
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+}
 
 # 상대경로 잔재 없는지 확인
 has_relative = '= "./chroma_db"' in chroma_src or "= './/chroma_db'" in chroma_src
 has_absolute = 'Path(__file__).parent.parent.parent' in chroma_src
 has_ids      = '"ids"' in chroma_src and 'results["ids"]' in chroma_src
-has_upsert   = 'collection.upsert(' in chroma_src
-has_add_old  = 'collection.add(' in chroma_src
+has_upsert   = "upsert" in called_methods
+has_add_old  = "add" in called_methods
 
 record("DB_PATH 상대경로 제거", PASS if not has_relative else FAIL,
        '이전 "./chroma_db" 없음' if not has_relative else '상대경로 잔재 발견')

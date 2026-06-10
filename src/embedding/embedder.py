@@ -4,7 +4,7 @@
 [사용 경로]  build_db.py → CNUVectorStore.add_documents() → KoreanEmbedder.embed()
              retriever.py → CNUVectorStore.search() → KoreanEmbedder.embed_query()
 [Colab 관계] Colab 노트북은 src.rag.pipeline을 import → 이 파일도 자동 사용됨
-[모델 변경]  MODEL_NAME 한 줄만 바꾸면 됨 — 비교 테스트는 tests/test_embedding.py
+[모델 변경]  src/embedding/config.py의 모델·차원 계약 변경 — 비교 테스트는 tests/test_embedding.py
 
 모델 선택 근거 (nlpai-lab/KURE-v1):
   - BGE-M3 기반 한국어 특화 파인튜닝, 1024d
@@ -14,17 +14,17 @@
   - 참고: 유사도 테스트(test_embedding.py)에서는 점수가 낮게 나올 수 있음
     → 비대칭 retrieval 모델 특성 (쿼리-문서 쌍이 다름) — 실제 검색 성능은 우수
 
-⚠️ 모델 변경 시 chroma_db를 삭제하고 재구축 필요 (차원이 달라질 수 있음)
+⚠️ config.py의 모델 변경 시 chroma_db를 재구축해야 함 (차원이 달라질 수 있음)
    KURE-v1: 1024d / KoE5: 768d / ko-sroberta: 768d
 """
 
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
-# ↓ 여기만 바꾸면 됨 (변경 시 chroma_db 재구축 필요)
-MODEL_NAME = "nlpai-lab/KURE-v1"   # 1024d, BGE-M3 기반, 한국어 retrieval 특화
-# MODEL_NAME = "nlpai-lab/KoE5"    # 768d, 한국어 E5 (일반 범용)
-# MODEL_NAME = "jhgan/ko-sroberta-multitask"  # 768d, STS 특화 (유사도 테스트에 강함)
+from src.embedding.config import EMBEDDING_DIMENSION, MODEL_NAME
+
+# 모델 계약은 src/embedding/config.py에서 관리한다.
+# 모델 또는 차원 변경 시 manifest 검사에 의해 chroma_db 전체 재구축이 요구된다.
 
 
 class KoreanEmbedder:

@@ -5,7 +5,7 @@
 출력: chroma_db/                  (ChromaDB 영구 저장소)
 
 실행:
-  python src/vectordb/build_db.py
+  python src/vectordb/build_db.py --fresh
 
 흐름:
   chunks.json 로드
@@ -24,13 +24,15 @@ metadata에 subcategory 추가 (Phase2 수정):
   retriever.py의 boost/penalty 로직이 subcategory로 쿼리 의도를 판단
   → ChromaDB 검색 결과에 subcategory가 포함되어야 _embed_search가 전달 가능
 
-⚠️ inject_faq.py 실행 후 반드시 chroma_db 삭제 및 재구축
+⚠️ inject_faq.py 실행 후 반드시 --fresh로 chroma_db 재구축
    (FAQ 청크가 embed_text 없이 color된 기존 DB와 혼용 불가)
-⚠️ 임베딩 모델(embedder.py) 변경 시 반드시 chroma_db 삭제 후 재실행
+⚠️ 임베딩 모델(config.py) 변경 시 반드시 --fresh로 재실행
    (차원 불일치 시 InvalidDimensionException 발생)
 """
 
+import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -38,9 +40,10 @@ BASE_DIR = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 from src.vectordb.chroma_store import CNUVectorStore
+from src.vectordb.integrity import check_integrity, write_manifest
 
 CHUNKS_PATH = BASE_DIR / "data" / "processed" / "chunks.json"
-DB_PATH     = str(BASE_DIR / "chroma_db")
+DB_PATH     = BASE_DIR / "chroma_db"
 
 
 def _get_embed_text(chunk: dict) -> str:
@@ -63,7 +66,18 @@ def _get_embed_text(chunk: dict) -> str:
     return " ".join(p for p in parts if p).strip()
 
 
-def build():
+def _reset_db() -> None:
+    """프로젝트 내부의 고정 chroma_db 경로만 삭제한다."""
+    resolved_db = DB_PATH.resolve()
+    expected_db = (BASE_DIR / "chroma_db").resolve()
+    if resolved_db != expected_db:
+        raise RuntimeError(f"안전하지 않은 DB 경로입니다: {resolved_db}")
+    if resolved_db.exists():
+        shutil.rmtree(resolved_db)
+        print(f"기존 벡터 DB 제거: {resolved_db}")
+
+
+def build(fresh: bool = False):
     """chunks.json을 읽어 ChromaDB 벡터 DB를 구축한다."""
     with open(CHUNKS_PATH, encoding="utf-8") as f:
         chunks = json.load(f)
@@ -72,8 +86,14 @@ def build():
     crawl_count = len(chunks) - faq_count
     print(f"청크 로드: {len(chunks)}건 (크롤링 {crawl_count}건 + FAQ {faq_count}건)")
 
+    if len({chunk["id"] for chunk in chunks}) != len(chunks):
+        raise ValueError("chunks.json에 중복 ID가 있어 색인을 중단합니다.")
+
+    if fresh:
+        _reset_db()
+
     # CNUVectorStore: DB 없으면 새로 생성, 있으면 기존 컬렉션 사용
-    store = CNUVectorStore(persist_dir=DB_PATH)
+    store = CNUVectorStore(persist_dir=str(DB_PATH))
 
     # chunks.json 형식 → add_documents 형식으로 변환
     docs = [
@@ -96,8 +116,19 @@ def build():
     ]
 
     store.add_documents(docs)
+    write_manifest(DB_PATH, chunks)
+    errors = check_integrity(DB_PATH, chunks)
+    if errors:
+        raise RuntimeError("벡터 DB 구축 후 정합성 검사 실패: " + "; ".join(errors))
     print(f"벡터 DB 구축 완료 → {DB_PATH}")
 
 
 if __name__ == "__main__":
-    build()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--fresh",
+        action="store_true",
+        help="고정된 프로젝트 chroma_db를 삭제한 뒤 전체 재구축",
+    )
+    args = parser.parse_args()
+    build(fresh=args.fresh)

@@ -22,7 +22,7 @@ import json
 from pathlib import Path
 
 import chromadb
-from src.embedding.embedder import KoreanEmbedder
+from src.embedding.embedder import EMBEDDING_DIMENSION, KoreanEmbedder
 
 # chroma_store.py 위치에서 프로젝트 루트 계산 — CWD 독립
 # 로컬:  C:\충남대학교\...\Termproject
@@ -65,7 +65,13 @@ class CNUVectorStore:
         # embed_text 없으면 content fallback (하위 호환)
         # → 저장(documents)은 원본 content 유지, 임베딩 벡터만 title+content 기준
         embed_texts = [d.get("embed_text", d["content"]) for d in docs]
-        embeddings  = self.embedder.embed(embed_texts).tolist()
+        embeddings_array = self.embedder.embed(embed_texts)
+        if embeddings_array.ndim != 2 or embeddings_array.shape[1] != EMBEDDING_DIMENSION:
+            raise ValueError(
+                "임베딩 차원 불일치: "
+                f"실제 {embeddings_array.shape} / 기대 (*, {EMBEDDING_DIMENSION})"
+            )
+        embeddings = embeddings_array.tolist()
         # upsert: add()와 달리 중복 ID 허용 — chunks.json 변경 후 재구축 시 안전
         self.collection.upsert(
             ids=ids,
