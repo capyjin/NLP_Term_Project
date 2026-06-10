@@ -111,6 +111,7 @@ body, .gradio-container {
     font-size: 0.91rem;
     opacity: 0.85;
     line-height: 1.55;
+    color: #ffffff !important;
 }
 
 /* ── 채팅 영역 감싸는 카드 ── */
@@ -130,7 +131,10 @@ body, .gradio-container {
 
 /* ── 사용자 메시지 말풍선 ── */
 .message.user > div,
-div[data-testid="user"] .prose {
+div[data-testid="user"] .prose,
+div[data-testid="user"],
+div[data-testid="user"] p,
+div[data-testid="user"] span {
     background: #002d72 !important;
     color: #ffffff !important;
     border-radius: 18px 18px 4px 18px !important;
