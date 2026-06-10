@@ -277,7 +277,6 @@ with gr.Blocks(css=_CSS, theme=gr.themes.Base(), title="CNU Campus ChatBot") as 
                 "🚌  셔틀버스 시간표 알려줘",
                 "💰  장학금 신청은 어디서 해?",
             ],
-            examples_per_page=6,
             cache_examples=False,
         )
 
