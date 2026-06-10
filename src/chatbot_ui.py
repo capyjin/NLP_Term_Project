@@ -157,6 +157,15 @@ div[data-testid="bot"] .prose {
     border-radius: 18px 18px 18px 4px !important;
 }
 
+/* ── 말풍선 꼬리(화살표) 제거 ── */
+.message::before, .message::after,
+div[data-testid="user"]::before, div[data-testid="user"]::after,
+div[data-testid="bot"]::before,  div[data-testid="bot"]::after,
+.bubble-wrap::before, .bubble-wrap::after {
+    display: none !important;
+    content: none !important;
+}
+
 /* ── 입력창 ── */
 #cnu-input textarea {
     border: 1.5px solid #c2cfe0 !important;
