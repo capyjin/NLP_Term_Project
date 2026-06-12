@@ -774,5 +774,125 @@
   {
     "question": "셔틀 어디서 타?",
     "label": 4
+  },
+  {
+    "question": "오늘 학생식당 문 열어요?",
+    "label": 3
+  },
+  {
+    "question": "학식 오늘 운영해요?",
+    "label": 3
+  },
+  {
+    "question": "오늘 조식 운영하나요?",
+    "label": 3
+  },
+  {
+    "question": "학교 밥 오늘 몇 시까지 해요?",
+    "label": 3
+  },
+  {
+    "question": "저녁 학식 몇 시까지야?",
+    "label": 3
+  },
+  {
+    "question": "학생식당 몇 시에 문 닫아요?",
+    "label": 3
+  },
+  {
+    "question": "제2학생회관 오늘 점심 메뉴 뭐야?",
+    "label": 3
+  },
+  {
+    "question": "생과대 식당 오늘 뭐 팔아?",
+    "label": 3
+  },
+  {
+    "question": "이번주 목요일 학식 메뉴 알려줘",
+    "label": 3
+  },
+  {
+    "question": "금요일 학식 뭐 나와?",
+    "label": 3
+  },
+  {
+    "question": "오늘 특식 있나요?",
+    "label": 3
+  },
+  {
+    "question": "학교 식당 오늘 쉬나요?",
+    "label": 3
+  },
+  {
+    "question": "학생회관 식당 오늘 운영해?",
+    "label": 3
+  },
+  {
+    "question": "오늘 점심 뭐가 나와?",
+    "label": 3
+  },
+  {
+    "question": "학식 오늘 뭐 먹을 수 있어?",
+    "label": 3
+  },
+  {
+    "question": "보운캠퍼스 셔틀 시간표 알려줘",
+    "label": 4
+  },
+  {
+    "question": "대덕캠퍼스 셔틀 몇 시에 출발해요?",
+    "label": 4
+  },
+  {
+    "question": "교내 순환버스 노선이 어떻게 돼요?",
+    "label": 4
+  },
+  {
+    "question": "학교 안에서 버스 타는 곳 어디야?",
+    "label": 4
+  },
+  {
+    "question": "도서관 앞에서 셔틀 타요?",
+    "label": 4
+  },
+  {
+    "question": "정심화에서 버스 타면 돼요?",
+    "label": 4
+  },
+  {
+    "question": "교내버스 시간표 어디서 봐요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 오늘 몇 회 운행해요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 실시간 위치 알 수 있어요?",
+    "label": 4
+  },
+  {
+    "question": "캠퍼스 순환버스 얼마예요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀 예약해야 하나요?",
+    "label": 4
+  },
+  {
+    "question": "셔틀버스 좌석 몇 개예요?",
+    "label": 4
+  },
+  {
+    "question": "개강하면 셔틀 운행 시작해요?",
+    "label": 4
+  },
+  {
+    "question": "방학에는 셔틀 몇 번 있어요?",
+    "label": 4
+  },
+  {
+    "question": "교내순환버스 정류장 몇 개야?",
+    "label": 4
   }
 ]
