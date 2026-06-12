@@ -38,7 +38,13 @@ PROFILES = {
 PROFILES["all"] = PROFILES["classifier"] | PROFILES["chatbot"]
 SMOKE_IMPORTS = {
     "classifier": ("transformers", "datasets", "sklearn"),
-    "chatbot": ("chromadb", "kiwipiepy", "rank_bm25", "sentence_transformers"),
+    "chatbot": (
+        "bitsandbytes",
+        "chromadb",
+        "kiwipiepy",
+        "rank_bm25",
+        "sentence_transformers",
+    ),
 }
 SMOKE_IMPORTS["all"] = SMOKE_IMPORTS["classifier"] + SMOKE_IMPORTS["chatbot"]
 

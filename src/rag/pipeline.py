@@ -183,7 +183,8 @@ class RAGPipeline:
           3B → ~2.5GB  (기본값, T4 15GB 기준 여유 ~10GB)
           7B → ~5.0GB  (실험용, KURE-v1 2GB와 합산 시 T4에서 경합 가능)
         """
-        quant_config = None
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
         if use_4bit:
             quant_config = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -191,13 +192,29 @@ class RAGPipeline:
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
             )
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            quantization_config=quant_config,
-            device_map={"": 0},      # "auto" 대신 GPU 0 강제 배치 (CPU 오프로드 방지)
-            trust_remote_code=True,
-        )
+            try:
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    quantization_config=quant_config,
+                    device_map={"": 0},
+                    trust_remote_code=True,
+                )
+            except Exception as exc:
+                print(f"[경고] 4-bit 모델 로드 실패: {exc}")
+                print("[대체] FP16 모델로 다시 로드합니다.")
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    torch_dtype=torch.float16,
+                    device_map={"": 0},
+                    trust_remote_code=True,
+                )
+        else:
+            self.model = AutoModelForCausalLM.from_pretrained(
+                model_name,
+                torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+                device_map={"": 0} if torch.cuda.is_available() else None,
+                trust_remote_code=True,
+            )
         self.model.eval()
 
     def retrieve(self, question: str, top_k: int = 2) -> tuple[str, float]:
