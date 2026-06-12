@@ -8,8 +8,6 @@
 
 # Core ML
 torch==2.5.1
-torchvision==0.20.1
-torchaudio==2.5.1
 
 # Transformers / 양자화 — 버전 고정 필수
 transformers==4.47.1
@@ -17,8 +15,6 @@ tokenizers==0.21.0
 accelerate==0.34.2
 bitsandbytes==0.43.3
 datasets==2.21.0
-peft==0.12.0
-trl==0.9.6
 
 # 질문 분류기 (Task 1)
 scikit-learn==1.5.1
@@ -48,9 +44,6 @@ gradio==4.42.0
 fastapi==0.112.2
 uvicorn==0.30.6
 pydantic==2.8.2
-
-# 과제 요구사항
-pytorch-lightning==2.4.0
 
 # Utils
 pandas==2.2.2

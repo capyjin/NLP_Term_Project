@@ -19,10 +19,15 @@ echo "========================================"
 echo "  CNU Campus ChatBot"
 echo "========================================"
 
-# 1. outputs/ 폴더 보장
+# 1. 새 Colab 런타임에서도 단독 실행 가능하도록 필수 패키지 보장
+echo ""
+echo "[0/4] 실행 환경 확인 중..."
+python scripts/ensure_runtime_deps.py --profile chatbot
+
+# 2. outputs/ 폴더 보장
 mkdir -p outputs
 
-# 2. FAQ 반영 후 벡터 DB 정합성 검사 (불일치 시 전체 재구축)
+# 3. FAQ 반영 후 벡터 DB 정합성 검사 (불일치 시 전체 재구축)
 python scripts/inject_faq.py
 if ! python scripts/check_vector_db.py; then
     echo ""

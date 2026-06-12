@@ -38,9 +38,8 @@ CELL_MD = """\
 
 ## 실행 순서
 1. 런타임 > 런타임 유형 변경 > **T4 GPU** 선택
-2. **셀 1** 실행 → 런타임 다시 시작
-3. **셀 2 ~ 8** 순서대로 실행
-4. 최종 출력: `outputs/cls_output.json`
+2. **Run All** 실행
+3. 최종 출력: `outputs/cls_output.json`
 
 | 라벨 | 카테고리 |
 |:---:|---|
@@ -52,9 +51,29 @@ CELL_MD = """\
 """
 
 CELL_INSTALL = """\
-# [셀 1] 패키지 설치 — 처음 1회 실행 후 런타임 재시작
-!pip install -q transformers datasets scikit-learn tqdm
-print('설치 완료 — 런타임 > 런타임 다시 시작 후 셀 2 부터 실행')\
+# [셀 1] Drive 마운트 + requirements.txt 기반 Task1/2/3 필수 패키지 설치
+import os, subprocess, sys
+from pathlib import Path
+
+try:
+    from google.colab import drive
+    drive.mount('/content/drive')
+except ImportError:
+    pass
+
+PROJECT_ROOT = Path('/content/drive/MyDrive/NLP_Termproject/Termproject_박연진')
+if not (PROJECT_ROOT / 'requirements.txt').is_file():
+    candidates = [Path.cwd(), *Path.cwd().parents]
+    PROJECT_ROOT = next(
+        (p for p in candidates if (p / 'requirements.txt').is_file() and (p / 'src').is_dir()),
+        PROJECT_ROOT,
+    )
+
+os.chdir(PROJECT_ROOT)
+subprocess.check_call([
+    sys.executable, 'scripts/ensure_runtime_deps.py', '--profile', 'all'
+])
+print('환경 준비 완료 — 런타임 재시작 없이 계속 실행합니다.')\
 """
 
 CELL_PATH = """\
@@ -62,7 +81,7 @@ CELL_PATH = """\
 import os, sys
 from pathlib import Path
 
-PROJECT_OVERRIDE = None  # 예: '/content/drive/MyDrive/NLP_Term_Project'
+PROJECT_OVERRIDE = None  # 예: '/content/drive/MyDrive/NLP_Termproject/Termproject_박연진'
 
 def is_project_root(path):
     path = Path(path)
